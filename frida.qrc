@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fonts/AtariClassic-Regular.ttf</file>
+        <file>fonts/C64_Pro_Mono-STYLE.ttf</file>
+        <file>fonts/SpaceMono-Regular.ttf</file>
+        <file>fonts/zx82system.ttf</file>
+        <file>fonts/DroidSansMono.ttf</file>
+        <file>logo/frida-logo.png</file>
+        <file>logo/frida-logo.svg</file>
+        <file>logo/frida-logo-test.png</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>icons/document-save.png</file>
+        <file>icons/document-save-as.png</file>
+        <file>icons/exit.png</file>
+        <file>icons/document-new.png</file>
+        <file>icons/document-open.png</file>
+        <file>icons/label.png</file>
+    </qresource>
+</RCC>
