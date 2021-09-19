@@ -1,4 +1,4 @@
-# frida
+![frida logo](logo/frida-logo-test.png)
 
 FRee Interactive DisAssembler
 
