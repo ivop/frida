@@ -97,7 +97,7 @@ void Disassembler::generateDisassembly(void) {
     quint8 *datatypes = s->datatypes;
     QList<struct disassembly> *dislist  = &s->disassembly;
     struct disassembly dis;
-    QString hex, instr, str;
+    QString hex, instr;
     int n, perline, prevtype;
     bool labelled;
 
