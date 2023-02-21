@@ -17,16 +17,17 @@ public:
     ~labelswindow();
 
 private slots:
-    void on_tableAutoLabels_cellChanged(int row, int column);
-    void on_tableUserLabels_cellChanged(int row, int column);
     void actionChange_To_Local_Label();
     void actionChange_To_User_Label();
     void actionDelete_Label();
 
-    void on_doneButton_clicked();
-    void on_addLabelButton_clicked();
-    void on_exportButton_clicked();
-    void on_importButton_clicked();
+    void onTableAutoLabels_cellChanged(int row, int column);
+    void onTableUserLabels_cellChanged(int row, int column);
+
+    void onDoneButton_clicked();
+    void onAddLabelButton_clicked();
+    void onExportButton_clicked();
+    void onImportButton_clicked();
 
 private:
     Ui::labelswindow *ui;

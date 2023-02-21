@@ -18,7 +18,7 @@ public:
     ~lowhighbytewindow();
 
 private slots:
-    void on_buttonBox_accepted();
+    void onButtonBox_accepted();
 
 private:
     Ui::lowhighbytewindow *ui;

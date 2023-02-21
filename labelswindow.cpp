@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QPushButton>
 
 labelswindow::labelswindow(QWidget *parent) :
     QDialog(parent),
@@ -21,6 +22,20 @@ labelswindow::labelswindow(QWidget *parent) :
     t->addAction(ui->actionChange_To_User_Label);
     t->addAction(ui->actionDelete_Label);
 
+    connect(ui->tableAutoLabels, &QTableWidget::cellChanged,
+            this, &labelswindow::onTableAutoLabels_cellChanged);
+    connect(ui->tableUserLabels, &QTableWidget::cellChanged,
+            this, &labelswindow::onTableUserLabels_cellChanged);
+
+    connect(ui->doneButton, &QPushButton::clicked,
+            this, &labelswindow::onDoneButton_clicked);
+    connect(ui->addLabelButton, &QPushButton::clicked,
+            this, &labelswindow::onAddLabelButton_clicked);
+    connect(ui->exportButton, &QPushButton::clicked,
+            this, &labelswindow::onExportButton_clicked);
+    connect(ui->importButton, &QPushButton::clicked,
+            this, &labelswindow::onImportButton_clicked);
+
     showAutoLabels();
     showUserLabels();
     showLocalLabels();
@@ -31,7 +46,7 @@ labelswindow::~labelswindow()
     delete ui;
 }
 
-void labelswindow::on_doneButton_clicked() {
+void labelswindow::onDoneButton_clicked() {
     close();
 }
 
@@ -75,7 +90,7 @@ static void get_contents(QTableWidget *t, int row, QString *label,
     return;
 }
 
-void labelswindow::on_tableAutoLabels_cellChanged(int row, int column) {
+void labelswindow::onTableAutoLabels_cellChanged(int row, int column) {
     QTableWidget *t = ui->tableAutoLabels;
     QString label;
     quint64 address;
@@ -84,13 +99,16 @@ void labelswindow::on_tableAutoLabels_cellChanged(int row, int column) {
 
     get_contents(t, row, &label, &address);
 
-    autoLabels.remove(address);
+//    autoLabels.remove(address); // do not remove autoLabels, so it's still
+                                  // there if the user or local label is
+                                  // deleted by the user.
+
     userLabels.insert(address, label);
     showAutoLabels();
     showUserLabels();
 }
 
-void labelswindow::on_tableUserLabels_cellChanged(int row, int column) {
+void labelswindow::onTableUserLabels_cellChanged(int row, int column) {
     QTableWidget *t = ui->tableUserLabels;
     QString label;
     quint64 address;
@@ -180,7 +198,7 @@ void labelswindow::actionDelete_Label() {
     showLabels(t, labels);
 }
 
-void labelswindow::on_addLabelButton_clicked() {
+void labelswindow::onAddLabelButton_clicked() {
     addLabelWindow alw;
     alw.exec();
     showUserLabels();
@@ -188,7 +206,7 @@ void labelswindow::on_addLabelButton_clicked() {
 
 // ---------------------------------------------------------------------------
 
-void labelswindow::on_exportButton_clicked() {
+void labelswindow::onExportButton_clicked() {
     QString name = QFileDialog::getSaveFileName(this, "Export labels to...");
 
     if (name.isEmpty()) return;
@@ -229,7 +247,7 @@ void labelswindow::on_exportButton_clicked() {
     file.close();
 }
 
-void labelswindow::on_importButton_clicked() {
+void labelswindow::onImportButton_clicked() {
     QString name = QFileDialog::getOpenFileName(this, "Import labels from...");
 
     if (name.isEmpty()) return;

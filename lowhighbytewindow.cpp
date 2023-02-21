@@ -17,6 +17,9 @@ lowhighbytewindow::lowhighbytewindow(quint64 location, bool low, quint8 byte,
 {
     ui->setupUi(this);
 
+    connect(ui->buttonBox, &QDialogButtonBox::accepted,
+            this, &lowhighbytewindow::onButtonBox_accepted);
+
     ui->location->setText(QString("%1").arg(location, 4, 16, (QChar)'0'));
     if (low)
         ui->lowhighbyteLabel->setText(QString("Low Byte"));
@@ -33,7 +36,7 @@ lowhighbytewindow::~lowhighbytewindow()
     delete ui;
 }
 
-void lowhighbytewindow::on_buttonBox_accepted()
+void lowhighbytewindow::onButtonBox_accepted()
 {
     bool ok;
     quint64 addr = ui->fullAddress->text().toULongLong(&ok, 16);
