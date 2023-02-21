@@ -323,7 +323,7 @@ void Disassembler6502::disassembleInstructionAt(quint64 i,
                 map = &segments[currentSegment].highbytes;
                 pref = '>';
             }
-            quint16 addr = map->value(start+i+1);
+            quint16 addr = map->value(i+1);
             if (localLabels->contains(addr))
                 hex = pref + QString("%1").arg(localLabels->value(addr));
             else if (userLabels.contains(addr))
@@ -332,7 +332,7 @@ void Disassembler6502::disassembleInstructionAt(quint64 i,
                 hex = pref + QString("%1").arg(autoLabels.value(addr));
             else
                 hex = pref + QString("$%1").arg(addr, 4, 16, (QChar)'0');
-        } else {
+        } else {  // XXX add check for operand < 256 and MODE_IMM
             hex   = QString("$%1").arg(operand, 2, 16, (QChar)'0');
         }
         temps = QString(fmts[m]).arg(hex);

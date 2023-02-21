@@ -114,12 +114,15 @@ void Disassembler::generateDisassembly(void) {
         case DT_XWORDBE:
         case DT_XWORDLE:
             if (!n) n = 16;
+            [[fallthrough]];
         case DT_QWORDBE:
         case DT_QWORDLE:
             if (!n) n = 8;
+            [[fallthrough]];
         case DT_DWORDBE:
         case DT_DWORDLE:
             if (!n) n = 4;
+            [[fallthrough]];
         case DT_WORDBE:
         case DT_WORDLE:
             if (!n) n = 2;
@@ -162,21 +165,8 @@ also_wrong2:
             for (int j=1; j<n; j++) {
                 if (datatypes[i+j] != type) goto also_wrong2;
             }
-            for (int j=1; j<n; j++) {
-                if (s->flags[i+j] & (FLAG_LOW_BYTE | FLAG_HIGH_BYTE)) {
-                    quint16 fulladdr;
-                    bool low = s->flags[i+j] & FLAG_LOW_BYTE;
-                    QMap<quint64,quint16> *map = low ?
-                                &s->lowbytes : &s->highbytes;
-                    if (map->contains(start+i+j))
-                        continue;
-                    lowhighbytewindow lhbw(start+i+j, low, s->data[i+j], &fulladdr);
-                    if (lhbw.exec())
-                        map->insert(start+i+j, fulladdr);
-                    else
-                        s->flags[i+j] &= ~(FLAG_LOW_BYTE|FLAG_HIGH_BYTE);
-                }
-            }
+
+
             // while we're at it, generate labels in the same loop?
             createOperandLabel(i);
             i += n-1;
@@ -392,7 +382,7 @@ do_string_directive:
             break;
 
         default:
-            qDebug() << "should not be here ;)";
+            qDebug() << "should not be here ;)\n";
             break;
         } // switch
     } // for

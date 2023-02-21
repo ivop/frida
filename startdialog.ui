@@ -169,13 +169,6 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="5" column="1">
-       <widget class="QLineEdit" name="lineSaveDir">
-        <property name="text">
-         <string>/home/ivo/frida-projects/atmas2.frida</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="labelFileDisasm">
         <property name="text">
@@ -190,9 +183,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="comboFileType"/>
-      </item>
       <item row="1" column="2">
        <widget class="QPushButton" name="buttonBrowseFileDisasm">
         <property name="text">
@@ -200,24 +190,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="labelFileType">
-        <property name="text">
-         <string>File Type</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="comboCPUType"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="labelCPUType">
-        <property name="text">
-         <string>CPU Type</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="2">
+      <item row="5" column="2">
        <widget class="QPushButton" name="buttonNewProject">
         <property name="text">
          <string>New</string>
@@ -228,7 +201,7 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
+      <item row="5" column="0">
        <spacer name="space">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -243,6 +216,26 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="labelCPUType">
+        <property name="text">
+         <string>CPU Type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="comboFileType"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="labelFileType">
+        <property name="text">
+         <string>File Type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="comboCPUType"/>
       </item>
       <item row="3" column="2">
        <spacer name="space2">
@@ -259,20 +252,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="labelNewProject">
-        <property name="text">
-         <string>Save Project To</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QPushButton" name="buttonBrowseSaveFilename">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>

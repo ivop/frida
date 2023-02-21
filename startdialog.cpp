@@ -54,13 +54,6 @@ void StartDialog::on_buttonBrowseFileDisasm_clicked()
         ui->lineFileDisasm->setText(file);
 }
 
-void StartDialog::on_buttonBrowseSaveFilename_clicked()
-{
-    QString file = QFileDialog::getSaveFileName();
-    if (!file.isEmpty())
-        ui->lineSaveDir->setText(file);
-}
-
 void StartDialog::on_buttonLoadExistingProject_clicked()
 {
     qDebug() << "Open Existing Project";
@@ -69,8 +62,7 @@ void StartDialog::on_buttonLoadExistingProject_clicked()
 
 void StartDialog::on_buttonNewProject_clicked()
 {
-    if (   ui->lineSaveDir->text().isEmpty()
-        || ui->lineFileDisasm->text().isEmpty()) {
+    if (ui->lineFileDisasm->text().isEmpty()) {
         QMessageBox msg;
         msg.setText("Some fields are left empty!");
         msg.exec();
@@ -83,7 +75,7 @@ void StartDialog::on_buttonNewProject_clicked()
     FileToDisassemble.append(ui->lineFileDisasm->text());
 
     ProjectFileToSaveTo.clear();
-    ProjectFileToSaveTo.append(ui->lineSaveDir->text());
+    // set filename to save to later
 
     filetype = ui->comboFileType->currentIndex();
     cputype  = ui->comboCPUType->currentIndex();

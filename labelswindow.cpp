@@ -216,8 +216,8 @@ void labelswindow::on_exportButton_clicked() {
 
     QList<quint64> keys = userLabels.keys();
     for (int i=0; i<keys.size(); i++) {
-        out << hex << showbase << keys.at(i) << " "
-            << userLabels.value(keys.at(i)) << endl;
+        out << Qt::hex << Qt::showbase << keys.at(i) << " "
+            << userLabels.value(keys.at(i)) << Qt::endl;
     }
 
     if (file.error()) {

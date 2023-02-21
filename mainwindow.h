@@ -39,12 +39,13 @@ public slots:
     void actionSet_To_PETSCII(void);
     void actionSet_To_ANTIC_Screen_Codes(void);
     void actionSet_To_CBM_Screen_Codes(void);
-    void actionComment(void);
-    void actionDelete_Segment(void);
-    void actionChange_Start_Address(void);
     void actionSet_Flag_Labelled(void);
     void actionSet_Flag_Low_Byte(void);
     void actionSet_Flag_High_Byte(void);
+    void actionSet_Flag_Clear(void);
+    void actionComment(void);
+    void actionDelete_Segment(void);
+    void actionChange_Start_Address(void);
 
 private slots:
     void linkHexASCIISelection(void);
@@ -67,6 +68,7 @@ private:
     Ui::MainWindow *ui;
     void Set_To_Foo(QList<QTableWidgetSelectionRange> ranges, quint8 datatype);
     void Set_Flag(QList<QTableWidgetSelectionRange> ranges, quint8 flag);
+    void Set_Flag_Low_or_High_Byte(bool bLow);
 };
 
 #endif // MAINWINDOW_H

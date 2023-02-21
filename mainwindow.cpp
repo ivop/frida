@@ -3,6 +3,7 @@
 #include "commentwindow.h"
 #include "labelswindow.h"
 #include "changesegmentwindow.h"
+#include "lowhighbytewindow.h"
 #include <QDebug>
 #include <QScrollBar>
 #include <QMenu>
@@ -123,6 +124,7 @@ MainWindow::MainWindow(QWidget *parent) :
         men->addAction(ui->actionSet_Flag_Labelled);
         men->addAction(ui->actionSet_Flag_Low_Byte);
         men->addAction(ui->actionSet_Flag_High_Byte);
+        men->addAction(ui->actionSet_Flag_Clear);
         act = new QAction("Set Flag", ui->tableHexadecimal);
         act->setMenu(men);
         t->addAction(act);
@@ -484,6 +486,10 @@ void MainWindow::actionSet_To_CBM_Screen_Codes(void) {
 
 // --------------------------------------------------------------------------
 
+// Set_Flags can in fact flag complete regions. Labelled data uses that.
+// But Low and High bytes must contain a single cell! That's guaranteed
+// by their respective actions below.
+
 void MainWindow::Set_Flag(QList<QTableWidgetSelectionRange> Ranges, quint8 flag) {
     const struct segment *s = &segments.at(currentSegment);
     unsigned int pos;
@@ -494,7 +500,7 @@ void MainWindow::Set_Flag(QList<QTableWidgetSelectionRange> Ranges, quint8 flag)
             for (int x = range.leftColumn(); x <= range.rightColumn(); x++) {
                 pos = y*8+x;
                 if (pos <= s->end)
-                    s->flags[pos] |=  flag;
+                    s->flags[pos] = flag;
             }
         }
     }
@@ -505,15 +511,69 @@ void MainWindow::Set_Flag(QList<QTableWidgetSelectionRange> Ranges, quint8 flag)
 }
 
 void MainWindow::actionSet_Flag_Labelled(void) {
+    qDebug("Flag Labelled\n");
     Set_Flag(ui->tableHexadecimal->selectedRanges(), FLAG_USE_LABEL);
 }
 
+void MainWindow::Set_Flag_Low_or_High_Byte(bool bLow) {
+
+    // check that only one byte is selected, otherwise error out
+
+    QList<QTableWidgetSelectionRange> ranges =
+                                    ui->tableHexadecimal->selectedRanges();
+
+    int nranges = ranges.size();
+    int ypos_equal = ranges.at(0).bottomRow() == ranges.at(0).topRow();
+    int xpos_equal = ranges.at(0).leftColumn() == ranges.at(0).rightColumn();
+    bool single_cell = xpos_equal && ypos_equal;
+
+    if (nranges != 1 || !single_cell) {
+        QMessageBox msg;
+        msg.setText("Select a single byte to flag as Low or High Byte     ");
+        msg.addButton("OK", QMessageBox::AcceptRole);
+        msg.exec();
+        return;
+    }
+
+    struct segment *s = &segments[currentSegment];
+
+    int x = ranges.at(0).leftColumn();
+    int y = ranges.at(0).topRow();
+    int relpos = y*8 + x;
+    int pos = s->start + relpos;
+
+    uint16_t fulladdr;
+    lowhighbytewindow lhbw(pos, bLow, s->data[relpos], &fulladdr);
+    if (lhbw.exec()) {
+        if (bLow) {
+            s->flags[relpos] = FLAG_LOW_BYTE;
+            s->lowbytes.remove(relpos);
+            s->lowbytes.insert(relpos, fulladdr);
+        } else {
+            s->flags[relpos] = FLAG_HIGH_BYTE;
+            s->highbytes.remove(relpos);
+            s->highbytes.insert(relpos, fulladdr);
+        }
+    } else {
+
+    }
+
+    Disassembler->generateDisassembly();
+    showHex();
+    showAscii();
+    showDisassembly();
+ }
+
 void MainWindow::actionSet_Flag_Low_Byte(void) {
-    Set_Flag(ui->tableHexadecimal->selectedRanges(), FLAG_LOW_BYTE);
+    Set_Flag_Low_or_High_Byte(true);
 }
 
 void MainWindow::actionSet_Flag_High_Byte(void) {
-    Set_Flag(ui->tableHexadecimal->selectedRanges(), FLAG_HIGH_BYTE);
+    Set_Flag_Low_or_High_Byte(false);
+}
+
+void MainWindow::actionSet_Flag_Clear(void) {
+    Set_Flag(ui->tableHexadecimal->selectedRanges(), 0);
 }
 
 // --------------------------------------------------------------------------

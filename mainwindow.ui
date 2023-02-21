@@ -929,6 +929,14 @@
     <string>&gt;</string>
    </property>
   </action>
+  <action name="actionSet_Flag_Clear">
+   <property name="text">
+    <string>Clear Flags</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear Flags</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -942,8 +950,8 @@
    <slot>linkHexASCIISelection()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>515</x>
-     <y>228</y>
+     <x>612</x>
+     <y>459</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -958,8 +966,8 @@
    <slot>linkASCIIHexSelection()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>717</x>
-     <y>228</y>
+     <x>813</x>
+     <y>459</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1335,6 +1343,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSet_Flag_Clear</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionSet_Flag_Clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>linkHexASCIISelection()</slot>
@@ -1363,5 +1387,6 @@
   <slot>actionSet_Flag_Labelled()</slot>
   <slot>actionSet_Flag_Low_Byte()</slot>
   <slot>actionSet_Flag_High_Byte()</slot>
+  <slot>actionSet_Flag_Clear()</slot>
  </slots>
 </ui>

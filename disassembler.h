@@ -2,7 +2,6 @@
 #define DISASSEMBLER_H
 
 #include <QDebug>
-#include "frida.h"
 
 class Disassembler {
 public:
