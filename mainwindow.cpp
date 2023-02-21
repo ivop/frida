@@ -324,8 +324,8 @@ void MainWindow::showHex(void) {
         t->setItem(i/8, i%8, new QTableWidgetItem(hex));
 
         QBrush brush = datatypeBrushes[(quint8)s->datatypes[i]];
-        if (s->flags[i] & FLAG_USE_LABEL)
-            brush.setStyle(Qt::Dense2Pattern);
+        if (s->flags[i] & (FLAG_USE_LABEL | FLAG_LOW_BYTE | FLAG_HIGH_BYTE))
+            brush.setStyle(Qt::Dense3Pattern);
         t->item(i/8, i%8)->setBackground(brush);
 
         if (!(i%8)) {
@@ -362,8 +362,8 @@ void MainWindow::showAscii(void) {
         t->setItem(i/8, i%8, new QTableWidgetItem(QChar(offset+data[i])));
 
         QBrush brush = datatypeBrushes[(quint8)s->datatypes[i]];
-        if (s->flags[i] & FLAG_USE_LABEL)
-            brush.setStyle(Qt::Dense2Pattern);
+        if (s->flags[i] & (FLAG_USE_LABEL | FLAG_LOW_BYTE | FLAG_HIGH_BYTE))
+            brush.setStyle(Qt::Dense3Pattern);
         t->item(i/8, i%8)->setBackground(brush);
 
         if (altfont)
