@@ -355,8 +355,10 @@ void Disassembler6502::trace(quint64 address) {
     QList<quint64> tracelist;
     tracelist.append(address);
 
-    if (address < start || address > end)
+    if (address < start || address > end) {
+        delete[] mark;
         return;
+    }
 
     initTables();
 
@@ -412,4 +414,5 @@ void Disassembler6502::trace(quint64 address) {
         }
 
     }
+    delete[] mark;
 }
