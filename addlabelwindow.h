@@ -16,9 +16,8 @@ public:
     ~addLabelWindow();
 
 private slots:
-    void on_pushButtonCancel_clicked();
-
-    void on_pushButtonAdd_clicked();
+    void onPushButtonCancel_clicked();
+    void onPushButtonAdd_clicked();
 
 private:
     Ui::addLabelWindow *ui;

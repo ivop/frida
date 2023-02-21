@@ -9,6 +9,11 @@ addLabelWindow::addLabelWindow(QWidget *parent) :
     ui(new Ui::addLabelWindow)
 {
     ui->setupUi(this);
+
+    connect(ui->pushButtonCancel, &QPushButton::clicked,
+            this, &addLabelWindow::onPushButtonCancel_clicked);
+    connect(ui->pushButtonAdd, &QPushButton::clicked,
+            this, &addLabelWindow::onPushButtonAdd_clicked);
 }
 
 addLabelWindow::~addLabelWindow()
@@ -16,11 +21,11 @@ addLabelWindow::~addLabelWindow()
     delete ui;
 }
 
-void addLabelWindow::on_pushButtonCancel_clicked() {
+void addLabelWindow::onPushButtonCancel_clicked() {
     close();
 }
 
-void addLabelWindow::on_pushButtonAdd_clicked() {
+void addLabelWindow::onPushButtonAdd_clicked() {
     QMessageBox msg;
     QString address = ui->lineEditAddress->text();
     QString label   = ui->lineEditLabel->text();

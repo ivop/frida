@@ -17,7 +17,7 @@ public:
     ~changesegmentwindow();
 
 private slots:
-    void on_buttonBox_accepted();
+    void onButtonBox_accepted();
 
 private:
     Ui::changesegmentwindow *ui;
