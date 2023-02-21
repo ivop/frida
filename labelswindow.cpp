@@ -189,7 +189,7 @@ void labelswindow::on_addLabelButton_clicked() {
 // ---------------------------------------------------------------------------
 
 void labelswindow::on_exportButton_clicked() {
-    QString name = QFileDialog::getOpenFileName(this, "Export labels to...");
+    QString name = QFileDialog::getSaveFileName(this, "Export labels to...");
 
     if (name.isEmpty()) return;
 
