@@ -9,6 +9,8 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QBrush>
+#include <QPushButton>
+#include <QComboBox>
 #include <sstream>
 #include "frida.h"
 #include "disassembler.h"
@@ -69,6 +71,28 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     QTableWidget *t;
     ui->setupUi(this);
+
+    connect(ui->labelsButton, &QPushButton::clicked,
+            this, &MainWindow::onLabelsButton_clicked);
+    connect(ui->exitButton, &QPushButton::clicked,
+            this, &MainWindow::onExitButton_clicked);
+
+    connect(ui->tableSegments, &QTableWidget::itemSelectionChanged,
+            this, &MainWindow::onTableSegments_itemSelectionChanged);
+    connect(ui->tableSegments, &QTableWidget::cellChanged,
+            this, &MainWindow::onTableSegments_cellChanged);
+
+    connect(ui->comboFonts, qOverload<int>(&QComboBox::activated),
+            this, &MainWindow::onComboFonts_activated);
+
+    connect(ui->radioButtonFullscreen, &QRadioButton::toggled,
+            this, &MainWindow::onRadioButtonFullscreen_toggled);
+
+    connect(ui->comboBox, qOverload<int>(&QComboBox::currentIndexChanged),
+            this, &MainWindow::onComboBox_currentIndexChanged);
+
+    connect(ui->tableDisassembly, &QTableWidget::doubleClicked,
+            this, &MainWindow::onTableDisassembly_doubleClicked);
 
     t = ui->tableSegments;
     t->horizontalHeader()->setSectionsClickable(false);
@@ -235,7 +259,7 @@ void MainWindow::showSegments(void) {
     }
 }
 
-void MainWindow::on_tableSegments_itemSelectionChanged()
+void MainWindow::onTableSegments_itemSelectionChanged()
 {
     currentSegment = ui->tableSegments->currentRow();
     if (currentSegment < 0) return;
@@ -294,7 +318,7 @@ void MainWindow::actionChange_Start_Address() {
     }
 }
 
-void MainWindow::on_tableSegments_cellChanged(int row, int column) {
+void MainWindow::onTableSegments_cellChanged(int row, int column) {
     QTableWidget *t = ui->tableSegments;
 
     if (column != 2) return;
@@ -676,7 +700,7 @@ void MainWindow::onHexSectionClicked(int index) {
     }
 }
 
-void MainWindow::on_comboFonts_activated(int index) {
+void MainWindow::onComboFonts_activated(int index) {
     altfont = (enum fonts) index;
     showAscii();
     linkSelections(ui->tableHexadecimal, ui->tableASCII);
@@ -761,7 +785,7 @@ void MainWindow::actionComment() {
     showDisassembly();
 }
 
-void MainWindow::on_labelsButton_clicked() {
+void MainWindow::onLabelsButton_clicked() {
     labelswindow lw;
     lw.exec();
     Disassembler->generateDisassembly();
@@ -770,21 +794,21 @@ void MainWindow::on_labelsButton_clicked() {
     showDisassembly();
 }
 
-void MainWindow::on_exitButton_clicked() {
+void MainWindow::onExitButton_clicked() {
     close();
 }
 
-void MainWindow::on_radioButtonFullscreen_toggled(bool checked) {
+void MainWindow::onRadioButtonFullscreen_toggled(bool checked) {
     checked ? this->showFullScreen() : this->showMaximized();
 }
 
-void MainWindow::on_comboBox_currentIndexChanged(int index) {
+void MainWindow::onComboBox_currentIndexChanged(int index) {
     QFont f = this->font();
     f.setPointSize(8+index);
     this->setFont(f);
 }
 
-void MainWindow::on_tableDisassembly_doubleClicked(const QModelIndex &index) {
+void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
     QTableWidget *t = ui->tableDisassembly;
     QTableWidgetItem *item = t->item(index.row(),0);
 

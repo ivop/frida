@@ -20,6 +20,15 @@ StartDialog::StartDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(ui->buttonBrowseExistingProject, &QPushButton::clicked,
+            this, &StartDialog::onButtonBrowseExistingProject_clicked);
+    connect(ui->buttonBrowseFileDisasm, &QPushButton::clicked,
+            this, &StartDialog::onButtonBrowseFileDisasm_clicked);
+    connect(ui->buttonLoadExistingProject, &QPushButton::clicked,
+            this, &StartDialog::onButtonLoadExistingProject_clicked);
+    connect(ui->buttonNewProject, &QPushButton::clicked,
+            this, &StartDialog::onButtonNewProject_clicked);
+
     ui->comboFileType->clear();
     for (int i=0; i<filetypes.size(); i++) {
         ui->comboFileType->addItem(filetypes.at(i).name);
@@ -40,27 +49,27 @@ StartDialog::~StartDialog()
     delete ui;
 }
 
-void StartDialog::on_buttonBrowseExistingProject_clicked()
+void StartDialog::onButtonBrowseExistingProject_clicked()
 {
     QString file = QFileDialog::getOpenFileName();
     if (!file.isEmpty())
         ui->lineExistingProject->setText(file);
 }
 
-void StartDialog::on_buttonBrowseFileDisasm_clicked()
+void StartDialog::onButtonBrowseFileDisasm_clicked()
 {
     QString file = QFileDialog::getOpenFileName();
     if (!file.isEmpty())
         ui->lineFileDisasm->setText(file);
 }
 
-void StartDialog::on_buttonLoadExistingProject_clicked()
+void StartDialog::onButtonLoadExistingProject_clicked()
 {
     qDebug() << "Open Existing Project";
     load_existing_project = true;
 }
 
-void StartDialog::on_buttonNewProject_clicked()
+void StartDialog::onButtonNewProject_clicked()
 {
     if (ui->lineFileDisasm->text().isEmpty()) {
         QMessageBox msg;

@@ -53,16 +53,20 @@ private slots:
     void linkSelections(QTableWidget *from, QTableWidget *to);
     void onHexSectionClicked(int index);
     void onDisassemblySectionClicked(int index);
-    void on_tableSegments_itemSelectionChanged();
-    void on_comboFonts_activated(int index);
-    void on_labelsButton_clicked();
-    void on_exitButton_clicked();
-    void on_tableSegments_cellChanged(int row, int column);
-    void on_radioButtonFullscreen_toggled(bool checked);
-    void on_comboBox_currentIndexChanged(int index);
+
+    void onLabelsButton_clicked();
+    void onExitButton_clicked();
+
+    void onTableSegments_itemSelectionChanged();
+    void onTableSegments_cellChanged(int row, int column);
+
+    void onComboFonts_activated(int index);
+    void onRadioButtonFullscreen_toggled(bool checked);
+    void onComboBox_currentIndexChanged(int index);
+    void onTableDisassembly_doubleClicked(const QModelIndex &index);
+
     void rememberValue(int value);
 
-    void on_tableDisassembly_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;

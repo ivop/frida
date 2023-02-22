@@ -19,10 +19,10 @@ public:
     bool create_new_project    = false;
 
 private slots:
-    void on_buttonBrowseExistingProject_clicked();
-    void on_buttonBrowseFileDisasm_clicked();
-    void on_buttonLoadExistingProject_clicked();
-    void on_buttonNewProject_clicked();
+    void onButtonBrowseExistingProject_clicked();
+    void onButtonBrowseFileDisasm_clicked();
+    void onButtonLoadExistingProject_clicked();
+    void onButtonNewProject_clicked();
 
 private:
     Ui::StartDialog *ui;
