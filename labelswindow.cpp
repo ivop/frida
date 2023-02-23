@@ -99,10 +99,7 @@ void labelswindow::onTableAutoLabels_cellChanged(int row, int column) {
 
     get_contents(t, row, &label, &address);
 
-//    autoLabels.remove(address); // do not remove autoLabels, so it's still
-                                  // there if the user or local label is
-                                  // deleted by the user.
-
+    autoLabels.remove(address);
     userLabels.insert(address, label);
     showAutoLabels();
     showUserLabels();
