@@ -14,6 +14,7 @@ TARGET = frida
 TEMPLATE = app
 
 SOURCES += main.cpp\
+    loadsaveproject.cpp \
         mainwindow.cpp \
     loader.cpp \
     filetypes.cpp \
@@ -35,6 +36,7 @@ HEADERS  += mainwindow.h \
     labelswindow.h \
     addlabelwindow.h \
     changesegmentwindow.h \
+    loadsaveproject.h \
     lowhighbytewindow.h \
     startdialog.h
 

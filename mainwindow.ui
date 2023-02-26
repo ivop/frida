@@ -60,6 +60,16 @@
           <string>12 pt</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>13 pt</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>14 pt</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -98,7 +108,7 @@
       <item>
        <widget class="QToolButton" name="saveButton">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>

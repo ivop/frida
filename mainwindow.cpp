@@ -4,6 +4,7 @@
 #include "labelswindow.h"
 #include "changesegmentwindow.h"
 #include "lowhighbytewindow.h"
+#include "loadsaveproject.h"
 #include <QDebug>
 #include <QScrollBar>
 #include <QMenu>
@@ -76,6 +77,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::onLabelsButton_clicked);
     connect(ui->exitButton, &QPushButton::clicked,
             this, &MainWindow::onExitButton_clicked);
+    connect(ui->saveButton, &QPushButton::clicked,
+            this, &MainWindow::onSaveButton_clicked);
 
     connect(ui->tableSegments, &QTableWidget::itemSelectionChanged,
             this, &MainWindow::onTableSegments_itemSelectionChanged);
@@ -820,4 +823,8 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
         actionComment();
         return;
     }
+}
+
+void MainWindow::onSaveButton_clicked() {
+    save_project();
 }

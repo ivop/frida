@@ -105,7 +105,7 @@ struct segment {
 
 extern QList<struct segment> segments;      // currently in main.cpp
 extern int currentSegment;
-extern QMap<quint64, QString> autoLabels, userLabels, userConstants;
+extern QMap<quint64, QString> autoLabels, userLabels;
 
 // --------------------------------------------------------------------------
 

@@ -56,6 +56,7 @@ private slots:
 
     void onLabelsButton_clicked();
     void onExitButton_clicked();
+    void onSaveButton_clicked();
 
     void onTableSegments_itemSelectionChanged();
     void onTableSegments_cellChanged(int row, int column);

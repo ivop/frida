@@ -111,7 +111,7 @@
       <item row="0" column="1">
        <widget class="QLineEdit" name="lineExistingProject">
         <property name="text">
-         <string>/home/ivo/frida-projects/atmas2.frida</string>
+         <string>project.frida</string>
         </property>
        </widget>
       </item>
