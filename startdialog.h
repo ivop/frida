@@ -19,7 +19,6 @@ public:
     bool create_new_project    = false;
 
 private slots:
-    void onButtonBrowseExistingProject_clicked();
     void onButtonBrowseFileDisasm_clicked();
     void onButtonLoadExistingProject_clicked();
     void onButtonNewProject_clicked();

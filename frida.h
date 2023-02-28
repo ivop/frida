@@ -8,6 +8,8 @@
 
 // --------------------------------------------------------------------------
 
+// Do NOT change this order as the index is saved in the project file(!)
+
 enum cputypeid {
     CT_NMOS6502 = 0,
     CT_NMOS6502UNDEF,
@@ -106,6 +108,7 @@ struct segment {
 extern QList<struct segment> segments;      // currently in main.cpp
 extern int currentSegment;
 extern QMap<quint64, QString> autoLabels, userLabels;
+extern quint32 cputype;
 
 // --------------------------------------------------------------------------
 

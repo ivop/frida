@@ -1,7 +1,9 @@
 #ifndef LOADSAVEPROJECT_H
 #define LOADSAVEPROJECT_H
 
-extern void load_project(void);
-extern void save_project(void);
+#include <QWidget>
+
+extern bool load_project(QWidget *widget);
+extern void save_project(QWidget *widget);
 
 #endif // LOADSAVEPROJECT_H

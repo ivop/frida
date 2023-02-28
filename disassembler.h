@@ -30,4 +30,6 @@ protected:
                                   struct disassembly &dis, int &n) override;
 };
 
+extern Disassembler *Disassembler;
+
 #endif // DISASSEMBLER_H

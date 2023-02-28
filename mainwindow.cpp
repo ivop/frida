@@ -16,8 +16,6 @@
 #include "frida.h"
 #include "disassembler.h"
 
-extern Disassembler *Disassembler;
-
 QBrush datatypeBrushes[DT_LAST] = {
     [DT_UNDEFINED_BYTES] = { QColor(255, 255, 255, 255), Qt::SolidPattern }, // white
     [DT_BYTES]           = { QColor(128, 128, 255, 255), Qt::SolidPattern }, // blueish
@@ -636,7 +634,7 @@ void MainWindow::showDisassembly(void) {
             t->item(row,0)->setTextAlignment(Qt::AlignTop);
 
             t->setItem(row, 1, new QTableWidgetItem(com));
-            t->item(row,1)->setForeground(Qt::gray); // XXX comment color
+            t->item(row,1)->setForeground(Qt::darkGray); // XXX comment color
             t->resizeRowToContents(row);
         }
 
@@ -826,5 +824,5 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 }
 
 void MainWindow::onSaveButton_clicked() {
-    save_project();
+    save_project(this);
 }

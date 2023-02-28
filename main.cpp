@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QHash>
 #include <QDesktopWidget>
+#include "disassembler.h"
 #include "frida.h"
 
 QList<struct segment> segments;
@@ -38,6 +39,14 @@ int main(int argc, char *argv[])
 
     if (!f.create_new_project && !f.load_existing_project)
         return 0;
+
+    // Select Disassembler as set in start dialog or loaded from project
+
+    switch(cputype) {
+    case CT_NMOS6502:
+        Disassembler = new Disassembler6502();
+        break;
+    }
 
     MainWindow m;
     m.showMaximized();

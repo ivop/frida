@@ -4,6 +4,8 @@
 #include "frida.h"
 #include "disassembler.h"
 
+class Disassembler *Disassembler;
+
 // ---------------------------------------------------------------------------
 
 static inline bool xisprint_ascii(quint8 v) {

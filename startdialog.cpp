@@ -6,13 +6,13 @@
 #include "frida.h"
 #include "loader.h"
 #include "disassembler.h"
+#include "loadsaveproject.h"
 
 QString FileToDisassemble;
 QString ProjectFileToSaveTo;
 
-int filetype, cputype;
+quint32 filetype, cputype;
 Loader *Loader;
-Disassembler *Disassembler;
 
 StartDialog::StartDialog(QWidget *parent) :
     QDialog(parent),
@@ -20,8 +20,6 @@ StartDialog::StartDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->buttonBrowseExistingProject, &QPushButton::clicked,
-            this, &StartDialog::onButtonBrowseExistingProject_clicked);
     connect(ui->buttonBrowseFileDisasm, &QPushButton::clicked,
             this, &StartDialog::onButtonBrowseFileDisasm_clicked);
     connect(ui->buttonLoadExistingProject, &QPushButton::clicked,
@@ -49,13 +47,6 @@ StartDialog::~StartDialog()
     delete ui;
 }
 
-void StartDialog::onButtonBrowseExistingProject_clicked()
-{
-    QString file = QFileDialog::getOpenFileName();
-    if (!file.isEmpty())
-        ui->lineExistingProject->setText(file);
-}
-
 void StartDialog::onButtonBrowseFileDisasm_clicked()
 {
     QString file = QFileDialog::getOpenFileName();
@@ -65,8 +56,8 @@ void StartDialog::onButtonBrowseFileDisasm_clicked()
 
 void StartDialog::onButtonLoadExistingProject_clicked()
 {
-    qDebug() << "Open Existing Project";
-    load_existing_project = true;
+    load_existing_project = load_project(this);
+    if (load_existing_project) close();
 }
 
 void StartDialog::onButtonNewProject_clicked()
@@ -137,17 +128,7 @@ void StartDialog::onButtonNewProject_clicked()
         return;
     }
 
-    // Select Disassembler (CPU Type)
-
-    switch(cputypes.at(cputype).id) {
-    case CT_NMOS6502:
-        Disassembler = new Disassembler6502();
-        break;
-    default:
-        msg.setText("Unknown cputype! (this shouldn't happen)");
-        msg.exec();
-        return;
-    }
+    cputype =  cputypes.at(cputype).id;
 
     create_new_project = true;
     close();
