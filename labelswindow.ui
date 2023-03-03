@@ -55,7 +55,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Export</string>
+        <string>Export User Labels</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
@@ -75,7 +75,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Import</string>
+        <string>Import User Labels</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
