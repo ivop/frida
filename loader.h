@@ -7,6 +7,7 @@ class Loader {
 public:
     virtual bool Load(QFile& file) = 0;
     static struct segment createEmptySegment(quint64 start, quint64 end);
+    void genericComment(QFile& file, struct segment *segment);
 };
 
 class LoaderRaw : public Loader {
