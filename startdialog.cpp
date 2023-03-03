@@ -56,6 +56,7 @@ void StartDialog::onButtonBrowseFileDisasm_clicked()
 
 void StartDialog::onButtonLoadExistingProject_clicked()
 {
+    segments.clear();
     load_existing_project = load_project(this);
     if (load_existing_project) close();
 }
@@ -113,6 +114,8 @@ void StartDialog::onButtonNewProject_clicked()
         msg.exec();
         return;
     }
+
+    segments.clear();
 
     if (!Loader->Load(file)) {
         msg.setText("Failed to load " + FileToDisassemble + "\n" + file.errorString());
