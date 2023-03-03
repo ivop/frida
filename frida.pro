@@ -4,18 +4,17 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += core gui widgets
 
 QMAKE_CXXFLAGS += -std=c++17
 
 TARGET = frida
 TEMPLATE = app
 
-SOURCES += main.cpp\
+SOURCES += \
+    main.cpp\
     loadsaveproject.cpp \
-        mainwindow.cpp \
+    mainwindow.cpp \
     loader.cpp \
     filetypes.cpp \
     cputypes.cpp \
@@ -28,7 +27,8 @@ SOURCES += main.cpp\
     lowhighbytewindow.cpp \
     startdialog.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS += \
+    mainwindow.h \
     frida.h \
     loader.h \
     disassembler.h \
@@ -40,7 +40,8 @@ HEADERS  += mainwindow.h \
     lowhighbytewindow.h \
     startdialog.h
 
-FORMS    += mainwindow.ui \
+FORMS += \
+    mainwindow.ui \
     commentwindow.ui \
     labelswindow.ui \
     addlabelwindow.ui \
