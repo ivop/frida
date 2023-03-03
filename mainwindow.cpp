@@ -805,7 +805,7 @@ void MainWindow::onRadioButtonFullscreen_toggled(bool checked) {
 
 void MainWindow::onComboBox_currentIndexChanged(int index) {
     QFont f = this->font();
-    f.setPointSize(8+index);
+    f.setPointSize(10+index);
     this->setFont(f);
 }
 

@@ -33,18 +33,8 @@
       <item>
        <widget class="QComboBox" name="comboBox">
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
-        <item>
-         <property name="text">
-          <string>8 pt</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>9 pt</string>
-         </property>
-        </item>
         <item>
          <property name="text">
           <string>10 pt</string>
