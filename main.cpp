@@ -16,6 +16,8 @@
 QList<struct segment> segments;
 int currentSegment;
 
+QString globalNotes;
+
 enum fonts altfont;
 
 // use QMap because they are always sorted according to the documentation

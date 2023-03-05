@@ -82,6 +82,7 @@ bool load_project(QWidget *widget) {
 
     in >> autoLabels;
     in >> userLabels;
+    in >> globalNotes;
 
     error = file.error();
     errorstring = file.errorString();
@@ -158,6 +159,7 @@ void save_project(QWidget *widget) {
 
     out << autoLabels;
     out << userLabels;
+    out << globalNotes;
 
     error = file.error();
     errorstring = file.errorString();

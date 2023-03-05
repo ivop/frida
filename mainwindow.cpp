@@ -71,6 +71,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QTableWidget *t;
     ui->setupUi(this);
 
+    ui->plainTextEditNotes->setPlainText(globalNotes);
+
     connect(ui->labelsButton, &QPushButton::clicked,
             this, &MainWindow::onLabelsButton_clicked);
     connect(ui->exitButton, &QPushButton::clicked,
@@ -824,5 +826,6 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 }
 
 void MainWindow::onSaveButton_clicked() {
+    globalNotes = ui->plainTextEditNotes->toPlainText();
     save_project(this);
 }
