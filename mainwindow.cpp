@@ -553,6 +553,9 @@ void MainWindow::Set_Flag_Low_or_High_Byte(bool bLow) {
                                     ui->tableHexadecimal->selectedRanges();
 
     int nranges = ranges.size();
+
+    if (!nranges) return;
+
     int ypos_equal = ranges.at(0).bottomRow() == ranges.at(0).topRow();
     int xpos_equal = ranges.at(0).leftColumn() == ranges.at(0).rightColumn();
     bool single_cell = xpos_equal && ypos_equal;
