@@ -47,6 +47,15 @@ bool load_project(QWidget *widget) {
 
     in >> fileformat;
 
+    if (fileformat > FRIDA_FILE_FORMAT_1) {
+        QMessageBox msg;
+        msg.setText("Unable to load " + file.errorString() +
+                    "\nProject is from a newer version of Frida\n");
+        msg.exec();
+        file.close();
+        return false;
+    }
+
     // future: select loader for older file formats
 
     in.setVersion(QDataStream::Qt_5_15);
