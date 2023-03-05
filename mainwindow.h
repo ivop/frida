@@ -21,6 +21,8 @@ public:
     void showAscii(void);
     void showDisassembly(void);
 
+    void closeEvent (QCloseEvent *event);
+
 public slots:
     void actionTrace(void);
     void actionSet_To_Undefined(void);

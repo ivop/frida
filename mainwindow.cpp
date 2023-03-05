@@ -829,3 +829,18 @@ void MainWindow::onSaveButton_clicked() {
     globalNotes = ui->plainTextEditNotes->toPlainText();
     save_project(this);
 }
+
+void MainWindow::closeEvent (QCloseEvent *event)
+{
+    QMessageBox msg;
+
+    msg.setText("Do you really want to exit Frida?");
+    msg.addButton("No", QMessageBox::RejectRole);
+    msg.addButton("Yes", QMessageBox::AcceptRole);
+    if (!msg.exec()) {
+        event->ignore();
+        return;
+    }
+
+    event->accept();
+}
