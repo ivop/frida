@@ -70,6 +70,8 @@ enum datatypes {
     DT_PETSCII,
     DT_ANTIC_SCREEN,
     DT_CBM_SCREEN,
+    DT_INVERSE_ATASCII,
+    DT_INVERSE_ANTIC_SCREEN,
     DT_LAST
 };
 

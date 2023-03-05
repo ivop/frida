@@ -186,6 +186,13 @@ also_wrong2:
             }
             break;
         case DT_ATASCII:
+            if (data[i] >= 128) {
+                datatypes[i] = DT_INVERSE_ATASCII;
+                if (!xisprint_ascii(atascii_to_ascii(data[i]-128))) {
+                    datatypes[i] = DT_BYTES;
+                }
+                break;
+            }
             if (!xisprint_ascii(atascii_to_ascii(data[i]))) {
                 datatypes[i] = DT_BYTES;
             }
@@ -196,6 +203,13 @@ also_wrong2:
             }
             break;
         case DT_ANTIC_SCREEN:
+            if (data[i] >= 128) {
+                datatypes[i] = DT_INVERSE_ANTIC_SCREEN;
+                if (!xisprint_ascii(atascii_to_ascii(data[i]-128))) {
+                    datatypes[i] = DT_BYTES;
+                }
+                break;
+            }
             if (!xisprint_ascii(antic_screen_to_ascii(data[i]))) {
                 datatypes[i] = DT_BYTES;
             }
@@ -334,6 +348,11 @@ do_directive:
             instr = ".atascii";
             goto do_string_directive;
 
+        case DT_INVERSE_ATASCII:
+            val = atascii_to_ascii(data[i]-128);
+            instr = ".invatascii";
+            goto do_string_directive;
+
         case DT_PETSCII:
             val = petscii_to_ascii(data[i]);
             instr = ".petscii";
@@ -342,6 +361,11 @@ do_directive:
         case DT_ANTIC_SCREEN:
             val = antic_screen_to_ascii(data[i]);
             instr = ".anticscreen";
+            goto do_string_directive;
+
+        case DT_INVERSE_ANTIC_SCREEN:
+            val = antic_screen_to_ascii(data[i]-128);
+            instr = ".invanticscreen";
             goto do_string_directive;
 
         case DT_CBM_SCREEN:

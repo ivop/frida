@@ -34,6 +34,8 @@ QBrush datatypeBrushes[DT_LAST] = {
     [DT_PETSCII]         = { QColor(128, 128, 128, 255), Qt::SolidPattern },
     [DT_ANTIC_SCREEN]    = { QColor(144, 144, 144, 255), Qt::SolidPattern },
     [DT_CBM_SCREEN]      = { QColor(160, 160, 160, 255), Qt::SolidPattern },
+    [DT_INVERSE_ATASCII]      = { QColor(112, 112, 112, 255), Qt::Dense3Pattern },
+    [DT_INVERSE_ANTIC_SCREEN] = { QColor(144, 144, 144, 255), Qt::Dense3Pattern },
 };
 
 const char *datatypeNames[DT_LAST] = {
@@ -54,6 +56,8 @@ const char *datatypeNames[DT_LAST] = {
     [DT_PETSCII]         = "PETSCII String",
     [DT_ANTIC_SCREEN]    = "ANTIC Screen Codes",
     [DT_CBM_SCREEN]      = "CBM Screen Codes",
+    [DT_INVERSE_ATASCII]      = "Inverse ATASCII String",
+    [DT_INVERSE_ANTIC_SCREEN] = "Inverse ANTIC Screen Codes",
 };
 
 const char *fontnames[FONT_LAST] = {
@@ -538,7 +542,6 @@ void MainWindow::Set_Flag(QList<QTableWidgetSelectionRange> Ranges, quint8 flag)
 }
 
 void MainWindow::actionSet_Flag_Labelled(void) {
-    qDebug("Flag Labelled\n");
     Set_Flag(ui->tableHexadecimal->selectedRanges(), FLAG_USE_LABEL);
 }
 
