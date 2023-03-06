@@ -60,6 +60,8 @@ const char *datatypeNames[DT_LAST] = {
     [DT_INVERSE_ANTIC_SCREEN] = "Inverse ANTIC Screen Codes",
 };
 
+// Do not change the order, as its index is saved as part of the project
+
 const char *fontnames[FONT_LAST] = {
     [FONT_NORMAL]        = "ASCII",
     [FONT_ATARI8BIT]     = "ATASCII",
