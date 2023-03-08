@@ -201,7 +201,8 @@ void export_assembly(QWidget *widget) {
 
             if (comments->contains(dis.address)) {
                 com = comments->value(dis.address);
-                out << ";\n";       // XXX print multi-line comment
+                com.replace("\n", "\n; ");
+                out << "; " << com << "\n";
             }
 
             if (   userLabels.contains(dis.address)
