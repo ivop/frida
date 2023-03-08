@@ -226,6 +226,12 @@ also_wrong2:
 
     // Generate disassembly
 
+    struct disassembly org = {};
+    org.instruction = QString(".org ");
+    org.arguments = QString(hexPrefix + "%1" + hexSuffix).arg(s->start, 0, 16);
+    org.changes_pc = true;
+    dislist->append(org);
+
     perline = 0;
     prevtype = -1;
     for (quint64 i = 0; i < size; i++) {

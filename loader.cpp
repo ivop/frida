@@ -12,7 +12,7 @@
 // new char[size]() is similar to calloc()
 
 void Loader::genericComment(QFile& file, struct segment *segment) {
-    segment->comments.insert(segment->start,
+    segment->comments.insert(0,
         QString("\n") +
         QString("Disassembled from: ") + file.fileName().section("/",-1,-1) +
         QString("\n"));

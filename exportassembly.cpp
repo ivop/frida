@@ -184,9 +184,7 @@ void export_assembly(QWidget *widget) {
             out << QString("%1").arg(iter.key(), 0, 16) << hexSuffix << "\n";
         }
 
-        out << "\n    org ";
-        out << hexPrefix << QString("%1").arg(s->start, 0, 16) << hexSuffix;
-        out << "\n\n";
+        out << "\n";
 
         // output disassembly
 
