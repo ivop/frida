@@ -50,26 +50,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="exportButton">
-       <property name="focusPolicy">
-        <enum>Qt::NoFocus</enum>
-       </property>
-       <property name="text">
-        <string>Export User Labels</string>
-       </property>
-       <property name="icon">
-        <iconset resource="frida.qrc">
-         <normaloff>:/icons/icons/label.png</normaloff>:/icons/icons/label.png</iconset>
-       </property>
-       <property name="shortcut">
-        <string>Alt+E</string>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QToolButton" name="importButton">
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
@@ -83,6 +63,26 @@
        </property>
        <property name="shortcut">
         <string>Alt+I</string>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="exportButton">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="text">
+        <string>Export User Labels</string>
+       </property>
+       <property name="icon">
+        <iconset resource="frida.qrc">
+         <normaloff>:/icons/icons/label.png</normaloff>:/icons/icons/label.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Alt+E</string>
        </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextBesideIcon</enum>
