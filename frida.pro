@@ -12,6 +12,7 @@ TARGET = frida
 TEMPLATE = app
 
 SOURCES += \
+    exportassembly.cpp \
     main.cpp\
     loadsaveproject.cpp \
     mainwindow.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
     startdialog.cpp
 
 HEADERS += \
+    exportassembly.h \
     mainwindow.h \
     frida.h \
     loader.h \

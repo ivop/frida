@@ -8,14 +8,14 @@ public:
     void generateDisassembly(void);
     virtual void trace(quint64 address) = 0;
 
+    QString hexPrefix, hexSuffix;
+
 protected:
     virtual void initTables(void) = 0;
     virtual int getInstructionSizeAt(quint64 address) = 0;
     virtual void createOperandLabel(quint64 address) = 0;
     virtual void disassembleInstructionAt(quint64 address,
                                           struct disassembly &dis, int&n) = 0;
-
-    QString hexPrefix, hexSuffix;
 };
 
 class Disassembler6502 : public Disassembler {

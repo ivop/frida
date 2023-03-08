@@ -15,6 +15,7 @@
 #include <sstream>
 #include "frida.h"
 #include "disassembler.h"
+#include "exportassembly.h"
 
 QBrush datatypeBrushes[DT_LAST] = {
     [DT_UNDEFINED_BYTES] = { QColor(255, 255, 255, 255), Qt::SolidPattern }, // white
@@ -85,6 +86,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::onExitButton_clicked);
     connect(ui->saveButton, &QPushButton::clicked,
             this, &MainWindow::onSaveButton_clicked);
+    connect(ui->exportAsmButton, &QPushButton::clicked,
+            this, &MainWindow::onExportAsmButton_clicked);
 
     connect(ui->tableSegments, &QTableWidget::itemSelectionChanged,
             this, &MainWindow::onTableSegments_itemSelectionChanged);
@@ -851,4 +854,8 @@ void MainWindow::closeEvent (QCloseEvent *event)
     }
 
     event->accept();
+}
+
+void MainWindow::onExportAsmButton_clicked() {
+    export_assembly(this);
 }

@@ -8,6 +8,12 @@
 
 // --------------------------------------------------------------------------
 
+#define FRIDA_VERSION_MAJOR     0
+#define FRIDA_VERSION_MINOR     9
+#define FRIDA_VERSION_STRING    "0.9 beta"
+
+// --------------------------------------------------------------------------
+
 // Do NOT change this order as the index is saved in the project file(!)
 
 enum cputypeid {

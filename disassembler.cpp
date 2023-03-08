@@ -219,6 +219,8 @@ also_wrong2:
                 datatypes[i] = DT_BYTES;
             }
             break;
+        case DT_INVERSE_ATASCII:      break; // never happens
+        case DT_INVERSE_ANTIC_SCREEN: break; // never happens
         }
     }
 
