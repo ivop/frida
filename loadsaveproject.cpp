@@ -119,6 +119,8 @@ void save_project(QWidget *widget) {
     if (name.isEmpty()) return;
 
     QFile file(name);
+
+#if 0   // QFileDialog already handles this
     if (file.exists()) {
         QMessageBox msg;
         msg.setText("File " + name + " exists. Overwrite?");
@@ -128,6 +130,7 @@ void save_project(QWidget *widget) {
         if(msg.exec() != QMessageBox::Yes)
             return;
     }
+#endif
 
     file.open(QIODevice::WriteOnly);
     if (!file.isOpen()) {
