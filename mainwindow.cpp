@@ -94,13 +94,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->tableSegments, &QTableWidget::cellChanged,
             this, &MainWindow::onTableSegments_cellChanged);
 
-    connect(ui->comboFonts, qOverload<int>(&QComboBox::activated),
+    connect(ui->comboFonts, QOverload<int>::of(&QComboBox::activated),
             this, &MainWindow::onComboFonts_activated);
 
     connect(ui->radioButtonFullscreen, &QRadioButton::toggled,
             this, &MainWindow::onRadioButtonFullscreen_toggled);
 
-    connect(ui->comboBox, qOverload<int>(&QComboBox::currentIndexChanged),
+    connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &MainWindow::onComboBox_currentIndexChanged);
 
     connect(ui->tableDisassembly, &QTableWidget::doubleClicked,
@@ -378,7 +378,7 @@ void MainWindow::showAscii(void) {
     qint32 offset = 0;
 
     if (altfont == FONT_ATARI8BIT) {
-        font = QFont("Atari Classic", 10, 1);
+        font = QFont("Atari Classic Int", 10, 1);
         offset = 0xe000;
     }
     if (altfont == FONT_C64) {
