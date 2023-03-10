@@ -9,9 +9,26 @@
 #include <QDataStream>
 #include "frida.h"
 #include "exportassembly.h"
+#include "exportassemblywindow.h"
 
 static int error;
 extern QString errorstring;
+static int asm_format;
+
+// ---------------------------------------------------------------------------
+
+// Output formats
+
+static void mads_assembler(QString *instr) {
+    instr->replace(".wordle", ".word");
+    instr->replace(".atascii", ".byte");
+    instr->replace(".anticscreen", ".sb");
+    instr->replace(".invatascii", ".byte +128");
+    instr->replace(".invanticscreen", ".sb +128");
+    instr->replace(".org", "org");
+}
+
+// ---------------------------------------------------------------------------
 
 static void write_line(QTextStream& out) {
     out << "; ----------------------------------------------------------";
@@ -19,6 +36,14 @@ static void write_line(QTextStream& out) {
 }
 
 void export_assembly(QWidget *widget) {
+    exportAssemblyWindow *asw = new exportAssemblyWindow();
+
+    asw->exec();
+
+    if (asw->result() == QDialog::Rejected) return;
+
+    asm_format = asw->asm_format;
+
     QString name = QFileDialog::getSaveFileName(widget, "Export assembly as...");
 
     if (name.isEmpty()) return;
@@ -226,7 +251,13 @@ void export_assembly(QWidget *widget) {
                 }
             }
 
-            out << "    " << dis.instruction << " " << dis.arguments << "\n";
+            QString instruction = dis.instruction;
+
+            if (asm_format == ASM_FORMAT_MADS) {
+                mads_assembler(&instruction);
+            }
+
+            out << "    " << instruction << " " << dis.arguments << "\n";
 
             if (dis.changes_pc) {
                 out << "\n";
