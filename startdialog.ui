@@ -35,6 +35,8 @@
      <property name="font">
       <font>
        <pointsize>20</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
       </font>
      </property>
      <property name="autoFillBackground">
@@ -49,14 +51,31 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="labelAuthor">
+    <widget class="QLabel" name="labelVersion">
      <property name="font">
       <font>
        <pointsize>12</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>Version 1.0 Copyright © 2017,2023 by Ivo van Poorten</string>
+      <string>version</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="labelAuthor">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Copyright © 2017,2023 by Ivo van Poorten</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -68,6 +87,11 @@
    </item>
    <item>
     <widget class="QLabel" name="labelBuild">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>build</string>
      </property>
