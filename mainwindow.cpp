@@ -106,6 +106,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->tableDisassembly, &QTableWidget::doubleClicked,
             this, &MainWindow::onTableDisassembly_doubleClicked);
 
+    connect(ui->tableDisassembly, &QTableWidget::cellChanged,
+            this, &MainWindow::onTableDisassembly_cellChanged);
+
     t = ui->tableSegments;
     t->horizontalHeader()->setSectionsClickable(false);
     t->addAction(ui->actionDelete_Segment);
@@ -622,6 +625,7 @@ void MainWindow::showDisassembly(void) {
     QTableWidget *t = ui->tableDisassembly;
     QList<struct disassembly> *dislist  = &s->disassembly;
     QMap<quint64, QString> *comments     = &s->comments;
+    QTableWidgetItem *item;
     struct disassembly dis;
     QString com;
     int row;
@@ -643,11 +647,16 @@ void MainWindow::showDisassembly(void) {
 
             t->setSpan(row,1,1,2);
 
-            t->setItem(row, 0, new QTableWidgetItem(";"));
-            t->item(row,0)->setTextAlignment(Qt::AlignTop);
+            item = new QTableWidgetItem(";");
+            item->setTextAlignment(Qt::AlignTop);
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+            t->setItem(row, 0, item);
 
-            t->setItem(row, 1, new QTableWidgetItem(com));
-            t->item(row,1)->setForeground(Qt::darkGray); // XXX comment color
+            item = new QTableWidgetItem(com);
+            item->setForeground(Qt::darkGray);
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+            t->setItem(row, 1, item);
+
             t->resizeRowToContents(row);
         }
 
@@ -683,8 +692,17 @@ void MainWindow::showDisassembly(void) {
         QString hex = QString("%1").arg(dis.address, 4, 16, (QChar)'0');
         t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
 
-        t->setItem(row, 1, new QTableWidgetItem(dis.instruction));
-        t->setItem(row, 2, new QTableWidgetItem(dis.arguments));
+        item = new QTableWidgetItem("");
+        item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+        t->setItem(row, 0, item);
+
+        item = new QTableWidgetItem(dis.instruction);
+        item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+        t->setItem(row, 1, item);
+
+        item = new QTableWidgetItem(dis.arguments);
+        item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+        t->setItem(row, 2, item);
 
         if (dis.instruction.at(0) == QString("."))
             t->item(row,1)->setForeground(QColor(0,96,0));
@@ -693,10 +711,41 @@ void MainWindow::showDisassembly(void) {
             row = t->rowCount();
             t->setRowCount(row+1);
             t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
+            item = new QTableWidgetItem("");
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+            t->setSpan(row,0,1,3);
+            t->setItem(row, 0, item);
         }
 
         di++;
     }
+}
+
+void MainWindow::onTableDisassembly_cellChanged(int row, int column) {
+    struct segment *s = &segments[currentSegment];
+    QTableWidget *t = ui->tableDisassembly;
+
+    if (! t->item(row,column)->isSelected()) return; // not a user action
+
+    if (!(t->item(row,column)->flags() & Qt::ItemIsEditable)) return;
+
+    // editable, so it's a label cell
+
+    quint64 address = t->verticalHeaderItem(row)->text().toULongLong(0,16);
+    QString label = t->item(row,column)->text();
+
+    if (s->localLabels.contains(address)) {
+        s->localLabels.insert(address, label);
+    } else if (userLabels.contains(address)) {
+        userLabels.insert(address,label);
+    } else if (autoLabels.contains(address)) {
+        autoLabels.remove(address);
+        userLabels.insert(address, label);
+    } else {
+        userLabels.insert(address, label);
+    }
+    Disassembler->generateDisassembly();
+    showDisassembly();
 }
 
 // --------------------------------------------------------------------------

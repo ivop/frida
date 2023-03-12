@@ -63,6 +63,7 @@ private slots:
 
     void onTableSegments_itemSelectionChanged();
     void onTableSegments_cellChanged(int row, int column);
+    void onTableDisassembly_cellChanged(int row, int column);
 
     void onComboFonts_activated(int index);
     void onRadioButtonFullscreen_toggled(bool checked);
