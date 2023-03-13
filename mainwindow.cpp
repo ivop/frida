@@ -754,6 +754,8 @@ void MainWindow::onTableDisassembly_cellChanged(int row, int column) {
 
 // --------------------------------------------------------------------------
 
+// Used for bot Hex and Ascii Sections
+
 void MainWindow::onHexSectionClicked(int index) {
     QTableWidget *th = ui->tableHexadecimal;
     QTableWidget *td = ui->tableDisassembly;
@@ -761,7 +763,8 @@ void MainWindow::onHexSectionClicked(int index) {
     int n = td->rowCount();
 
     for (int i=0; i<n; i++) {
-        if (td->verticalHeaderItem(i)->text() < s) continue;
+        if (td->verticalHeaderItem(i)->text().toULongLong(0,16) < s.toULongLong(0,16))
+            continue;
         td->scrollToItem(td->item(i,0), QAbstractItemView::PositionAtCenter);
         break;
     }
@@ -782,7 +785,8 @@ void MainWindow::onDisassemblySectionClicked(int index) {
     int n = th->rowCount();
 
     for (int i=0; i<n; i++) {
-        if (th->verticalHeaderItem(i)->text() < s) continue;
+        if (th->verticalHeaderItem(i)->text().toULongLong(0,16) < s.toULongLong(0,16))
+            continue;
         th->scrollToItem(th->item(i,0), QAbstractItemView::PositionAtCenter);
         break;
     }
@@ -973,12 +977,11 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         // search row and center
 
-        QString rowstr = QString("%1").arg(addr, 0, 16);
         QTableWidget *td = ui->tableDisassembly;
-        qDebug() << rowstr;
-        qDebug() << td->rowCount();
+
         for (int row = 0; row < td->rowCount(); row++) {
-            if (td->verticalHeaderItem(row)->text() < rowstr) continue;
+            if (td->verticalHeaderItem(row)->text().toULongLong(0,16) < addr)
+                continue;
 
             // found row:
             if (td->item(row,0)->text() == QString(";")) row++; // skip comment
