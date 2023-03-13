@@ -13,6 +13,7 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <sstream>
+#include <algorithm>
 #include "frida.h"
 #include "disassembler.h"
 #include "exportassembly.h"
@@ -349,6 +350,7 @@ void MainWindow::showHex(void) {
     QTableWidget *t = ui->tableHexadecimal;
 
     t->setRowCount(0);
+    t->verticalHeader()->setDefaultAlignment(Qt::AlignRight);
 
     qint64 size = s->end - s->start + 1;
 
@@ -390,6 +392,7 @@ void MainWindow::showAscii(void) {
     }
 
     t->setRowCount(0);
+    t->verticalHeader()->setDefaultAlignment(Qt::AlignRight);
 
     qint64 size = s->end - s->start + 1;
 
@@ -631,6 +634,7 @@ void MainWindow::showDisassembly(void) {
     int row;
 
     t->setRowCount(0);
+    t->verticalHeader()->setDefaultAlignment(Qt::AlignRight);
 
     qint64 di = 0;
     while (di < dislist->size()) {
@@ -641,9 +645,9 @@ void MainWindow::showDisassembly(void) {
 
             row = t->rowCount();
             t->setRowCount(row+1);
-            QString hex = QString("%1").arg(dis.address, 4, 16, (QChar)'0');
+            QString hex = QString("%1").arg(dis.address, 0, 16, (QChar)'0');
             t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
-            t->verticalHeaderItem(row)->setTextAlignment(Qt::AlignTop);
+            t->verticalHeaderItem(row)->setTextAlignment(Qt::AlignTop | Qt::AlignRight);
 
             t->setSpan(row,1,1,2);
 
@@ -678,7 +682,7 @@ void MainWindow::showDisassembly(void) {
             if (!label.contains(QChar('+')) && !label.contains(QChar('-'))) {
                 row = t->rowCount();
                 t->setRowCount(row+1);
-                QString hex = QString("%1").arg(dis.address, 4, 16, (QChar)'0');
+                QString hex = QString("%1").arg(dis.address, 0, 16, (QChar)'0');
                 t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
 
                 t->setSpan(row,0,1,3);
@@ -689,7 +693,7 @@ void MainWindow::showDisassembly(void) {
         row = t->rowCount();
         t->setRowCount(row+1);
 
-        QString hex = QString("%1").arg(dis.address, 4, 16, (QChar)'0');
+        QString hex = QString("%1").arg(dis.address, 0, 16, (QChar)'0');
         t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
 
         item = new QTableWidgetItem("");
@@ -758,7 +762,7 @@ void MainWindow::onHexSectionClicked(int index) {
 
     for (int i=0; i<n; i++) {
         if (td->verticalHeaderItem(i)->text() < s) continue;
-        td->scrollToItem(td->item(i,1), QAbstractItemView::PositionAtCenter);
+        td->scrollToItem(td->item(i,0), QAbstractItemView::PositionAtCenter);
         break;
     }
 }
@@ -779,7 +783,7 @@ void MainWindow::onDisassemblySectionClicked(int index) {
 
     for (int i=0; i<n; i++) {
         if (th->verticalHeaderItem(i)->text() < s) continue;
-        th->scrollToItem(th->item(i,1), QAbstractItemView::PositionAtCenter);
+        th->scrollToItem(th->item(i,0), QAbstractItemView::PositionAtCenter);
         break;
     }
 
@@ -872,17 +876,122 @@ void MainWindow::onComboBox_currentIndexChanged(int index) {
 }
 
 void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
+    struct segment *s = &segments[currentSegment];
     QTableWidget *t = ui->tableDisassembly;
     QTableWidgetItem *item = t->item(index.row(),0);
 
     if (!item) return;
 
-    QString s = t->item(index.row(), 0)->text();
+    // coment lines:
 
-    if (s == ";") {
+    QString first = t->item(index.row(), 0)->text();
+
+    if (first == ";") {
         actionComment();
         return;
     }
+
+    // empty lines span three columns
+
+    if (t->columnSpan(index.row(), index.column()) == 3) {
+
+    }
+
+    // other lines have columnSpan of one (space, opcode, operand/label)
+
+    if (t->columnSpan(index.row(), index.column()) == 1) {
+        if (index.column() != 2) return;
+
+        QString operand = t->item(index.row(), 2)->text();
+
+        QMap<quint64, QString>::const_iterator iter;
+
+        // find value for key if it exists
+
+        // find local label
+
+        for (iter  = s->localLabels.constBegin();
+             iter != s->localLabels.constEnd();
+             iter++) {
+
+            if (iter.value() == operand) {
+                break;      // found!
+            }
+        }
+
+        // if not found, find user label
+
+        if (iter == s->localLabels.constEnd()) {
+            for (iter  = userLabels.constBegin();
+                 iter != userLabels.constEnd();
+                 iter++) {
+
+                if (iter.value() == operand) {
+                    break;      // found!
+                }
+            }
+        }
+
+        // if not found, find auto label
+
+        if (iter == userLabels.constEnd()) {
+            for (iter  = autoLabels.constBegin();
+                 iter != autoLabels.constEnd();
+                 iter++) {
+
+                if (iter.value() == operand) {
+                    break;      // found!
+                }
+            }
+        }
+
+        if (iter == autoLabels.constEnd()) {
+            return;     // nothing found
+        }
+
+        quint64 addr = iter.key();
+
+        // find segment that contains address
+        // if outside of any segment, return
+
+        int i;
+        for (i = 0; i<segments.size(); i++) {
+            if ((addr >= segments[i].start) && (addr <= segments[i].end))
+                break;
+        }
+
+        if (i == segments.size()) // not found
+            return;
+
+        // otherwise,
+        // jump to segment and scroll disassembly and hex/ascii to right place
+
+        ui->tableSegments->selectRow(i);
+
+        QCoreApplication::processEvents(QEventLoop::AllEvents); // direct triggers
+        QCoreApplication::processEvents(QEventLoop::AllEvents); // indirect triggers
+
+        // search row and center
+
+        QString rowstr = QString("%1").arg(addr, 0, 16);
+        QTableWidget *td = ui->tableDisassembly;
+        qDebug() << rowstr;
+        qDebug() << td->rowCount();
+        for (int row = 0; row < td->rowCount(); row++) {
+            if (td->verticalHeaderItem(row)->text() < rowstr) continue;
+
+            // found row:
+            if (td->item(row,0)->text() == QString(";")) row++; // skip comment
+            td->scrollToItem(td->item(row,0), QAbstractItemView::PositionAtCenter);
+            td->clearSelection();   // if segment is the same, clear selected
+            td->clearFocus();       // and focus
+            td->item(row,0)->setSelected(true);
+            break;
+        }
+    }
+
+    // labeled lines span three columns, too, but are editable and don't reach
+    // this function.
 }
 
 void MainWindow::onSaveButton_clicked() {
