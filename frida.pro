@@ -14,6 +14,7 @@ TEMPLATE = app
 SOURCES += \
     exportassembly.cpp \
     exportassemblywindow.cpp \
+    jumptowindow.cpp \
     main.cpp\
     loadsaveproject.cpp \
     mainwindow.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
 HEADERS += \
     exportassembly.h \
     exportassemblywindow.h \
+    jumptowindow.h \
     mainwindow.h \
     frida.h \
     loader.h \
@@ -46,6 +48,7 @@ HEADERS += \
 
 FORMS += \
     exportassemblywindow.ui \
+    jumptowindow.ui \
     mainwindow.ui \
     commentwindow.ui \
     labelswindow.ui \

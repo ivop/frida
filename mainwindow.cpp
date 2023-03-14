@@ -17,6 +17,7 @@
 #include "frida.h"
 #include "disassembler.h"
 #include "exportassembly.h"
+#include "jumptowindow.h"
 
 QBrush datatypeBrushes[DT_LAST] = {
     [DT_UNDEFINED_BYTES] = { QColor(255, 255, 255, 255), Qt::SolidPattern }, // white
@@ -908,6 +909,26 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         QString operand = t->item(index.row(), 2)->text();
 
+        // check for #<label and #>label
+
+        if ((operand.left(2) == "#<") || (operand.left(2) == "#>")) {
+            operand = operand.mid(2);
+        }
+
+        // check for line of addresses/labels
+
+        QStringList operand_list;
+
+        if (operand.contains(",") && t->item(index.row(), 1)->text() != ".byte") {
+            operand_list = operand.split(", ");     // note extra space!
+
+            jumpToWindow *jtw = new jumpToWindow(nullptr, &operand_list);
+
+            jtw->exec();
+
+            operand = jtw->jump_to_location;
+        }
+
         QMap<quint64, QString>::const_iterator iter;
 
         // find value for key if it exists
@@ -949,14 +970,27 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
             }
         }
 
+        quint64 addr;
+        QString *hexPrefix = &Disassembler->hexPrefix;
+        QString *hexSuffix = &Disassembler->hexSuffix;
+
+        // if no label is found, check for hexPrefixed or hexSuffixed address
+
         if (iter == autoLabels.constEnd()) {
-            return;     // nothing found
+            if (operand.left(hexPrefix->size()) == *hexPrefix) {
+                operand = operand.mid(hexPrefix->size());
+                addr = operand.toULongLong(0,16);
+            } else if (operand.right(hexSuffix->size()) == *hexSuffix) {
+                operand = operand.left(operand.size()-hexSuffix->size());
+                addr = operand.toULongLong(0,16);
+            } else {
+                return;     // nothing found to jump to
+            }
+        } else {
+            addr = iter.key();
         }
 
-        quint64 addr = iter.key();
-
         // find segment that contains address
-        // if outside of any segment, return
 
         int i;
         for (i = 0; i<segments.size(); i++) {
@@ -968,7 +1002,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
             return;
 
         // otherwise,
-        // jump to segment and scroll disassembly and hex/ascii to right place
+        // jump to segment and scroll disassembly to the right place
 
         ui->tableSegments->selectRow(i);
 
