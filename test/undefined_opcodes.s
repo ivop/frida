@@ -54,7 +54,8 @@
 
     lax $ff
     lax $ff,y
-    lax ($ff,x)             ; MADS 2.1.5 BUG: $9F, should be $A3
+;    lax ($ff,x)             ; MADS 2.1.5 BUG: $9F, should be $A3
+    .byte $a3, $ff
     lax ($ff),y
     lax $ffff
     lax $ffff,y
