@@ -46,9 +46,13 @@ int main(int argc, char *argv[])
 
     switch(cputype) {
     case CT_NMOS6502:
+        [[fallthrough]];
+    case CT_NMOS6502UNDEF:
         Disassembler = new Disassembler6502();
         break;
     }
+
+    Disassembler->cputype = cputype;        // be able to detect variants
 
     MainWindow m;
     m.showMaximized();

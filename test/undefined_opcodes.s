@@ -173,4 +173,14 @@
 
     cim
 
-    .byte $12, $22, $32, $42, $52, $62, $72, $92, $b2, $d2, $f2
+    .byte $12, $ff      ; CIM #$ff
+    .byte $22, $ff      ; CIM $ff
+    .byte $32, $ff      ; CIM $ff,x
+    .byte $42, $ff      ; CIM $ff,y
+    .byte $52, $ff      ; CIM ($ff,x)
+    .byte $62, $ff      ; CIM ($ff),y
+    .byte $72, $ff, $ff ; CIM $ffff
+    .byte $92, $ff, $ff ; CIM $ffff,x
+    .byte $b2, $ff, $ff ; CIM $ffff,y
+    .byte $d2, $ff, $ff ; CIM ($ffff)
+    .byte $f2, $ff      ; CIM relative

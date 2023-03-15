@@ -9,6 +9,7 @@ public:
     virtual void trace(quint64 address) = 0;
 
     QString hexPrefix, hexSuffix;
+    quint64 cputype;
 
 protected:
     virtual void initTables(void) = 0;
