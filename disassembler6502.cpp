@@ -1060,8 +1060,6 @@ void Disassembler6502::trace(quint64 address) {
             enum addressing_mode m = (enum addressing_mode) item.mode;
             int n = isizes[m];
 
-            qDebug() << address;
-
             if (address+n-1>end)
                 break;
             if (  datatypes[i] != DT_UNDEFINED_BYTES
