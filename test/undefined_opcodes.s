@@ -147,6 +147,7 @@
     .byte $82, $ff      ; NOP #$ff
     .byte $c2, $ff      ; NOP #$ff
     .byte $e2, $ff      ; NOP #$ff
+    .byte $89, $ff      ; NOP #$ff
 
     .byte $04, $ff      ; NOP $ff
     dop $ff             ; .byte $44, $ff      ; NOP $ff
@@ -168,7 +169,7 @@
     .byte $dc, $ff, $ff ; NOP $ffff,x
     .byte $fc, $ff, $ff ; NOP $ffff,x
 
-; JAM       (CIM)
+; CIM       (JAM)
 
     cim
 
