@@ -119,7 +119,9 @@ void StartDialog::onButtonNewProject_clicked()
     segments.clear();
 
     if (!Loader->Load(file)) {
-        msg.setText("Failed to load " + FileToDisassemble + "\n" + file.errorString());
+        msg.setText("Failed to load " + FileToDisassemble + "\n"
+                    + file.errorString()
+                    + "\n\nFile type mismatch or corrupted file!\n");
         msg.exec();
         return;
     }

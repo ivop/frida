@@ -48,6 +48,8 @@ int main(int argc, char *argv[])
     case CT_NMOS6502:
         [[fallthrough]];
     case CT_NMOS6502UNDEF:
+        [[fallthrough]];
+    case CT_CMOS65C02:
         Disassembler = new Disassembler6502();
         break;
     }

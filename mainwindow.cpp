@@ -633,6 +633,7 @@ void MainWindow::showDisassembly(void) {
     struct disassembly dis;
     QString com;
     int row;
+    bool zero_comment_done = false;
 
     t->setRowCount(0);
     t->verticalHeader()->setDefaultAlignment(Qt::AlignRight);
@@ -642,6 +643,11 @@ void MainWindow::showDisassembly(void) {
         dis = dislist->at(di);
 
         if (comments->contains(dis.address)) {
+            if (dis.address == 0 && zero_comment_done)
+                goto skip_comment;
+            if (dis.address == 0)
+                zero_comment_done = true; // no double comments for raw files
+
             com = comments->value(dis.address);
 
             row = t->rowCount();
@@ -664,6 +670,8 @@ void MainWindow::showDisassembly(void) {
 
             t->resizeRowToContents(row);
         }
+
+        skip_comment:
 
         if (   userLabels.contains(dis.address)
             || autoLabels.contains(dis.address)

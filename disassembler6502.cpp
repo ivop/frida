@@ -26,55 +26,63 @@ enum addressing_mode {
     MODE_IND,           // jmp ($1234)
     MODE_ABS_X,         // lda $1234,x
     MODE_ABS_Y,         // lda $1234,y
+    MODE_IND_ZP,        // lda ($12)        65C02 only
+    MODE_IND_ABS_X,     // jmp ($1234,x)    65C02 only
     MODE_LAST
 };
 
 static const char * const fmts[MODE_LAST] = {
-    [MODE_ACCU]  = "A",
-    [MODE_IMPL]  = "",
-    [MODE_IMM]   = "#%1",
-    [MODE_REL]   = "%1",
-    [MODE_ZP]    = "%1",
-    [MODE_ZP_X]  = "%1,x",
-    [MODE_ZP_Y]  = "%1,y",
-    [MODE_IND_X] = "(%1,x)",
-    [MODE_IND_Y] = "(%1),y",
-    [MODE_ABS]   = "%1",
-    [MODE_IND]   = "(%1)",
-    [MODE_ABS_X] = "%1,x",
-    [MODE_ABS_Y] = "%1,y"
+    [MODE_ACCU]      = "A",
+    [MODE_IMPL]      = "",
+    [MODE_IMM]       = "#%1",
+    [MODE_REL]       = "%1",
+    [MODE_ZP]        = "%1",
+    [MODE_ZP_X]      = "%1,x",
+    [MODE_ZP_Y]      = "%1,y",
+    [MODE_IND_X]     = "(%1,x)",
+    [MODE_IND_Y]     = "(%1),y",
+    [MODE_ABS]       = "%1",
+    [MODE_IND]       = "(%1)",
+    [MODE_ABS_X]     = "%1,x",
+    [MODE_ABS_Y]     = "%1,y",
+    [MODE_IND_ZP]    = "(%1)",          // 65C02 only
+    [MODE_IND_ABS_X] = "(%1,x)"         // 65C02 only
 };
 
 static const char isizes[MODE_LAST] = {
-    [MODE_ACCU]  = 1,
-    [MODE_IMPL]  = 1,
-    [MODE_IMM]   = 2,
-    [MODE_REL]   = 2,
-    [MODE_ZP]    = 2,
-    [MODE_ZP_X]  = 2,
-    [MODE_ZP_Y]  = 2,
-    [MODE_IND_X] = 2,
-    [MODE_IND_Y] = 2,
-    [MODE_ABS]   = 3,
-    [MODE_IND]   = 3,
-    [MODE_ABS_X] = 3,
-    [MODE_ABS_Y] = 3
+    [MODE_ACCU]      = 1,
+    [MODE_IMPL]      = 1,
+    [MODE_IMM]       = 2,
+    [MODE_REL]       = 2,
+    [MODE_ZP]        = 2,
+    [MODE_ZP_X]      = 2,
+    [MODE_ZP_Y]      = 2,
+    [MODE_IND_X]     = 2,
+    [MODE_IND_Y]     = 2,
+    [MODE_ABS]       = 3,
+    [MODE_IND]       = 3,
+    [MODE_ABS_X]     = 3,
+    [MODE_ABS_Y]     = 3,
+    [MODE_IND_ZP]    = 2,               // 65C02 only
+    [MODE_IND_ABS_X] = 3                // 65C02 only
 };
 
 static const char can_be_label[MODE_LAST] = {
-    [MODE_ACCU]  = 0,
-    [MODE_IMPL]  = 0,
-    [MODE_IMM]   = 0,
-    [MODE_REL]   = 1,
-    [MODE_ZP]    = 1,
-    [MODE_ZP_X]  = 1,
-    [MODE_ZP_Y]  = 1,
-    [MODE_IND_X] = 1,
-    [MODE_IND_Y] = 1,
-    [MODE_ABS]   = 1,
-    [MODE_IND]   = 1,
-    [MODE_ABS_X] = 1,
-    [MODE_ABS_Y] = 1
+    [MODE_ACCU]      = 0,
+    [MODE_IMPL]      = 0,
+    [MODE_IMM]       = 0,
+    [MODE_REL]       = 1,
+    [MODE_ZP]        = 1,
+    [MODE_ZP_X]      = 1,
+    [MODE_ZP_Y]      = 1,
+    [MODE_IND_X]     = 1,
+    [MODE_IND_Y]     = 1,
+    [MODE_ABS]       = 1,
+    [MODE_IND]       = 1,
+    [MODE_ABS_X]     = 1,
+    [MODE_ABS_Y]     = 1,
+    [MODE_IND_ZP]    = 1,               // 65C02 only
+    [MODE_IND_ABS_X] = 1                // 65C02 only
 };
 
 struct distabitem {
@@ -643,12 +651,291 @@ static struct distabitem distabNMOS6502UNDEF[256] = {
 
 // ---------------------------------------------------------------------------
 
+static struct distabitem distabCMOS65C02[256] = {
+
+    { "brk", MODE_IMPL },       // $00
+    { "ora", MODE_IND_X },      // $01
+    UNDEFINED,                  // $02
+    UNDEFINED,                  // $03
+    { "tsb", MODE_ZP },                 // $04
+    { "ora", MODE_ZP },         // $05
+    { "asl", MODE_ZP },         // $06
+    UNDEFINED,                  // $07
+    { "php", MODE_IMPL },       // $08
+    { "ora", MODE_IMM },        // $09
+    { "asl", MODE_ACCU },       // $0a
+    UNDEFINED,                  // $0b
+    { "tsb", MODE_ABS },                // $0c
+    { "ora", MODE_ABS },        // $0d
+    { "asl", MODE_ABS },        // $0e
+    UNDEFINED,                  // $0f
+
+    { "bpl", MODE_REL },        // $10
+    { "ora", MODE_IND_Y },      // $11
+    { "ora", MODE_IND_ZP },             // $12
+    UNDEFINED,                  // $13
+    { "trb", MODE_ZP },                 // $14
+    { "ora", MODE_ZP_X },       // $15
+    { "asl", MODE_ZP_X },       // $16
+    UNDEFINED,                  // $17
+    { "clc", MODE_IMPL },       // $18
+    { "ora", MODE_ABS_Y },      // $19
+    { "inc", MODE_ACCU },               // $1a
+    UNDEFINED,                  // $1b
+    { "trb", MODE_ABS },                // $1c
+    { "ora", MODE_ABS_X },      // $1d
+    { "asl", MODE_ABS_X },      // $1e
+    UNDEFINED,                  // $1f
+
+    { "jsr", MODE_ABS },        // $20
+    { "and", MODE_IND_X },      // $21
+    UNDEFINED,                  // $22
+    UNDEFINED,                  // $23
+    { "bit", MODE_ZP },         // $24
+    { "and", MODE_ZP },         // $25
+    { "rol", MODE_ZP },         // $26
+    UNDEFINED,                  // $27
+    { "plp", MODE_IMPL },       // $28
+    { "and", MODE_IMM },        // $29
+    { "rol", MODE_ACCU },       // $2a
+    UNDEFINED,                  // $2b
+    { "bit", MODE_ABS },        // $2c
+    { "and", MODE_ABS },        // $2d
+    { "rol", MODE_ABS },        // $2d
+    UNDEFINED,                  // $2f
+
+    { "bmi", MODE_REL },        // $30
+    { "and", MODE_IND_Y },      // $31
+    { "and", MODE_IND_ZP },             // $32
+    UNDEFINED,                  // $33
+    { "bit", MODE_ZP_X },               // $34
+    { "and", MODE_ZP_X },       // $35
+    { "rol", MODE_ZP_X },       // $36
+    UNDEFINED,                  // $37
+    { "sec", MODE_IMPL },       // $38
+    { "and", MODE_ABS_Y },      // $39
+    { "dec", MODE_ACCU },               // $3a
+    UNDEFINED,                  // $3b
+    { "bit", MODE_ABS_X },              // $3c
+    { "and", MODE_ABS_X },      // $3d
+    { "rol", MODE_ABS_X},       // $3e
+    UNDEFINED,                  // $3f
+
+    { "rti", MODE_IMPL },       // $40
+    { "eor", MODE_IND_X },      // $41
+    UNDEFINED,                  // $42
+    UNDEFINED,                  // $43
+    UNDEFINED,                  // $44
+    { "eor", MODE_ZP },         // $45
+    { "lsr", MODE_ZP },         // $46
+    UNDEFINED,                  // $47
+    { "pha", MODE_IMPL },       // $48
+    { "eor", MODE_IMM },        // $49
+    { "lsr", MODE_ACCU },       // $4a
+    UNDEFINED,                  // $4b
+    { "jmp", MODE_ABS },        // $4c
+    { "eor", MODE_ABS },        // $4d
+    { "lsr", MODE_ABS },        // $4e
+    UNDEFINED,                  // $4f
+
+    { "bvc", MODE_REL },        // $50
+    { "eor", MODE_IND_Y },      // $51
+    { "eor", MODE_IND_ZP },             // $52
+    UNDEFINED,                  // $53
+    UNDEFINED,                  // $54
+    { "eor", MODE_ZP_X },       // $55
+    { "lsr", MODE_ZP_X },       // $56
+    UNDEFINED,                  // $57
+    { "cli", MODE_IMPL },       // $58
+    { "eor", MODE_ABS_Y },      // $59
+    { "phy", MODE_IMPL },               // $5a
+    UNDEFINED,                  // $5b
+    UNDEFINED,                  // $5c
+    { "eor", MODE_ABS_X },      // $5d
+    { "lsr", MODE_ABS_X },      // $5e
+    UNDEFINED,                  // $5f
+
+    { "rts", MODE_IMPL },       // $60
+    { "adc", MODE_IND_X },      // $61
+    UNDEFINED,                  // $62
+    UNDEFINED,                  // $63
+    { "stz", MODE_ZP },                 // $64
+    { "adc", MODE_ZP },         // $65
+    { "ror", MODE_ZP },         // $66
+    UNDEFINED,                  // $67
+    { "pla", MODE_IMPL },       // $68
+    { "adc", MODE_IMM },        // $69
+    { "ror", MODE_ACCU },       // $6a
+    UNDEFINED,                  // $6b
+    { "jmp", MODE_IND },        // $6c
+    { "adc", MODE_ABS },        // $6d
+    { "ror", MODE_ABS },        // $6e
+    UNDEFINED,                  // $6f
+
+    { "bvs", MODE_REL },        // $70
+    { "adc", MODE_IND_Y },      // $71
+    { "adc", MODE_IND_ZP },             // $72
+    UNDEFINED,                  // $73
+    { "stz", MODE_ZP_X },               // $74
+    { "adc", MODE_ZP_X },       // $75
+    { "ror", MODE_ZP_X },       // $76
+    UNDEFINED,                  // $77
+    { "sei", MODE_IMPL },       // $78
+    { "adc", MODE_ABS_Y },      // $79
+    { "ply", MODE_IMPL },               // $7a
+    UNDEFINED,                  // $7b
+    { "jmp", MODE_IND_ABS_X },          // $7c
+    { "adc", MODE_ABS_X },      // $7d
+    { "ror", MODE_ABS_X },      // $7e
+    UNDEFINED,                  // $7f
+
+    { "bra", MODE_REL },                // $80
+    { "sta", MODE_IND_X },      // $81
+    UNDEFINED,                  // $82
+    UNDEFINED,                  // $83
+    { "sty", MODE_ZP },         // $84
+    { "sta", MODE_ZP },         // $85
+    { "stx", MODE_ZP },         // $86
+    UNDEFINED,                  // $87
+    { "dey", MODE_IMPL },       // $88
+    { "bit", MODE_IMM },                // $89
+    { "txa", MODE_IMPL },       // $8a
+    UNDEFINED,                  // $8b
+    { "sty", MODE_ABS },        // $8c
+    { "sta", MODE_ABS },        // $8d
+    { "stx", MODE_ABS },        // $8e
+    UNDEFINED,                  // $8f
+
+    { "bcc", MODE_REL },        // $90
+    { "sta", MODE_IND_Y },      // $91
+    { "sta", MODE_IND_ZP },             // $92
+    UNDEFINED,                  // $93
+    { "sty", MODE_ZP_X },       // $94
+    { "sta", MODE_ZP_X },       // $95
+    { "stx", MODE_ZP_Y },       // $96
+    UNDEFINED,                  // $97
+    { "tya", MODE_IMPL },       // $98
+    { "sta", MODE_ABS_Y },      // $99
+    { "txs", MODE_IMPL },       // $9a
+    UNDEFINED,                  // $9b
+    { "stz", MODE_ABS },                // $9c
+    { "sta", MODE_ABS_X },      // $9d
+    { "stz", MODE_ABS_X },              // $9e
+    UNDEFINED,                  // $9f
+
+    { "ldy", MODE_IMM },        // $a0
+    { "lda", MODE_IND_X },      // $a1
+    { "ldx", MODE_IMM },        // $a2
+    UNDEFINED,                  // $a3
+    { "ldy", MODE_ZP },         // $a4
+    { "lda", MODE_ZP },         // $a5
+    { "ldx", MODE_ZP },         // $a6
+    UNDEFINED,                  // $a7
+    { "tay", MODE_IMPL },       // $a8
+    { "lda", MODE_IMM },        // $a9
+    { "tax", MODE_IMPL },       // $aa
+    UNDEFINED,                  // $ab
+    { "ldy", MODE_ABS },        // $ac
+    { "lda", MODE_ABS },        // $ad
+    { "ldx", MODE_ABS },        // $ae
+    UNDEFINED,                  // $af
+
+    { "bcs", MODE_REL },        // $b0
+    { "lda", MODE_IND_Y },      // $b1
+    { "lda", MODE_IND_ZP },             // $b2
+    UNDEFINED,                  // $b3
+    { "ldy", MODE_ZP_X },       // $b4
+    { "lda", MODE_ZP_X },       // $b5
+    { "ldx", MODE_ZP_Y },       // $b6
+    UNDEFINED,                  // $b7
+    { "clv", MODE_IMPL },       // $b8
+    { "lda", MODE_ABS_Y },      // $b9
+    { "tsx", MODE_IMPL },       // $ba
+    UNDEFINED,                  // $bb
+    { "ldy", MODE_ABS_X },      // $bc
+    { "lda", MODE_ABS_X },      // $bd
+    { "ldx", MODE_ABS_Y },      // $be
+    UNDEFINED,                  // $bf
+
+    { "cpy", MODE_IMM },        // $c0
+    { "cmp", MODE_IND_X },      // $c1
+    UNDEFINED,                  // $c2
+    UNDEFINED,                  // $c3
+    { "cpy", MODE_ZP },         // $c4
+    { "cmp", MODE_ZP },         // $c5
+    { "dec", MODE_ZP },         // $c6
+    UNDEFINED,                  // $c7
+    { "iny", MODE_IMPL },       // $c8
+    { "cmp", MODE_IMM },        // $c9
+    { "dex", MODE_IMPL },       // $ca
+    UNDEFINED,                  // $cb
+    { "cpy", MODE_ABS },        // $cc
+    { "cmp", MODE_ABS },        // $cd
+    { "dec", MODE_ABS },        // $ce
+    UNDEFINED,                  // $cf
+
+    { "bne", MODE_REL },        // $d0
+    { "cmp", MODE_IND_Y },      // $d1
+    { "cmp", MODE_IND_ZP },             // $d2
+    UNDEFINED,                  // $d3
+    UNDEFINED,                  // $d4
+    { "cmp", MODE_ZP_X },       // $d5
+    { "dec", MODE_ZP_X },       // $d6
+    UNDEFINED,                  // $d7
+    { "cld", MODE_IMPL },       // $d8
+    { "cmp", MODE_ABS_Y },      // $d9
+    { "phx", MODE_IMPL },               // $da
+    UNDEFINED,                  // $db
+    UNDEFINED,                  // $dc
+    { "cmp", MODE_ABS_X },      // $dd
+    { "dec", MODE_ABS_X },      // $de
+    UNDEFINED,                  // $df
+
+    { "cpx", MODE_IMM },        // $e0
+    { "sbc", MODE_IND_X },      // $e1
+    UNDEFINED,                  // $e2
+    UNDEFINED,                  // $e3
+    { "cpx", MODE_ZP },         // $e4
+    { "sbc", MODE_ZP },         // $e5
+    { "inc", MODE_ZP },         // $e6
+    UNDEFINED,                  // $e7
+    { "inx", MODE_IMPL },       // $e8
+    { "sbc", MODE_IMM },        // $e9
+    { "nop", MODE_IMPL },       // $ea
+    UNDEFINED,                  // $eb
+    { "cpx", MODE_ABS },        // $ec
+    { "sbc", MODE_ABS },        // $ed
+    { "inc", MODE_ABS },        // $ee
+    UNDEFINED,                  // $ef
+
+    { "beq", MODE_REL },        // $f0
+    { "sbc", MODE_IND_Y },      // $f1
+    { "sbc", MODE_IND_ZP },             // $f2
+    UNDEFINED,                  // $f3
+    UNDEFINED,                  // $f4
+    { "sbc", MODE_ZP_X },       // $f5
+    { "inc", MODE_ZP_X },       // $f6
+    UNDEFINED,                  // $f7
+    { "sed", MODE_IMPL },       // $f8
+    { "sbc", MODE_ABS_Y },      // $f9
+    { "plx", MODE_IMPL },               // $fa
+    UNDEFINED,                  // $fb
+    UNDEFINED,                  // $fc
+    { "sbc", MODE_ABS_X },      // $fd
+    { "inc", MODE_ABS_X },      // $fe
+    UNDEFINED                   // $ff
+
+};
+
+// ---------------------------------------------------------------------------
+
 static struct distabitem *distab;
 
 void Disassembler6502::initTables(void) {
     switch(this->cputype) {
         case CT_NMOS6502:       distab = distabNMOS6502;        break;
         case CT_NMOS6502UNDEF:  distab = distabNMOS6502UNDEF;   break;
+        case CT_CMOS65C02:      distab = distabCMOS65C02;   break;
         default: break;
     }
 
@@ -773,7 +1060,9 @@ void Disassembler6502::trace(quint64 address) {
             enum addressing_mode m = (enum addressing_mode) item.mode;
             int n = isizes[m];
 
-            if (address+n>=end)
+            qDebug() << address;
+
+            if (address+n-1>end)
                 break;
             if (  datatypes[i] != DT_UNDEFINED_BYTES
                && datatypes[i] != DT_CODE)
