@@ -919,7 +919,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         QStringList operand_list;
 
-        if (operand.contains(",") && t->item(index.row(), 1)->text() != ".byte") {
+        if (operand.contains(", ") && t->item(index.row(), 1)->text() != ".byte") {
             operand_list = operand.split(", ");     // note extra space!
 
             jumpToWindow *jtw = new jumpToWindow(nullptr, &operand_list);
