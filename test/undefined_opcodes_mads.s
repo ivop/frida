@@ -183,4 +183,4 @@
     .byte $92, $ff, $ff ; CIM $ffff,x
     .byte $b2, $ff, $ff ; CIM $ffff,y
     .byte $d2, $ff, $ff ; CIM ($ffff)
-    .byte $f2, $ff      ; CIM relative
+    .byte $f2, $fe      ; CIM relative
