@@ -1019,7 +1019,7 @@ void Disassembler6502::disassembleInstructionAt(quint64 i,
                 hex = pref + QString("%1").arg(autoLabels.value(addr));
             else
                 hex = pref + QString("$%1").arg(addr, 4, 16, (QChar)'0');
-        } else {  // XXX add check for operand < 256 and MODE_IMM
+        } else {
             hex   = QString("$%1").arg(operand, 2, 16, (QChar)'0');
         }
         temps = QString(fmts[m]).arg(hex);

@@ -927,8 +927,17 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         QStringList operand_list;
 
-        if (operand.contains(", ") && t->item(index.row(), 1)->text() != ".byte") {
-            operand_list = operand.split(", ");     // note extra space!
+        if (operand.contains(",")) {
+            operand_list = operand.split(",");
+
+            operand_list.replaceInStrings("(", ""); // (label)
+            operand_list.replaceInStrings(")", "");
+            operand_list.replaceInStrings("<", ""); // <label in .byte
+            operand_list.replaceInStrings(">", "");
+
+            for (int i = 0; i < operand_list.size(); i++) {
+                operand_list.replace(i, operand_list.at(i).trimmed());
+            }
 
             jumpToWindow *jtw = new jumpToWindow(nullptr, &operand_list);
 
