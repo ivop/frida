@@ -170,7 +170,7 @@ also_wrong2:
 
 
             // while we're at it, generate labels in the same loop?
-            createOperandLabel(i);
+            createOperandLabels(i);
             i += n-1;
             break;
 

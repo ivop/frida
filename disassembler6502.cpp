@@ -28,6 +28,7 @@ enum addressing_mode {
     MODE_ABS_Y,         // lda $1234,y
     MODE_IND_ZP,        // lda ($12)        65C02 only
     MODE_IND_ABS_X,     // jmp ($1234,x)    65C02 only
+    MODE_ZP_REL,        // bbr0 $12,$fe     65C02 only (Rockwell/WDC)
     MODE_LAST
 };
 
@@ -46,7 +47,8 @@ static const char * const fmts[MODE_LAST] = {
     [MODE_ABS_X]     = "%1,x",
     [MODE_ABS_Y]     = "%1,y",
     [MODE_IND_ZP]    = "(%1)",          // 65C02 only
-    [MODE_IND_ABS_X] = "(%1,x)"         // 65C02 only
+    [MODE_IND_ABS_X] = "(%1,x)",        // 65C02 only
+    [MODE_ZP_REL]    = "%1,%2",         // 65C02 only (Rockwell/WDC)
 };
 
 static const char isizes[MODE_LAST] = {
@@ -64,7 +66,8 @@ static const char isizes[MODE_LAST] = {
     [MODE_ABS_X]     = 3,
     [MODE_ABS_Y]     = 3,
     [MODE_IND_ZP]    = 2,               // 65C02 only
-    [MODE_IND_ABS_X] = 3                // 65C02 only
+    [MODE_IND_ABS_X] = 3,               // 65C02 only
+    [MODE_ZP_REL]    = 3,               // 65C02 only (Rockwell/WDC)
 };
 
 static const char can_be_label[MODE_LAST] = {
@@ -82,7 +85,8 @@ static const char can_be_label[MODE_LAST] = {
     [MODE_ABS_X]     = 1,
     [MODE_ABS_Y]     = 1,
     [MODE_IND_ZP]    = 1,               // 65C02 only
-    [MODE_IND_ABS_X] = 1                // 65C02 only
+    [MODE_IND_ABS_X] = 1,               // 65C02 only
+    [MODE_ZP_REL]    = 1,               // 65C02 only (Rockwell/WDC)
 };
 
 struct distabitem {
@@ -375,6 +379,8 @@ static struct distabitem distabNMOS6502[256] = {
 
 static struct distabitem distabNMOS6502UNDEF[256] = {
 
+                                // std  // undef
+
     { "brk", MODE_IMPL },       // $00
     { "ora", MODE_IND_X },      // $01
     { "cim", MODE_IMPL },               // $02
@@ -653,6 +659,8 @@ static struct distabitem distabNMOS6502UNDEF[256] = {
 
 static struct distabitem distabCMOS65C02[256] = {
 
+                                // std  // cmos // rockwell/wdc
+
     { "brk", MODE_IMPL },       // $00
     { "ora", MODE_IND_X },      // $01
     UNDEFINED,                  // $02
@@ -660,7 +668,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "tsb", MODE_ZP },                 // $04
     { "ora", MODE_ZP },         // $05
     { "asl", MODE_ZP },         // $06
-    UNDEFINED,                  // $07
+    { "rmb0", MODE_ZP },                    // $07
     { "php", MODE_IMPL },       // $08
     { "ora", MODE_IMM },        // $09
     { "asl", MODE_ACCU },       // $0a
@@ -668,7 +676,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "tsb", MODE_ABS },                // $0c
     { "ora", MODE_ABS },        // $0d
     { "asl", MODE_ABS },        // $0e
-    UNDEFINED,                  // $0f
+    { "bbr0", MODE_ZP_REL },                // $0f
 
     { "bpl", MODE_REL },        // $10
     { "ora", MODE_IND_Y },      // $11
@@ -677,7 +685,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "trb", MODE_ZP },                 // $14
     { "ora", MODE_ZP_X },       // $15
     { "asl", MODE_ZP_X },       // $16
-    UNDEFINED,                  // $17
+    { "rmb1", MODE_ZP },                    // $17
     { "clc", MODE_IMPL },       // $18
     { "ora", MODE_ABS_Y },      // $19
     { "inc", MODE_ACCU },               // $1a
@@ -685,7 +693,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "trb", MODE_ABS },                // $1c
     { "ora", MODE_ABS_X },      // $1d
     { "asl", MODE_ABS_X },      // $1e
-    UNDEFINED,                  // $1f
+    { "bbr1", MODE_ZP_REL },                // $1f
 
     { "jsr", MODE_ABS },        // $20
     { "and", MODE_IND_X },      // $21
@@ -694,7 +702,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "bit", MODE_ZP },         // $24
     { "and", MODE_ZP },         // $25
     { "rol", MODE_ZP },         // $26
-    UNDEFINED,                  // $27
+    { "rmb2", MODE_ZP },                    // $27
     { "plp", MODE_IMPL },       // $28
     { "and", MODE_IMM },        // $29
     { "rol", MODE_ACCU },       // $2a
@@ -702,7 +710,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "bit", MODE_ABS },        // $2c
     { "and", MODE_ABS },        // $2d
     { "rol", MODE_ABS },        // $2d
-    UNDEFINED,                  // $2f
+    { "bbr2", MODE_ZP_REL },                // $2f
 
     { "bmi", MODE_REL },        // $30
     { "and", MODE_IND_Y },      // $31
@@ -711,7 +719,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "bit", MODE_ZP_X },               // $34
     { "and", MODE_ZP_X },       // $35
     { "rol", MODE_ZP_X },       // $36
-    UNDEFINED,                  // $37
+    { "rmb3", MODE_ZP },                    // $37
     { "sec", MODE_IMPL },       // $38
     { "and", MODE_ABS_Y },      // $39
     { "dec", MODE_ACCU },               // $3a
@@ -719,7 +727,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "bit", MODE_ABS_X },              // $3c
     { "and", MODE_ABS_X },      // $3d
     { "rol", MODE_ABS_X},       // $3e
-    UNDEFINED,                  // $3f
+    { "bbr3", MODE_ZP_REL },                // $3f
 
     { "rti", MODE_IMPL },       // $40
     { "eor", MODE_IND_X },      // $41
@@ -728,7 +736,7 @@ static struct distabitem distabCMOS65C02[256] = {
     UNDEFINED,                  // $44
     { "eor", MODE_ZP },         // $45
     { "lsr", MODE_ZP },         // $46
-    UNDEFINED,                  // $47
+    { "rmb4", MODE_ZP },                    // $47
     { "pha", MODE_IMPL },       // $48
     { "eor", MODE_IMM },        // $49
     { "lsr", MODE_ACCU },       // $4a
@@ -736,7 +744,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "jmp", MODE_ABS },        // $4c
     { "eor", MODE_ABS },        // $4d
     { "lsr", MODE_ABS },        // $4e
-    UNDEFINED,                  // $4f
+    { "bbr4", MODE_ZP_REL },                // $4f
 
     { "bvc", MODE_REL },        // $50
     { "eor", MODE_IND_Y },      // $51
@@ -745,7 +753,7 @@ static struct distabitem distabCMOS65C02[256] = {
     UNDEFINED,                  // $54
     { "eor", MODE_ZP_X },       // $55
     { "lsr", MODE_ZP_X },       // $56
-    UNDEFINED,                  // $57
+    { "rmb5", MODE_ZP },                    // $57
     { "cli", MODE_IMPL },       // $58
     { "eor", MODE_ABS_Y },      // $59
     { "phy", MODE_IMPL },               // $5a
@@ -753,7 +761,7 @@ static struct distabitem distabCMOS65C02[256] = {
     UNDEFINED,                  // $5c
     { "eor", MODE_ABS_X },      // $5d
     { "lsr", MODE_ABS_X },      // $5e
-    UNDEFINED,                  // $5f
+    { "bbr5", MODE_ZP_REL },                // $5f
 
     { "rts", MODE_IMPL },       // $60
     { "adc", MODE_IND_X },      // $61
@@ -762,7 +770,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "stz", MODE_ZP },                 // $64
     { "adc", MODE_ZP },         // $65
     { "ror", MODE_ZP },         // $66
-    UNDEFINED,                  // $67
+    { "rmb6", MODE_ZP },                    // $67
     { "pla", MODE_IMPL },       // $68
     { "adc", MODE_IMM },        // $69
     { "ror", MODE_ACCU },       // $6a
@@ -770,7 +778,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "jmp", MODE_IND },        // $6c
     { "adc", MODE_ABS },        // $6d
     { "ror", MODE_ABS },        // $6e
-    UNDEFINED,                  // $6f
+    { "bbr6", MODE_ZP_REL },                // $6f
 
     { "bvs", MODE_REL },        // $70
     { "adc", MODE_IND_Y },      // $71
@@ -779,7 +787,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "stz", MODE_ZP_X },               // $74
     { "adc", MODE_ZP_X },       // $75
     { "ror", MODE_ZP_X },       // $76
-    UNDEFINED,                  // $77
+    { "rmb7", MODE_ZP },                    // $77
     { "sei", MODE_IMPL },       // $78
     { "adc", MODE_ABS_Y },      // $79
     { "ply", MODE_IMPL },               // $7a
@@ -787,7 +795,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "jmp", MODE_IND_ABS_X },          // $7c
     { "adc", MODE_ABS_X },      // $7d
     { "ror", MODE_ABS_X },      // $7e
-    UNDEFINED,                  // $7f
+    { "bbr7", MODE_ZP_REL },                // $7f
 
     { "bra", MODE_REL },                // $80
     { "sta", MODE_IND_X },      // $81
@@ -796,7 +804,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "sty", MODE_ZP },         // $84
     { "sta", MODE_ZP },         // $85
     { "stx", MODE_ZP },         // $86
-    UNDEFINED,                  // $87
+    { "smb0", MODE_ZP },                    // $87
     { "dey", MODE_IMPL },       // $88
     { "bit", MODE_IMM },                // $89
     { "txa", MODE_IMPL },       // $8a
@@ -804,7 +812,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "sty", MODE_ABS },        // $8c
     { "sta", MODE_ABS },        // $8d
     { "stx", MODE_ABS },        // $8e
-    UNDEFINED,                  // $8f
+    { "bbs0", MODE_ZP_REL },                // $8f
 
     { "bcc", MODE_REL },        // $90
     { "sta", MODE_IND_Y },      // $91
@@ -813,7 +821,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "sty", MODE_ZP_X },       // $94
     { "sta", MODE_ZP_X },       // $95
     { "stx", MODE_ZP_Y },       // $96
-    UNDEFINED,                  // $97
+    { "smb1", MODE_ZP },                    // $97
     { "tya", MODE_IMPL },       // $98
     { "sta", MODE_ABS_Y },      // $99
     { "txs", MODE_IMPL },       // $9a
@@ -821,7 +829,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "stz", MODE_ABS },                // $9c
     { "sta", MODE_ABS_X },      // $9d
     { "stz", MODE_ABS_X },              // $9e
-    UNDEFINED,                  // $9f
+    { "bbs1", MODE_ZP_REL },                // $9f
 
     { "ldy", MODE_IMM },        // $a0
     { "lda", MODE_IND_X },      // $a1
@@ -830,7 +838,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "ldy", MODE_ZP },         // $a4
     { "lda", MODE_ZP },         // $a5
     { "ldx", MODE_ZP },         // $a6
-    UNDEFINED,                  // $a7
+    { "smb2", MODE_ZP },                    // $a7
     { "tay", MODE_IMPL },       // $a8
     { "lda", MODE_IMM },        // $a9
     { "tax", MODE_IMPL },       // $aa
@@ -838,7 +846,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "ldy", MODE_ABS },        // $ac
     { "lda", MODE_ABS },        // $ad
     { "ldx", MODE_ABS },        // $ae
-    UNDEFINED,                  // $af
+    { "bbs2", MODE_ZP_REL },                // $af
 
     { "bcs", MODE_REL },        // $b0
     { "lda", MODE_IND_Y },      // $b1
@@ -847,7 +855,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "ldy", MODE_ZP_X },       // $b4
     { "lda", MODE_ZP_X },       // $b5
     { "ldx", MODE_ZP_Y },       // $b6
-    UNDEFINED,                  // $b7
+    { "smb3", MODE_ZP },                    // $b7
     { "clv", MODE_IMPL },       // $b8
     { "lda", MODE_ABS_Y },      // $b9
     { "tsx", MODE_IMPL },       // $ba
@@ -855,7 +863,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "ldy", MODE_ABS_X },      // $bc
     { "lda", MODE_ABS_X },      // $bd
     { "ldx", MODE_ABS_Y },      // $be
-    UNDEFINED,                  // $bf
+    { "bbs3", MODE_ZP_REL },                // $bf
 
     { "cpy", MODE_IMM },        // $c0
     { "cmp", MODE_IND_X },      // $c1
@@ -864,15 +872,15 @@ static struct distabitem distabCMOS65C02[256] = {
     { "cpy", MODE_ZP },         // $c4
     { "cmp", MODE_ZP },         // $c5
     { "dec", MODE_ZP },         // $c6
-    UNDEFINED,                  // $c7
+    { "smb4", MODE_ZP },                    // $c7
     { "iny", MODE_IMPL },       // $c8
     { "cmp", MODE_IMM },        // $c9
     { "dex", MODE_IMPL },       // $ca
-    UNDEFINED,                  // $cb
+    { "wai", MODE_IMPL },                   // $cb
     { "cpy", MODE_ABS },        // $cc
     { "cmp", MODE_ABS },        // $cd
     { "dec", MODE_ABS },        // $ce
-    UNDEFINED,                  // $cf
+    { "bbs4", MODE_ZP_REL },                // $cf
 
     { "bne", MODE_REL },        // $d0
     { "cmp", MODE_IND_Y },      // $d1
@@ -881,15 +889,15 @@ static struct distabitem distabCMOS65C02[256] = {
     UNDEFINED,                  // $d4
     { "cmp", MODE_ZP_X },       // $d5
     { "dec", MODE_ZP_X },       // $d6
-    UNDEFINED,                  // $d7
+    { "smb5", MODE_ZP },                    // $d7
     { "cld", MODE_IMPL },       // $d8
     { "cmp", MODE_ABS_Y },      // $d9
     { "phx", MODE_IMPL },               // $da
-    UNDEFINED,                  // $db
+    { "stp", MODE_IMPL },                   // $db
     UNDEFINED,                  // $dc
     { "cmp", MODE_ABS_X },      // $dd
     { "dec", MODE_ABS_X },      // $de
-    UNDEFINED,                  // $df
+    { "bbs5", MODE_ZP_REL },                // $df
 
     { "cpx", MODE_IMM },        // $e0
     { "sbc", MODE_IND_X },      // $e1
@@ -898,7 +906,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "cpx", MODE_ZP },         // $e4
     { "sbc", MODE_ZP },         // $e5
     { "inc", MODE_ZP },         // $e6
-    UNDEFINED,                  // $e7
+    { "smb6", MODE_ZP },                    // $e7
     { "inx", MODE_IMPL },       // $e8
     { "sbc", MODE_IMM },        // $e9
     { "nop", MODE_IMPL },       // $ea
@@ -906,7 +914,7 @@ static struct distabitem distabCMOS65C02[256] = {
     { "cpx", MODE_ABS },        // $ec
     { "sbc", MODE_ABS },        // $ed
     { "inc", MODE_ABS },        // $ee
-    UNDEFINED,                  // $ef
+    { "bbs6", MODE_ZP_REL },                // $ef
 
     { "beq", MODE_REL },        // $f0
     { "sbc", MODE_IND_Y },      // $f1
@@ -915,7 +923,7 @@ static struct distabitem distabCMOS65C02[256] = {
     UNDEFINED,                  // $f4
     { "sbc", MODE_ZP_X },       // $f5
     { "inc", MODE_ZP_X },       // $f6
-    UNDEFINED,                  // $f7
+    { "smb7", MODE_ZP },                    // $f7
     { "sed", MODE_IMPL },       // $f8
     { "sbc", MODE_ABS_Y },      // $f9
     { "plx", MODE_IMPL },               // $fa
@@ -923,7 +931,7 @@ static struct distabitem distabCMOS65C02[256] = {
     UNDEFINED,                  // $fc
     { "sbc", MODE_ABS_X },      // $fd
     { "inc", MODE_ABS_X },      // $fe
-    UNDEFINED                   // $ff
+    { "bbs7", MODE_ZP_REL },                // $ff
 
 };
 
@@ -948,13 +956,32 @@ int Disassembler6502::getInstructionSizeAt(quint64 address) {
     return isizes[(enum addressing_mode)distab[data[address]].mode];
 }
 
-void Disassembler6502::createOperandLabel(quint64 i) {
+void Disassembler6502::createOperandLabels(quint64 i) {
     quint8 *data = segments[currentSegment].data;
-    quint64 addr = 0, start = segments[currentSegment].start;
+    quint64 addr = 0, addr2 = 0, start = segments[currentSegment].start;
     int n = isizes[(enum addressing_mode)distab[data[i]].mode];
     QString hex;
 
-    if (can_be_label[(enum addressing_mode)distab[data[i]].mode]) {
+    if (distab[data[i]].mode == MODE_ZP_REL) {
+        addr  = data[i+1];
+        addr2 = data[i+2];
+        addr2 = 3 + start + i + addr2 - (addr2>0x7f ? 0x100 : 0);
+
+        if ( ! (segments[currentSegment].localLabels.contains(addr)
+                || userLabels.contains(addr))) {
+
+            hex = QString("L%1").arg(addr,4,16,(QChar)'0');
+            autoLabels.insert(addr, hex);
+        }
+
+        if ( ! (segments[currentSegment].localLabels.contains(addr2)
+                || userLabels.contains(addr2))) {
+
+            hex = QString("L%1").arg(addr2,4,16,(QChar)'0');
+            autoLabels.insert(addr2, hex);
+        }
+
+    } else if (can_be_label[(enum addressing_mode)distab[data[i]].mode]) {
         if (n == 2)
             addr = data[i+1];
         else if (n == 3)
@@ -977,30 +1004,61 @@ void Disassembler6502::disassembleInstructionAt(quint64 i,
     quint8 *flags = segments[currentSegment].flags;
     quint8 *data = segments[currentSegment].data;
     quint64 start = segments[currentSegment].start;
-    quint16 opcode = data[i], operand = 0;
-    QString temps, hex;
+    quint16 opcode = data[i], operand = 0, operand2 = 0;
+    QString temps, hex, hex2;
     struct distabitem item = distab[opcode];
     enum addressing_mode m = (enum addressing_mode) item.mode;
 
     n = isizes[m];
     if (n > 1) {
         operand = data[i+1];
+
         if (n == 3) {
             operand |= (quint16) data[i+2] << 8;
         }
+
         if (m == MODE_REL) {
             operand = 2 + start + i + operand - (operand>0x7f ? 0x100 : 0);
         }
-        if (can_be_label[m] && (   autoLabels.contains(operand)
+
+        if (m == MODE_ZP_REL) {
+
+            operand  = data[i+1];
+            operand2 = data[i+2];
+            operand2 = 3 + start + i + operand2 - (operand2>0x7f ? 0x100 : 0);
+
+            if (localLabels->contains(operand))
+                hex = localLabels->value(operand);
+            else if (userLabels.contains(operand))
+                hex = userLabels.value(operand);
+            else if (autoLabels.contains(operand2))
+                hex = autoLabels.value(operand);
+            else
+                hex = QString("$%1").arg(operand, 2, 16, (QChar)'0');
+
+            if (localLabels->contains(operand2))
+                hex2 = localLabels->value(operand2);
+            else if (userLabels.contains(operand2))
+                hex2 = userLabels.value(operand2);
+            else if (autoLabels.contains(operand2))
+                hex2 = autoLabels.value(operand2);
+            else
+                hex2 = QString("$%1").arg(operand2, 2, 16, (QChar)'0');
+
+
+        } else if (can_be_label[m] && (   autoLabels.contains(operand)
                                 || userLabels.contains(operand)
                                 || localLabels->contains(operand) )) {
+
             if (localLabels->contains(operand))
                 hex = localLabels->value(operand);
             else if (userLabels.contains(operand))
                 hex = userLabels.value(operand);
             else
                 hex = autoLabels.value(operand);
+
         } else if (m == MODE_IMM && flags[i+1] & (FLAG_LOW_BYTE|FLAG_HIGH_BYTE)) {
+
             QMap<quint64,quint16> *map;
             char pref;
             if (flags[i+1] & FLAG_LOW_BYTE) {
@@ -1019,10 +1077,18 @@ void Disassembler6502::disassembleInstructionAt(quint64 i,
                 hex = pref + QString("%1").arg(autoLabels.value(addr));
             else
                 hex = pref + QString("$%1").arg(addr, 4, 16, (QChar)'0');
+
         } else {
-            hex   = QString("$%1").arg(operand, 2, 16, (QChar)'0');
+                hex   = QString("$%1").arg(operand, 2, 16, (QChar)'0');
         }
-        temps = QString(fmts[m]).arg(hex);
+
+        // build final string
+
+        if (m != MODE_ZP_REL) {
+            temps = QString(fmts[m]).arg(hex);
+        } else {
+            temps = QString(fmts[m]).arg(hex, hex2);
+        }
     }
     dis = { start + i, distab[opcode].inst, temps, n,false, (quint64) opcode,
                                                 (quint64) operand, 0 };
@@ -1055,7 +1121,7 @@ void Disassembler6502::trace(quint64 address) {
 
         while (1) {
             int i = address - start;
-            quint16 opcode = data[i], operand = 0;
+            quint16 opcode = data[i], operand = 0, operand2 = 0;
             struct distabitem item = distab[opcode];
             enum addressing_mode m = (enum addressing_mode) item.mode;
             int n = isizes[m];
@@ -1074,6 +1140,11 @@ void Disassembler6502::trace(quint64 address) {
                 if (m == MODE_REL) {
                     operand = 2 + start + i + operand - (operand>0x7f ? 0x100 : 0);
                 }
+                if (m == MODE_ZP_REL) {
+                    operand  = data[i+1];
+                    operand2 = data[i+2];
+                    operand2 = 3 + start + i + operand2 - (operand2>0x7f ? 0x100 : 0);
+                }
             }
 
             for (int j=0; j<n; j++) {
@@ -1086,6 +1157,11 @@ void Disassembler6502::trace(quint64 address) {
                     && operand >= start && operand <= end) {
                 if (!mark[operand-start])
                     tracelist.append(operand);
+            }
+
+            if (m == MODE_ZP_REL && operand2 >= start && operand2 <=end) {
+                if (!mark[operand2-start])
+                    tracelist.append(operand2);
             }
 
             // rts, rti, jmp

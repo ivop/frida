@@ -62,9 +62,47 @@ label:
 
 ; BBR, BBS, Branch on Bit Reset or Set
 
+    bbr0 $ff,label  ; $0f
+    bbr1 $ff,label  ; $1f
+    bbr2 $ff,label  ; $2f
+    bbr3 $ff,label  ; $3f
+    bbr4 $ff,label  ; $4f
+    bbr5 $ff,label  ; $5f
+    bbr6 $ff,label  ; $6f
+    bbr7 $ff,label  ; $7f
+    bbs0 $ff,label  ; $8f
+    bbs1 $ff,label  ; $9f
+    bbs2 $ff,label  ; $af
+    bbs3 $ff,label  ; $bf
+    bbs4 $ff,label  ; $cf
+    bbs5 $ff,label  ; $df
+    bbs6 $ff,label  ; $ef
+    bbs7 $ff,label  ; $ff
+
 ; RMB, SMB, Reset or Set Memory Bit
+
+    rmb0 $ff        ; $07
+    rmb1 $ff        ; $17
+    rmb2 $ff        ; $27
+    rmb3 $ff        ; $37
+    rmb4 $ff        ; $47
+    rmb5 $ff        ; $57
+    rmb6 $ff        ; $67
+    rmb7 $ff        ; $77
+    smb0 $ff        ; $87
+    smb1 $ff        ; $97
+    smb2 $ff        ; $a7
+    smb3 $ff        ; $b7
+    smb4 $ff        ; $c7
+    smb5 $ff        ; $d7
+    smb6 $ff        ; $e7
+    smb7 $ff        ; $f7
 
 ; STP Stop
 
+    stp             ; $db
+
 ; WAI WAit for Interrupt
+
+    wai             ; $cb
 
