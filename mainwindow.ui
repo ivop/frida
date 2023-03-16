@@ -893,7 +893,7 @@
     <string>Set Flag Labelled</string>
    </property>
    <property name="toolTip">
-    <string>Set Flag Labelled</string>
+    <string>Set Flag Labelled Words</string>
    </property>
    <property name="shortcut">
     <string>L</string>
