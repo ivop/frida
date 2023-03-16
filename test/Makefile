@@ -10,5 +10,5 @@ test_65c02_ca65.raw: test_65c02_ca65.s
 clean:
 	rm -f *~ *.o
 	
-veryclean: clean
+cleaner: clean
 	rm -f *.xex *.raw *.prg
