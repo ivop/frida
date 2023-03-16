@@ -591,10 +591,12 @@ void MainWindow::Set_Flag_Low_or_High_Byte(bool bLow) {
     lowhighbytewindow lhbw(pos, bLow, s->data[relpos], &fulladdr);
     if (lhbw.exec()) {
         if (bLow) {
+            s->datatypes[relpos] = DT_BYTES;
             s->flags[relpos] = FLAG_LOW_BYTE;
             s->lowbytes.remove(relpos);
             s->lowbytes.insert(relpos, fulladdr);
         } else {
+            s->datatypes[relpos] = DT_BYTES;
             s->flags[relpos] = FLAG_HIGH_BYTE;
             s->highbytes.remove(relpos);
             s->highbytes.insert(relpos, fulladdr);
