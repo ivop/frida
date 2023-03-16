@@ -323,11 +323,11 @@ do_directive:
             }
             hex.clear();
             if (s->flags[i] & FLAG_USE_LABEL) {
-                hex = s->localLabels.value(val,"");
+                hex = s->localLabels.value(val);
                 if (hex.isEmpty())
-                    hex = userLabels.value(val,"");
+                    hex = userLabels.value(val);
                 if (hex.isEmpty())
-                    hex = autoLabels.value(val,"");
+                    hex = autoLabels.value(val);
             }
             if (hex.isEmpty()) {
                 hex  = hexPrefix;
@@ -337,8 +337,8 @@ do_directive:
                 } else {
                     hex += QString("%1").arg(val, n*2, 16, (QChar)'0');
                 }
+                hex += hexSuffix;
             }
-            hex += hexSuffix;
             if (perline <= 0 || prevtype != type) {
                 dis = { start + i, instr, hex, n, false, 256, 0, 0 };
                 perline = 8;
