@@ -14,12 +14,14 @@
 
 // --------------------------------------------------------------------------
 
-// Do NOT change this order as the index is saved in the project file(!)
+// Do change the numbers as they are saved in the project file(!)
 
 enum cputypeid {
-    CT_NMOS6502 = 0,
-    CT_NMOS6502UNDEF,
-    CT_CMOS65C02
+    CT_NMOS6502         = 0x00,
+    CT_NMOS6502UNDEF    = 0x01,
+    CT_CMOS65C02        = 0x02,
+//    CT_Z80              = 0x10,       // example, not set in stone yet
+//    CT_6800             = 0x20,
 };
 
 struct cputype {
@@ -31,11 +33,12 @@ extern QList<struct cputype> cputypes;
 
 // --------------------------------------------------------------------------
 
+// leave space for other file types
 enum filetypeid {
-    FT_RAW_FILE = 0,
-    FT_ATARI8BIT_BINARY,
-    FT_C64_BINARY,
-    FT_C64_PSID
+    FT_RAW_FILE         = 0x00,
+    FT_ATARI8BIT_BINARY = 0x10,
+    FT_C64_BINARY       = 0x20,
+    FT_C64_PSID         = 0x21,
 };
 
 struct filetype {

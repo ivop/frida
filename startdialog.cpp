@@ -80,7 +80,6 @@ void StartDialog::onButtonNewProject_clicked()
     // set filename to save to later
 
     filetype = ui->comboFileType->currentIndex();
-    cputype  = ui->comboCPUType->currentIndex();
 
     // Open file
 
@@ -134,7 +133,10 @@ void StartDialog::onButtonNewProject_clicked()
         return;
     }
 
-    cputype =  cputypes.at(cputype).id;
+    // retrieve cputype from table as index is not necessarily the same
+    // there can be holes in the enumeration
+
+    cputype =  cputypes.at(ui->comboCPUType->currentIndex()).id;
 
     create_new_project = true;
     close();

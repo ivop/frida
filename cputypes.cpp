@@ -4,5 +4,7 @@
 QList<struct cputype> cputypes = {
 { "NMOS 6502",                          CT_NMOS6502 },
 { "NMOS 6502 w/ undefined opcodes",     CT_NMOS6502UNDEF },
-{ "CMOS 65C02",                         CT_CMOS65C02 }
+{ "CMOS 65C02",                         CT_CMOS65C02 },
+// { "Zilog Z80",                          CT_Z80 },
+// { "Motorola 6800",                      CT_6800 },
 };

@@ -99,6 +99,27 @@ bool LoaderC64Binary::Load(QFile& file) {
         return false;
 
     genericComment(file, &segment);
+
+    // 2-byte pointer to the next line of BASIC code
+    // 2-byte line number
+    // Byte code for the SYS command is $9e
+    // Zero terminated string
+    // Pointer to next line or zero
+
+    if (segment.data[4] == 0x9e) {
+        segment.datatypes[0] = segment.datatypes[1] = DT_WORDLE;
+        segment.datatypes[2] = segment.datatypes[3] = DT_WORDLE;
+        segment.datatypes[4] = DT_BYTES;
+        int i;
+        for (i=5; segment.data[i]; i++)
+            segment.datatypes[i] = DT_PETSCII;
+        segment.datatypes[i] = DT_PETSCII;
+
+        int sys = QString((const char *)&segment.data[5]).toInt();
+        QString hex = QString("SYS $%1").arg(sys, 4, 16, QLatin1Char('0'));
+        segment.comments.insert(start+4, hex);
+    }
+
     segments.append(segment);
 
     return true;
