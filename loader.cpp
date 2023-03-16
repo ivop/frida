@@ -130,7 +130,7 @@ bool LoaderC64PSID::Load(QFile &file) {
     quint64 start = 0, end, size, init, play, version;
 
     file.read((char*) tmp, 4);
-    if (tmp[0] != 'P' || tmp[1] != 'S' || tmp[2] != 'I' || tmp[3] != 'D')
+    if ((tmp[0] != 'P' && tmp[0] != 'R') || tmp[1] != 'S' || tmp[2] != 'I' || tmp[3] != 'D')
         return false;
 
     size = file.size();
@@ -153,7 +153,7 @@ bool LoaderC64PSID::Load(QFile &file) {
 
     file.seek(file.pos() + 4);      // skip speed
     file.seek(file.pos() + 32*3);   // skip name, author, copyright
-    if (version == 2)
+    if (version >= 2)
         file.seek(file.pos() + 6);  // skip flags/reserved
     if (!start) {
         file.read((char*) tmp, 2);
