@@ -329,6 +329,27 @@ do_directive:
                 if (hex.isEmpty())
                     hex = autoLabels.value(val);
             }
+            if (s->flags[i] & FLAG_HIGH_BYTE || s->flags[i] & FLAG_LOW_BYTE) {
+                quint64 key;
+                if (s->flags[i] & FLAG_HIGH_BYTE)
+                    key = s->highbytes[i];
+                else
+                    key = s->lowbytes[i];
+
+                hex = s->localLabels.value(key);
+                if (hex.isEmpty())
+                    hex = userLabels.value(key);
+                if (hex.isEmpty())
+                    hex = autoLabels.value(key);
+                if (hex.isEmpty())
+                    hex = hexPrefix +
+                          QString("%1").arg(key, 4, 16, (QChar)'0') +
+                          hexSuffix;
+                if (s->flags[i] & FLAG_HIGH_BYTE)
+                    hex = '>' + hex;
+                else
+                    hex = '<' + hex;
+            }
             if (hex.isEmpty()) {
                 hex  = hexPrefix;
                 if (n>8) {
