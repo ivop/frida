@@ -39,7 +39,10 @@ void addLabelWindow::onPushButtonAdd_clicked() {
         msg.setText("No label specified!");
         msg.exec();
     } else {
-        userLabels.insert(addr, label);
+        if (ui->checkBoxLocalLabel->isChecked())
+            segments[currentSegment].localLabels.insert(addr, label);
+        else
+            userLabels.insert(addr, label);
         close();
     }
 }

@@ -199,6 +199,7 @@ void labelswindow::onAddLabelButton_clicked() {
     addLabelWindow alw;
     alw.exec();
     showUserLabels();
+    showLocalLabels();
 }
 
 // ---------------------------------------------------------------------------
