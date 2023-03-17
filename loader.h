@@ -30,4 +30,9 @@ public:
     bool Load(QFile& file) override;
 };
 
+class LoaderAtari2600ROM2K4K : public Loader {
+public:
+    bool Load(QFile& file) override;
+};
+
 #endif // LOADER_H

@@ -179,3 +179,34 @@ bool LoaderC64PSID::Load(QFile &file) {
 
     return true;
 }
+
+bool LoaderAtari2600ROM2K4K::Load(QFile &file) {
+    quint64 size;
+    quint16 start, end, init;
+
+    size = file.size();
+
+    if (size != 2048 && size != 4096)
+        return false;
+
+    start = 0xf000;
+    end   = start + size - 1;
+
+    struct segment segment = createEmptySegment(start, end);
+    if ((quint64)file.read((char*)segment.data, size) != size)
+        return false;
+
+    init = segment.data[size-4] + segment.data[size-3] * 256;
+
+    if (size == 2048 && init >= 0xf800) {
+        segment.start += 0x800;
+        segment.end += 0x800;
+    }
+
+    genericComment(file, &segment);
+    segments.append(segment);
+
+    userLabels.insert(init, "init");
+
+    return true;
+}

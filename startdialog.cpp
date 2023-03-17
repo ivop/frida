@@ -109,6 +109,9 @@ void StartDialog::onButtonNewProject_clicked()
         Loader = new LoaderC64PSID();
         altfont = FONT_C64;
         break;
+    case FT_ATARI2600_2K4K:
+        Loader = new LoaderAtari2600ROM2K4K();
+         break;
     default:
         msg.setText("Unknown filetype! (this shouldn't happen)");
         msg.exec();

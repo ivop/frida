@@ -39,6 +39,7 @@ enum filetypeid {
     FT_ATARI8BIT_BINARY = 0x10,
     FT_C64_BINARY       = 0x20,
     FT_C64_PSID         = 0x21,
+    FT_ATARI2600_2K4K   = 0x30,
 };
 
 struct filetype {
