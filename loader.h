@@ -40,4 +40,14 @@ public:
     bool Load(QFile &file) override;
 };
 
+class LoaderApple2DOS33 : public Loader {
+public:
+    bool Load(QFile &file) override;
+};
+
+class LoaderApple2AppleSingle : public Loader {
+public:
+    bool Load(QFile &file) override;
+};
+
 #endif // LOADER_H

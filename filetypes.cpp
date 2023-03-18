@@ -8,4 +8,6 @@ QList<struct filetype> filetypes = {
 { "Commodore C64 PSID/RSID (.SID)",     FT_C64_PSID },
 { "Atari 2600 2K/4K ROM (.A26)",        FT_ATARI2600_2K4K },
 { "Oric Tape File (.TAP)",              FT_ORIC_TAP },
+{ "Apple ][ DOS3.3 4-byte header",      FT_APPLE2_DOS33 },
+{ "Apple ][ ProDOS AppleSingle",        FT_APPLE2_APPLESINGLE },
 };

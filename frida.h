@@ -35,12 +35,14 @@ extern QList<struct cputype> cputypes;
 
 // leave space for other file types
 enum filetypeid {
-    FT_RAW_FILE         = 0x00,
-    FT_ATARI8BIT_BINARY = 0x10,
-    FT_C64_BINARY       = 0x20,
-    FT_C64_PSID         = 0x21,
-    FT_ATARI2600_2K4K   = 0x30,
-    FT_ORIC_TAP         = 0x40,
+    FT_RAW_FILE             = 0x00,
+    FT_ATARI8BIT_BINARY     = 0x10,
+    FT_C64_BINARY           = 0x20,
+    FT_C64_PSID             = 0x21,
+    FT_ATARI2600_2K4K       = 0x30,
+    FT_ORIC_TAP             = 0x40,
+    FT_APPLE2_DOS33         = 0x50,
+    FT_APPLE2_APPLESINGLE   = 0x51
 };
 
 struct filetype {

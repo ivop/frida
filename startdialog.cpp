@@ -111,6 +111,12 @@ void StartDialog::onButtonNewProject_clicked()
     case FT_ORIC_TAP:
         Loader = new LoaderOricTap();
         break;
+    case FT_APPLE2_DOS33:
+        Loader = new LoaderApple2DOS33();
+        break;
+    case FT_APPLE2_APPLESINGLE:
+        Loader = new LoaderApple2AppleSingle();
+        break;
     default:
         msg.setText("Unknown filetype! (this shouldn't happen)");
         msg.exec();

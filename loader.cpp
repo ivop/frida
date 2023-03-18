@@ -4,8 +4,10 @@
 #include "loader.h"
 #include "disassembler.h"
 
-#define LE16(x) (x[0] | x[1]<<8)
-#define BE16(x) (x[0]<<8 | x[1])
+#define LE16(x) ((x)[0] | (x)[1]<<8)
+#define BE16(x) ((x)[0]<<8 | (x)[1])
+#define LE32(x) ((x)[0] | (x)[1]<<8 | (x)[2]<<16 | (x)[3]<<24)
+#define BE32(x) ((x)[0]<<24 | (x)[1]<<16 | (x)[2]<<8 | (x)[3])
 
 // note on zeroed memory:
 // new char[size]   is similar to malloc()
@@ -261,3 +263,93 @@ bool LoaderOricTap::Load(QFile &file) {
 
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// APPLE ][
+
+bool LoaderApple2DOS33::Load(QFile &file) {
+    quint8 tmp[4];
+    quint16 start, end, size;
+
+    file.read((char*) tmp, 4);
+    start = LE16(tmp);
+    size  = LE16(tmp+2);
+
+    end   = start + size - 1;
+
+    struct segment segment = createEmptySegment(start, end);
+    if ((quint64)file.read((char*)segment.data, size) != size)
+        return false;
+
+    genericComment(file, &segment);
+    segments.append(segment);
+
+    userLabels.insert(start, "start");
+
+    return true;
+};
+
+bool LoaderApple2AppleSingle::Load(QFile &file) {
+    quint8 tmp[12];
+    quint16 numentries, start, end, size;
+    quint32 magic, version, entry_id, offset, length;
+    quint32 prodos_offset, data_fork_offset;
+
+    file.read((char*) tmp, 8);
+    magic   = BE32(tmp);
+    version = BE32(tmp+4);
+
+    if (magic != 0x00051600 || version != 0x00020000)
+        return false;       // fix if anything other than 0x00020000 exists
+
+    file.seek(file.pos() + 16);     // skip filler
+
+    file.read((char*) tmp, 2);
+    numentries = BE16(tmp);
+
+    // find ProDOS file info and data fork
+
+    prodos_offset = data_fork_offset = 0xffffffff;
+    size = 0;
+
+    for (int i=0; i<numentries; i++) {
+        file.read((char*) tmp, 12);
+
+        entry_id = BE32(tmp);
+        offset   = BE32(tmp+4);
+        length   = BE32(tmp+8);
+
+        if (entry_id == 11) {   // ProDOS File Info
+            prodos_offset = offset;
+        }
+        if (entry_id == 1) {    // remember Data fork
+            data_fork_offset = offset;
+            size = length;
+        }
+    }
+
+    if (size == 0)
+        return false;
+    if (data_fork_offset == 0xffffffff)
+        return false;
+    if (prodos_offset == 0xffffffff)
+        return false;
+
+    file.seek(prodos_offset);
+    file.read((char*) tmp, 8);
+    start = BE16(tmp+6);
+
+    end = start + size - 1;
+
+    file.seek(data_fork_offset);
+    struct segment segment = createEmptySegment(start, end);
+    if ((quint64)file.read((char*)segment.data, size) != size)
+        return false;
+
+    genericComment(file, &segment);
+    segments.append(segment);
+
+    userLabels.insert(start, "start");
+
+    return true;
+};
