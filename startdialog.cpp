@@ -9,7 +9,6 @@
 #include "loadsaveproject.h"
 
 QString FileToDisassemble;
-QString ProjectFileToSaveTo;
 
 quint32 filetype, cputype;
 Loader *Loader;
@@ -75,9 +74,6 @@ void StartDialog::onButtonNewProject_clicked()
 
     FileToDisassemble.clear();
     FileToDisassemble.append(ui->lineFileDisasm->text());
-
-    ProjectFileToSaveTo.clear();
-    // set filename to save to later
 
     filetype = ui->comboFileType->currentIndex();
 
