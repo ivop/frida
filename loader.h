@@ -35,4 +35,9 @@ public:
     bool Load(QFile& file) override;
 };
 
+class LoaderOricTap : public Loader {
+public:
+    bool Load(QFile &file) override;
+};
+
 #endif // LOADER_H

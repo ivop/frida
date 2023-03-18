@@ -112,6 +112,9 @@ void StartDialog::onButtonNewProject_clicked()
     case FT_ATARI2600_2K4K:
         Loader = new LoaderAtari2600ROM2K4K();
          break;
+    case FT_ORIC_TAP:
+        Loader = new LoaderOricTap();
+        break;
     default:
         msg.setText("Unknown filetype! (this shouldn't happen)");
         msg.exec();

@@ -45,6 +45,9 @@ bool LoaderRaw::Load(QFile& file) {
     return true;
 }
 
+// ---------------------------------------------------------------------------
+// ATARI 8-BIT
+
 bool LoaderAtari8bitBinary::Load(QFile& file) {
     quint8 tmp[2];
     quint64 ffff, start, end, size;
@@ -84,6 +87,9 @@ bool LoaderAtari8bitBinary::Load(QFile& file) {
 
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// COMMODORE C64
 
 bool LoaderC64Binary::Load(QFile& file) {
     quint8 tmp[2];
@@ -170,15 +176,14 @@ bool LoaderC64PSID::Load(QFile &file) {
     genericComment(file, &segment);
     segments.append(segment);
 
-//    QString *curcom = &segments[currentSegment].comments[segment.start];
-//    curcom->append(QString("\nInit: %1").arg(init, 4, 16, (QChar)'0'));
-//    curcom->append(QString("\nPlay: %1").arg(play, 4, 16, (QChar)'0'));
-
     userLabels.insert(init, "init");
     userLabels.insert(play, "play");
 
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// ATARI 2600
 
 bool LoaderAtari2600ROM2K4K::Load(QFile &file) {
     quint64 size;
@@ -207,6 +212,52 @@ bool LoaderAtari2600ROM2K4K::Load(QFile &file) {
     segments.append(segment);
 
     userLabels.insert(init, "init");
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+// ORIC 1 / ATMOS
+
+bool LoaderOricTap::Load(QFile &file) {
+    char c;
+    quint8 data[9];
+    quint64 start, end, size;
+
+    // Synchronisation bytes: 0x16
+
+    file.getChar(&c);
+    if (c != 0x16)
+        return false;
+
+    while (c == 0x16) {
+        file.getChar(&c);
+    }
+
+    // End of synchronisation: $24
+
+    if (c != 0x24)
+        return false;
+
+    file.read((char *)data, 9);
+
+    start = (data[6] << 8) + data[7];   // big endian!
+    end   = (data[4] << 8) + data[5];   // big endian!
+
+    size = end - start + 1;
+
+    while (c != 0x00) {
+        file.getChar(&c);   // skip zero terminated name
+    }
+
+    struct segment segment = createEmptySegment(start, end);
+    if ((quint64)file.read((char*)segment.data, size) != size)
+        return false;
+
+    genericComment(file, &segment);
+    segments.append(segment);
+
+    userLabels.insert(start, "start");
 
     return true;
 }
