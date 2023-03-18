@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QFileInfo>
+#include <string.h>
 #include "frida.h"
 #include "loader.h"
 #include "disassembler.h"
@@ -353,3 +354,52 @@ bool LoaderApple2AppleSingle::Load(QFile &file) {
 
     return true;
 };
+
+// ----------------------------------------------------------------------------
+// NINTENDO NES
+
+bool LoaderNESSongFile::Load(QFile &file) {
+    quint8 tmp[8];
+    quint64 start, end, size, init, play;
+    int x = 0;
+
+    file.read((char*) tmp, 5);
+    if (strncmp((char*) tmp, "NESM\x1a", 5))
+        return false;
+
+    file.seek(file.pos() + 3);      // skip version, songs, starting song
+    file.read((char *) tmp, 6);
+
+    start = LE16(tmp);
+    init  = LE16(tmp+2);
+    play  = LE16(tmp+4);
+
+    file.seek(file.pos() + 3*32 + 2);   // skip name, artist, copyright, NTSC speed
+
+    file.read((char*) tmp, 8);
+    for (int i=0; i<8; i++)
+        x += tmp[i];
+    if (x)
+        return false;                   // bankswitching not supported
+
+    file.seek(file.pos() + 8);          // skip PAL speed, flags, reserved
+
+    size = file.size() - file.pos();
+
+    end = start + size - 1;
+
+    if (end > 0xffff)
+        return false;
+
+    struct segment segment = createEmptySegment(start, end);
+    if ((quint64)file.read((char*)segment.data, size) != size)
+        return false;
+
+    genericComment(file, &segment);
+    segments.append(segment);
+
+    userLabels.insert(init, "init");
+    userLabels.insert(play, "play");
+
+    return true;
+}

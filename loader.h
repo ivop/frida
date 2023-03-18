@@ -50,4 +50,9 @@ public:
     bool Load(QFile &file) override;
 };
 
+class LoaderNESSongFile : public Loader {
+public:
+    bool Load(QFile &file) override;
+};
+
 #endif // LOADER_H

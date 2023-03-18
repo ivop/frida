@@ -10,4 +10,5 @@ QList<struct filetype> filetypes = {
 { "Oric Tape File (.TAP)",              FT_ORIC_TAP },
 { "Apple ][ DOS3.3 4-byte header",      FT_APPLE2_DOS33 },
 { "Apple ][ ProDOS AppleSingle",        FT_APPLE2_APPLESINGLE },
+{ "Nintendo NES Song File (.NSF)",      FT_NES_SONG_FILE },
 };

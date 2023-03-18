@@ -117,6 +117,9 @@ void StartDialog::onButtonNewProject_clicked()
     case FT_APPLE2_APPLESINGLE:
         Loader = new LoaderApple2AppleSingle();
         break;
+    case FT_NES_SONG_FILE:
+        Loader = new LoaderNESSongFile();
+        break;
     default:
         msg.setText("Unknown filetype! (this shouldn't happen)");
         msg.exec();

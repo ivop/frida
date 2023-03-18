@@ -42,7 +42,8 @@ enum filetypeid {
     FT_ATARI2600_2K4K       = 0x30,
     FT_ORIC_TAP             = 0x40,
     FT_APPLE2_DOS33         = 0x50,
-    FT_APPLE2_APPLESINGLE   = 0x51
+    FT_APPLE2_APPLESINGLE   = 0x51,
+    FT_NES_SONG_FILE        = 0x60,
 };
 
 struct filetype {
