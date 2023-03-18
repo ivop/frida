@@ -129,9 +129,13 @@ void StartDialog::onButtonNewProject_clicked()
     segments.clear();
 
     if (!Loader->Load(file)) {
-        msg.setText("Failed to load " + FileToDisassemble + "\n"
-                    + file.errorString()
-                    + "\n\nFile type mismatch or corrupted file!\n");
+        QString text = QString("Failed to load " + FileToDisassemble + "\n\n");
+        if (Loader->error_message.isEmpty()) {
+            text += "File type mismatch or corrupted file!\n";
+        } else {
+            text += Loader->error_message;
+        }
+        msg.setText(text);
         msg.exec();
         return;
     }

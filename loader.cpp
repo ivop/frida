@@ -74,8 +74,10 @@ bool LoaderAtari8bitBinary::Load(QFile& file) {
         size = end - start + 1;
 
         struct segment segment = createEmptySegment(start, end);
-        if ((quint64)file.read((char*)segment.data, size) != size)
+        if ((quint64)file.read((char*)segment.data, size) != size) {
+            this->error_message = "Premature end of file!\n";
             return false;
+        }
 
         if (start == 0x02e0 && end == 0x02e1)
             segment.name = "Run Address";
@@ -104,8 +106,10 @@ bool LoaderC64Binary::Load(QFile& file) {
     end = start + size - 1;
 
     struct segment segment = createEmptySegment(start, end);
-    if ((quint64)file.read((char*)segment.data, size) != size)
+    if ((quint64)file.read((char*)segment.data, size) != size) {
+        this->error_message = "Premature end of file!\n";
         return false;
+    }
 
     genericComment(file, &segment);
 
@@ -139,8 +143,10 @@ bool LoaderC64PSID::Load(QFile &file) {
     quint64 start = 0, end, size, init, play, version;
 
     file.read((char*) tmp, 4);
-    if ((tmp[0] != 'P' && tmp[0] != 'R') || tmp[1] != 'S' || tmp[2] != 'I' || tmp[3] != 'D')
+    if ((tmp[0] != 'P' && tmp[0] != 'R') || tmp[1] != 'S' || tmp[2] != 'I' || tmp[3] != 'D') {
+        this->error_message = "Magic Number not found!\n";
         return false;
+    }
 
     size = file.size();
 
@@ -173,8 +179,10 @@ bool LoaderC64PSID::Load(QFile &file) {
     end = start + size - 1;
 
     struct segment segment = createEmptySegment(start, end);
-    if ((quint64)file.read((char*)segment.data, size) != size)
+    if ((quint64)file.read((char*)segment.data, size) != size) {
+        this->error_message = "Premature end of file!\n";
         return false;
+    }
 
     genericComment(file, &segment);
     segments.append(segment);
@@ -194,15 +202,19 @@ bool LoaderAtari2600ROM2K4K::Load(QFile &file) {
 
     size = file.size();
 
-    if (size != 2048 && size != 4096)
+    if (size != 2048 && size != 4096) {
+        this->error_message = "File size if not 2KB or 4KB.\n";
         return false;
+    }
 
     start = 0xf000;
     end   = start + size - 1;
 
     struct segment segment = createEmptySegment(start, end);
-    if ((quint64)file.read((char*)segment.data, size) != size)
+    if ((quint64)file.read((char*)segment.data, size) != size) {
+        this->error_message = "Premature end of file!\n";
         return false;
+    }
 
     init = segment.data[size-4] + segment.data[size-3] * 256;
 
@@ -230,8 +242,10 @@ bool LoaderOricTap::Load(QFile &file) {
     // Synchronisation bytes: 0x16
 
     file.getChar(&c);
-    if (c != 0x16)
+    if (c != 0x16) {
+        this->error_message = "Synchronisation bytes not found!\n";
         return false;
+    }
 
     while (c == 0x16) {
         file.getChar(&c);
@@ -239,8 +253,10 @@ bool LoaderOricTap::Load(QFile &file) {
 
     // End of synchronisation: $24
 
-    if (c != 0x24)
+    if (c != 0x24) {
+        this->error_message = "Proper synchronistion end not found!\n";
         return false;
+    }
 
     file.read((char *)data, 9);
 
@@ -254,8 +270,10 @@ bool LoaderOricTap::Load(QFile &file) {
     }
 
     struct segment segment = createEmptySegment(start, end);
-    if ((quint64)file.read((char*)segment.data, size) != size)
+    if ((quint64)file.read((char*)segment.data, size) != size) {
+        this->error_message = "Premature end of file!\n";
         return false;
+    }
 
     genericComment(file, &segment);
     segments.append(segment);
@@ -279,8 +297,10 @@ bool LoaderApple2DOS33::Load(QFile &file) {
     end   = start + size - 1;
 
     struct segment segment = createEmptySegment(start, end);
-    if ((quint64)file.read((char*)segment.data, size) != size)
+    if ((quint64)file.read((char*)segment.data, size) != size) {
+        this->error_message = "Premature end of file!\n";
         return false;
+    }
 
     genericComment(file, &segment);
     segments.append(segment);
@@ -300,8 +320,10 @@ bool LoaderApple2AppleSingle::Load(QFile &file) {
     magic   = BE32(tmp);
     version = BE32(tmp+4);
 
-    if (magic != 0x00051600 || version != 0x00020000)
+    if (magic != 0x00051600 || version != 0x00020000) {
+        this->error_message = "Magic Number not found!\n";
         return false;       // fix if anything other than 0x00020000 exists
+    }
 
     file.seek(file.pos() + 16);     // skip filler
 
@@ -329,12 +351,18 @@ bool LoaderApple2AppleSingle::Load(QFile &file) {
         }
     }
 
-    if (size == 0)
+    if (size == 0) {
+        this->error_message = "Size of data fork is zero!\n";
         return false;
-    if (data_fork_offset == 0xffffffff)
+    }
+    if (data_fork_offset == 0xffffffff) {
+        this->error_message = "Data fork not found!\n";
         return false;
-    if (prodos_offset == 0xffffffff)
+    }
+    if (prodos_offset == 0xffffffff) {
+        this->error_message = "ProDOS File Info not found!\n";
         return false;
+    }
 
     file.seek(prodos_offset);
     file.read((char*) tmp, 8);
@@ -344,8 +372,10 @@ bool LoaderApple2AppleSingle::Load(QFile &file) {
 
     file.seek(data_fork_offset);
     struct segment segment = createEmptySegment(start, end);
-    if ((quint64)file.read((char*)segment.data, size) != size)
+    if ((quint64)file.read((char*)segment.data, size) != size) {
+        this->error_message = "Premature end of file!\n";
         return false;
+    }
 
     genericComment(file, &segment);
     segments.append(segment);
@@ -364,8 +394,10 @@ bool LoaderNESSongFile::Load(QFile &file) {
     int x = 0;
 
     file.read((char*) tmp, 5);
-    if (strncmp((char*) tmp, "NESM\x1a", 5))
+    if (strncmp((char*) tmp, "NESM\x1a", 5)) {
+        this->error_message = "Magic Number not found!\n";
         return false;
+    }
 
     file.seek(file.pos() + 3);      // skip version, songs, starting song
     file.read((char *) tmp, 6);
@@ -379,8 +411,10 @@ bool LoaderNESSongFile::Load(QFile &file) {
     file.read((char*) tmp, 8);
     for (int i=0; i<8; i++)
         x += tmp[i];
-    if (x)
-        return false;                   // bankswitching not supported
+    if (x) {
+        this->error_message = "Bankswitching NSF file not supported!\n";
+        return false;
+    }
 
     file.seek(file.pos() + 8);          // skip PAL speed, flags, reserved
 
@@ -392,8 +426,10 @@ bool LoaderNESSongFile::Load(QFile &file) {
         return false;
 
     struct segment segment = createEmptySegment(start, end);
-    if ((quint64)file.read((char*)segment.data, size) != size)
+    if ((quint64)file.read((char*)segment.data, size) != size) {
+        this->error_message = "Premature end of file!\n";
         return false;
+    }
 
     genericComment(file, &segment);
     segments.append(segment);
