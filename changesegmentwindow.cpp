@@ -17,6 +17,7 @@ changesegmentwindow::changesegmentwindow(quint64 oldaddr, quint64 *newaddr,
     ui->oldAddress->setText(hex);
     newaddress = newaddr;
     ui->newAddress->setText(hex);
+    ui->newAddress->setFocus();
 }
 
 changesegmentwindow::~changesegmentwindow()

@@ -923,6 +923,14 @@
     <string>Clear Flags</string>
    </property>
   </action>
+  <action name="actionAdd_Label">
+   <property name="text">
+    <string>Add Label</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -1345,6 +1353,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionAdd_Label</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionAdd_Label()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>linkHexASCIISelection()</slot>
@@ -1374,5 +1398,6 @@
   <slot>actionSet_Flag_Low_Byte()</slot>
   <slot>actionSet_Flag_High_Byte()</slot>
   <slot>actionSet_Flag_Clear()</slot>
+  <slot>actionAdd_Label()</slot>
  </slots>
 </ui>

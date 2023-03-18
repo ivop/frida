@@ -48,6 +48,7 @@ public slots:
     void actionComment(void);
     void actionDelete_Segment(void);
     void actionChange_Start_Address(void);
+    void actionAdd_Label(void);
 
 private slots:
     void linkHexASCIISelection(void);
@@ -71,7 +72,6 @@ private slots:
     void onTableDisassembly_doubleClicked(const QModelIndex &index);
 
     void rememberValue(int value);
-
 
 private:
     Ui::MainWindow *ui;

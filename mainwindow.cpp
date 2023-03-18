@@ -18,6 +18,7 @@
 #include "disassembler.h"
 #include "exportassembly.h"
 #include "jumptowindow.h"
+#include "addlabelwindow.h"
 
 QBrush datatypeBrushes[DT_LAST] = {
     [DT_UNDEFINED_BYTES] = { QColor(255, 255, 255, 255), Qt::SolidPattern }, // white
@@ -217,6 +218,7 @@ MainWindow::MainWindow(QWidget *parent) :
             SLOT(rememberValue(int)));
 
     t->addAction(ui->actionComment);
+    t->addAction(ui->actionAdd_Label);
     t->setRowCount(0);
 
     t = ui->tableLegend;
@@ -1072,4 +1074,9 @@ void MainWindow::closeEvent (QCloseEvent *event)
 
 void MainWindow::onExportAsmButton_clicked() {
     export_assembly(this);
+}
+void MainWindow::actionAdd_Label(void) {
+    addLabelWindow alw;
+    alw.exec();
+    showDisassembly();
 }

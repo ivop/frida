@@ -14,6 +14,7 @@ addLabelWindow::addLabelWindow(QWidget *parent) :
             this, &addLabelWindow::onPushButtonCancel_clicked);
     connect(ui->pushButtonAdd, &QPushButton::clicked,
             this, &addLabelWindow::onPushButtonAdd_clicked);
+    ui->lineEditAddress->setFocus();
 }
 
 addLabelWindow::~addLabelWindow()
