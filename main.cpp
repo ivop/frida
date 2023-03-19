@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
     case CT_CMOS65C02:
         Disassembler = new Disassembler6502();
         break;
+    case CT_INTEL_8080:
+        Disassembler = new Disassembler8080();
     }
 
     Disassembler->cputype = cputype;        // be able to detect variants

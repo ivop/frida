@@ -1,5 +1,4 @@
 #include <QDebug>
-#include <QMessageBox>
 #include "frida.h"
 #include "disassembler.h"
 
@@ -949,6 +948,7 @@ void Disassembler6502::initTables(void) {
 
     hexPrefix = "$";
     hexSuffix = "";
+    toUpper   = false;
 }
 
 int Disassembler6502::getInstructionSizeAt(quint64 address) {
@@ -971,6 +971,8 @@ void Disassembler6502::createOperandLabels(quint64 i) {
                 || userLabels.contains(addr))) {
 
             hex = QString("L%1").arg(addr,4,16,(QChar)'0');
+            if (toUpper)
+                hex = hex.toUpper();
             autoLabels.insert(addr, hex);
         }
 
@@ -978,6 +980,8 @@ void Disassembler6502::createOperandLabels(quint64 i) {
                 || userLabels.contains(addr2))) {
 
             hex = QString("L%1").arg(addr2,4,16,(QChar)'0');
+            if (toUpper)
+                hex = hex.toUpper();
             autoLabels.insert(addr2, hex);
         }
 
@@ -994,6 +998,8 @@ void Disassembler6502::createOperandLabels(quint64 i) {
             return;
 
         hex = QString("L%1").arg(addr,4,16,(QChar)'0');
+        if (toUpper)
+            hex = hex.toUpper();
         autoLabels.insert(addr, hex);
     }
 }
@@ -1004,12 +1010,16 @@ void Disassembler6502::disassembleInstructionAt(quint64 i,
     quint8 *flags = segments[currentSegment].flags;
     quint8 *data = segments[currentSegment].data;
     quint64 start = segments[currentSegment].start;
-    quint16 opcode = data[i], operand = 0, operand2 = 0;
+    quint16 opcode, operand = 0, operand2 = 0;
     QString temps, hex, hex2;
+
+    opcode = data[i];
+
     struct distabitem item = distab[opcode];
     enum addressing_mode m = (enum addressing_mode) item.mode;
 
     n = isizes[m];
+
     if (n > 1) {
         operand = data[i+1];
 

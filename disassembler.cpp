@@ -229,6 +229,10 @@ also_wrong2:
     struct disassembly org = {};
     org.instruction = QString(".org ");
     org.arguments = QString(hexPrefix + "%1" + hexSuffix).arg(s->start, 0, 16);
+    if (toUpper) {
+        org.instruction = org.instruction.toUpper();
+        org.arguments   = org.arguments.toUpper();
+    }
     org.changes_pc = true;
     dislist->append(org);
 
@@ -349,6 +353,8 @@ do_directive:
                     hex = '>' + hex;
                 else
                     hex = '<' + hex;
+                if (toUpper)
+                    hex = hex.toUpper();
             }
             if (hex.isEmpty()) {
                 hex  = hexPrefix;
@@ -359,7 +365,11 @@ do_directive:
                     hex += QString("%1").arg(val, n*2, 16, (QChar)'0');
                 }
                 hex += hexSuffix;
+                if (toUpper)
+                    hex = hex.toUpper();
             }
+            if (toUpper)
+                instr = instr.toUpper();
             if (perline <= 0 || prevtype != type) {
                 dis = { start + i, instr, hex, n, false, 256, 0, 0 };
                 perline = 8;
@@ -408,6 +418,9 @@ do_directive:
 
 do_string_directive:
             n = 1;
+
+            if (toUpper)
+                instr = instr.toUpper();
 
             // XXX do not start new directive when label contains + or -
             if (   autoLabels.contains(start+i)

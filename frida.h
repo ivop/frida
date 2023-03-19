@@ -20,8 +20,7 @@ enum cputypeid {
     CT_NMOS6502         = 0x00,
     CT_NMOS6502UNDEF    = 0x01,
     CT_CMOS65C02        = 0x02,
-//    CT_Z80              = 0x10,       // example, not set in stone yet
-//    CT_6800             = 0x20,
+    CT_INTEL_8080       = 0x10,
 };
 
 struct cputype {

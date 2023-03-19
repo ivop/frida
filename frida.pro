@@ -12,6 +12,7 @@ TARGET = frida
 TEMPLATE = app
 
 SOURCES += \
+    disassembler8080.cpp \
     exportassembly.cpp \
     exportassemblywindow.cpp \
     jumptowindow.cpp \

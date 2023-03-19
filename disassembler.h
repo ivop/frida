@@ -3,6 +3,8 @@
 
 #include <QDebug>
 
+extern class Disassembler *Disassembler;
+
 class Disassembler {
 public:
     void generateDisassembly(void);
@@ -10,6 +12,7 @@ public:
 
     QString hexPrefix, hexSuffix;
     quint64 cputype;
+    bool toUpper;
 
 protected:
     virtual void initTables(void) = 0;
@@ -31,6 +34,16 @@ protected:
                                   struct disassembly &dis, int &n) override;
 };
 
-extern Disassembler *Disassembler;
+class Disassembler8080 : public Disassembler {
+public:
+    void trace(quint64 address) override;
+
+protected:
+    void initTables(void) override;
+    int getInstructionSizeAt(quint64 address) override;
+    void createOperandLabels(quint64 address) override;
+    void disassembleInstructionAt(quint64 address,
+                                  struct disassembly &dis, int &n) override;
+};
 
 #endif // DISASSEMBLER_H
