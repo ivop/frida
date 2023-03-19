@@ -508,3 +508,18 @@ bool LoaderNESSongFile::Load(QFile &file) {
 
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// CP/M
+
+bool LoaderCPMBinary::Load(QFile &file) {
+    LoaderRaw raw;
+    if (raw.Load(file) == false)
+        return false;
+
+    segments[0].start += 0x0100;
+    segments[0].end   += 0x0100;
+
+    userLabels.insert(segments[0].start, "RUN");
+    return true;
+}

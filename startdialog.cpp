@@ -124,6 +124,9 @@ void StartDialog::onButtonNewProject_clicked()
     case FT_NES_SONG_FILE:
         Loader = new LoaderNESSongFile();
         break;
+    case FT_CPM_BINARY:
+        Loader = new LoaderCPMBinary();
+        break;
     default:
         msg.setText("Unknown filetype! (this shouldn't happen)");
         msg.exec();

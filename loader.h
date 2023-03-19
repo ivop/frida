@@ -61,4 +61,9 @@ public:
     bool Load(QFile &file) override;
 };
 
+class LoaderCPMBinary : public Loader {
+public:
+    bool Load(QFile &file) override;
+};
+
 #endif // LOADER_H

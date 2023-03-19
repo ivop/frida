@@ -12,4 +12,5 @@ QList<struct filetype> filetypes = {
 { "Apple ][ DOS3.3 4-byte header",                  FT_APPLE2_DOS33 },
 { "Apple ][ ProDOS AppleSingle",                    FT_APPLE2_APPLESINGLE },
 { "Nintendo NES Song File (.NSF)",                  FT_NES_SONG_FILE },
+{ "CP/M Binary at 0100H (.COM)",                    FT_CPM_BINARY },
 };
