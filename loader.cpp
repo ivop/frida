@@ -1,6 +1,8 @@
 #include <QDebug>
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <string.h>
+#include <stdio.h>
 #include "frida.h"
 #include "loader.h"
 #include "disassembler.h"
@@ -58,6 +60,7 @@ bool LoaderAtari8bitBinary::Load(QFile& file) {
     file.read((char *)tmp, 2);
     ffff = LE16(tmp);
     if (ffff != 0xffff) {
+        this->error_message = "Start marker (0xffff) not found!\n";
         return false;
     }
 
@@ -89,6 +92,72 @@ bool LoaderAtari8bitBinary::Load(QFile& file) {
         genericComment(file, &segment);
         segments.append(segment);
     }
+
+    return true;
+}
+
+bool LoaderAtari8bitSAP::Load(QFile& file) {
+    quint8 tmp[5];
+    unsigned int init, play;
+    quint8 c;
+    QChar type;
+    QString header;
+
+    file.read((char*) tmp, 5);
+
+    if (strncmp((char *) tmp, "SAP\x0d\x0a", 5)) {
+        this->error_message = "SAP Identifier not found!\n";
+        return false;
+    }
+
+    file.getChar((char *) &c);
+    while (c != 0xff) {
+        header += c;
+        file.getChar((char *) &c);
+        if (file.atEnd()) {
+            this->error_message = "Premature end of file!\n";
+            return false;
+        }
+    }
+
+    qDebug() << header;
+
+    QRegularExpression re;
+    QRegularExpressionMatch match;
+
+    re.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+    re.setPattern("INIT[ ]*([0-9A-Fa-f]{1,4})");
+    match = re.match(header);
+    if (match.hasMatch() == false) {
+        this->error_message = "No INIT address found\n";
+        return false;
+    }
+    init = match.captured(1).toInt(nullptr, 16);
+
+    re.setPattern("PLAYER[ ]*([0-9A-Fa-f]{1,4})");
+    match = re.match(header);
+    if (match.hasMatch() == false) {
+        this->error_message = "No PLAYER address found\n";
+        return false;
+    }
+    play = match.captured(1).toInt(nullptr, 16);
+
+    re.setPattern("TYPE[ ]*([BCDRS])");
+    match = re.match(header);
+    if (match.hasMatch() == false) {
+        this->error_message = "No PLAYER address found\n";
+        return false;
+    }
+    type = match.captured(1).toInt(nullptr, 16);
+
+    file.ungetChar(c);
+
+    LoaderAtari8bitBinary la8b;
+    if (la8b.Load(file) == false)
+        return false;
+
+    userLabels.insert(init, "init");
+    userLabels.insert(play, "play");
 
     return true;
 }
@@ -144,7 +213,7 @@ bool LoaderC64PSID::Load(QFile &file) {
 
     file.read((char*) tmp, 4);
     if ((tmp[0] != 'P' && tmp[0] != 'R') || tmp[1] != 'S' || tmp[2] != 'I' || tmp[3] != 'D') {
-        this->error_message = "Magic Number not found!\n";
+        this->error_message = "SID Identifier not found!\n";
         return false;
     }
 

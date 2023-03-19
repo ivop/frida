@@ -21,6 +21,11 @@ public:
     bool Load(QFile& file) override;
 };
 
+class LoaderAtari8bitSAP : public Loader {
+public:
+    bool Load(QFile& file) override;
+};
+
 class LoaderC64Binary : public Loader {
 public:
     bool Load(QFile& file) override;

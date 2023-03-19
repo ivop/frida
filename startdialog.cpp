@@ -97,6 +97,10 @@ void StartDialog::onButtonNewProject_clicked()
         Loader = new LoaderAtari8bitBinary();
         altfont = FONT_ATARI8BIT;
         break;
+    case FT_ATARI8BIT_SAP:
+        Loader = new LoaderAtari8bitSAP();
+        altfont = FONT_ATARI8BIT;
+        break;
     case FT_C64_BINARY:
         Loader = new LoaderC64Binary();
         altfont = FONT_C64;
