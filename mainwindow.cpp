@@ -994,17 +994,17 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
         }
 
         quint64 addr;
-        QString *hexPrefix = &Disassembler->hexPrefix;
-        QString *hexSuffix = &Disassembler->hexSuffix;
+        QString hexPrefix = Disassembler->hexPrefix;
+        QString hexSuffix = Disassembler->hexSuffix;
 
         // if no label is found, check for hexPrefixed or hexSuffixed address
 
         if (iter == autoLabels.constEnd()) {
-            if (operand.left(hexPrefix->size()) == *hexPrefix) {
-                operand = operand.mid(hexPrefix->size());
+            if (hexPrefix.size() && operand.left(hexPrefix.size()) == hexPrefix) {
+                operand = operand.mid(hexPrefix.size());
                 addr = operand.toULongLong(0,16);
-            } else if (operand.right(hexSuffix->size()) == *hexSuffix) {
-                operand = operand.left(operand.size()-hexSuffix->size());
+            } else if (hexSuffix.size() && operand.right(hexSuffix.size()) == hexSuffix) {
+                operand = operand.left(operand.size()-hexSuffix.size());
                 addr = operand.toULongLong(0,16);
             } else {
                 return;     // nothing found to jump to
