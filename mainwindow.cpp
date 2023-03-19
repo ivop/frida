@@ -238,12 +238,14 @@ MainWindow::MainWindow(QWidget *parent) :
     // use very large sizes so they will be scaled to fit the screen
     // (unless your screen is larger than 10kx10k :)
 
-    ui->splitterSegNotes->setSizes(       { 7500, 2500 } );
+    ui->splitterSegNotes->setSizes(       { 6000, 2000, 2000 } );
     ui->splitterDisRef->setSizes(         { 8500, 1500 } );
     ui->splitterHexAsciiLegend->setSizes( { 7000, 3000 } );
     ui->splitterMain->setSizes(           { 2000, 4500, 3500 });
 
     ui->tableSegments->selectRow(0); // triggers all show functions
+
+    ui->instructionDescription->setReadOnly(true);
 }
 
 MainWindow::~MainWindow()
@@ -918,8 +920,20 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
     // other lines have columnSpan of one (space, opcode, operand/label)
 
-    if (t->columnSpan(index.row(), index.column()) == 1) {
-        if (index.column() != 2) return;
+    // opcode
+
+    if (t->columnSpan(index.row(), index.column()) == 1 && index.column() == 1) {
+        QTableWidgetItem *vhitem = t->verticalHeaderItem(index.row());
+        quint64 address = vhitem->text().toULongLong(nullptr, 16);
+
+        QString descr = Disassembler->getDescriptionAt(address);
+
+        ui->instructionDescription->document()->setHtml(descr);
+    }
+
+    // operand(s)
+
+    if (t->columnSpan(index.row(), index.column()) == 1 && index.column() == 2) {
 
         QString operand = t->item(index.row(), 2)->text();
 

@@ -9,6 +9,7 @@ class Disassembler {
 public:
     void generateDisassembly(void);
     virtual void trace(quint64 address) = 0;
+    virtual QString getDescriptionAt(quint64 address) = 0;
 
     QString hexPrefix, hexSuffix;
     quint64 cputype;
@@ -25,6 +26,7 @@ protected:
 class Disassembler6502 : public Disassembler {
 public:
     void trace(quint64 address) override;
+    QString getDescriptionAt(quint64 address) override;
 
 protected:
     void initTables(void) override;
@@ -37,6 +39,7 @@ protected:
 class Disassembler8080 : public Disassembler {
 public:
     void trace(quint64 address) override;
+    QString getDescriptionAt(quint64 address) override;
 
 protected:
     void initTables(void) override;

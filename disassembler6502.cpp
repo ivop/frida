@@ -1189,3 +1189,8 @@ void Disassembler6502::trace(quint64 address) {
     }
     delete[] mark;
 }
+
+QString Disassembler6502::getDescriptionAt(quint64 address) {
+    return "";
+}
+

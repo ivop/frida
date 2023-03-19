@@ -294,6 +294,16 @@
          </item>
         </layout>
        </widget>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="title">
+         <string>Instruction Description</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QTextEdit" name="instructionDescription"/>
+         </item>
+        </layout>
+       </widget>
        <widget class="QWidget" name="verticalLayoutWidget_3">
         <layout class="QVBoxLayout" name="verticalNotes">
          <item>

@@ -19,7 +19,7 @@ struct distabitem {
     const char * descr;
 };
 
-static const char isizes[MODE_LAST] = {
+static const quint8 isizes[MODE_LAST] = {
     [MODE_IMPL] = 1,
     [MODE_D8]   = 2,
     [MODE_D16]  = 3,
@@ -27,6 +27,16 @@ static const char isizes[MODE_LAST] = {
     [MODE_JMP]  = 3,
     [MODE_RST]  = 1,
     [MODE_RET]  = 1,
+};
+
+static const QString operand_description[MODE_LAST] = {
+    [MODE_IMPL] = "",
+    [MODE_D8]   = "d8",
+    [MODE_D16]  = "d16",
+    [MODE_ADR]  = "adr",
+    [MODE_JMP]  = "adr",
+    [MODE_RST]  = "",
+    [MODE_RET]  = "",
 };
 
 // Thanks to http://www.emulator101.com/reference/8080-by-opcode.html for
@@ -41,46 +51,46 @@ static struct distabitem distab8080[256] = {
     // 00H - 0FH
 
 { "NOP",    MODE_IMPL,  "Nothing" },
-{ "LXI B,", MODE_D16,   "B <- byte 3, C <- byte 2" },
+{ "LXI B,", MODE_D16,   "B <- byte 3; C <- byte 2" },
 { "STAX B", MODE_IMPL,  "(BC) <- A" },
 { "INX B",  MODE_IMPL,  "BC <- BC+1" },
 { "INR B",  MODE_IMPL,  "B <- B+1 [Z,S,P,AC]" },
 { "DCR B",  MODE_IMPL,  "B <- B-1 [Z,S,P,AC]" },
 { "MVI B,", MODE_D8,    "B <- byte 2" },
-{ "RLC",    MODE_IMPL,  "A = A << 1; bit 0 = prev bit 7; CY = prev bit 7 [CY]" },
+{ "RLC",    MODE_IMPL,  "A = A << 1;bit 0 = prev bit 7;CY = prev bit 7 [CY]" },
 UNDEFINED,
 { "DAD B",  MODE_IMPL,  "HL = HL + BC [CY]" },
 { "LDAX B", MODE_IMPL,  "A <- (BC)" },
 { "DCX B",  MODE_IMPL,  "BC = BC-1 [CY]" },
 { "INR C",  MODE_IMPL,  "C <- C+1 [Z,S,P,AC]" },
-{ "DCR C",  MODE_IMPL,  "C <-C-1 [Z,S,P,AC]" },
-{ "MVI C",  MODE_D8,    "C <- byte 2" },
-{ "RRC",    MODE_IMPL,  "A = A >> 1; bit 7 = prev bit 0; CY = prev bit 0 [CY]" },
+{ "DCR C",  MODE_IMPL,  "C <- C-1 [Z,S,P,AC]" },
+{ "MVI C,", MODE_D8,    "C <- byte 2" },
+{ "RRC",    MODE_IMPL,  "A = A >> 1;bit 7 = prev bit 0;CY = prev bit 0 [CY]" },
 
     // 10H - 1fH
 
 UNDEFINED,
-{ "LXI D,", MODE_D16,   "D <- byte 3, E <- byte 2" },
+{ "LXI D,", MODE_D16,   "D <- byte 3; E <- byte 2" },
 { "STAX D", MODE_IMPL,  "(DE) <- A" },
 { "INX D",  MODE_IMPL,  "DE <- DE + 1" },
 { "INR D",  MODE_IMPL,  "D <- D+1 [Z,S,P,AC]" },
 { "DCR D",  MODE_IMPL,  "D <- D-1 [Z,S,P,AC]" },
 { "MVI D,", MODE_D8,    "D <- byte 2" },
-{ "RAL",    MODE_IMPL,  "A = A << 1; bit 0 = prev CY; CY = prev bit 7 [CY]" },
+{ "RAL",    MODE_IMPL,  "A = A << 1;bit 0 = prev CY;CY = prev bit 7 [CY]" },
 UNDEFINED,
 { "DAD D",  MODE_IMPL,  "HL = HL + DE [CY]" },
 { "LDAX D", MODE_IMPL,  "A <- (DE)" },
 { "DCX D",  MODE_IMPL,  "DE = DE-1" },
-{ "INR E",  MODE_IMPL,  "E <-E+1 [Z,S,P,AC]" },
+{ "INR E",  MODE_IMPL,  "E <- E+1 [Z,S,P,AC]" },
 { "DCR E",  MODE_IMPL,  "E <- E-1 [Z,S,P,AC]" },
 { "MVI E,", MODE_D8,    "E <- byte 2" },
-{ "RAR",    MODE_IMPL,  "A = A >> 1; bit 7 = prev bit 7; CY = prev bit 0 [CY]" },
+{ "RAR",    MODE_IMPL,  "A = A >> 1;bit 7 = prev bit 7;CY = prev bit 0 [CY]" },
 
     // 20H - 2fH
 
 UNDEFINED,
-{ "LXI H,", MODE_D16,   "H <- byte 3, L <- byte 2" },
-{ "SHLD",   MODE_ADR,   "(adr) <-L; (adr+1)<-H" },
+{ "LXI H,", MODE_D16,   "H <- byte 3; L <- byte 2" },
+{ "SHLD",   MODE_ADR,   "(adr) <-L;(adr+1) <- H" },
 { "INX H",  MODE_IMPL,  "HL <- HL + 1" },
 { "INR H",  MODE_IMPL,  "H <- H+1 [Z,S,P,AC]" },
 { "DCR H",  MODE_IMPL,  "H <- H-1 [Z,S,P,AC]" },
@@ -88,7 +98,7 @@ UNDEFINED,
 { "DAA",    MODE_IMPL,  "Decimal Adjust Accumulator" },
 UNDEFINED,
 { "DAD H",  MODE_IMPL,  "HL = HL + HI [CY]" },
-{ "LHLD",   MODE_ADR,   "L <- (adr); H<-(adr+1)" },
+{ "LHLD",   MODE_ADR,   "L <- (adr);H <- (adr+1)" },
 { "DCX H",  MODE_IMPL,  "HL = HL-1" },
 { "INR L",  MODE_IMPL,  "L <- L+1 [Z,S,P,AC]" },
 { "DCR L",  MODE_IMPL,  "L <- L-1 [Z,S,P,AC]" },
@@ -98,7 +108,7 @@ UNDEFINED,
     // 30H - 3fH
 
 UNDEFINED,
-{ "LXI SP,",MODE_D16,   "SP.hi <- byte 3, SP.lo <- byte 2" },
+{ "LXI SP,",MODE_D16,   "SP.hi <- byte 3;SP.lo <- byte 2" },
 { "STA",    MODE_ADR,   "(adr) <- A" },
 { "INX SP", MODE_IMPL,  "SP = SP + 1" },
 { "INR M",  MODE_IMPL,  "(HL) <- (HL)+1 [Z,S,P,AC]" },
@@ -269,35 +279,35 @@ UNDEFINED,
     // C0H - CFH
 
 { "RNZ",    MODE_RET,   "if NZ, RET" },
-{ "POP B",  MODE_IMPL,  "C <- (sp); B <- (sp+1); sp <- sp+2" },
+{ "POP B",  MODE_IMPL,  "C <- (SP);B <- (SP+1);SP <- SP+2" },
 { "JNZ",    MODE_JMP,   "if NZ, PC <- adr" },
-{ "JMP",    MODE_JMP,   "PC <= adr" },
+{ "JMP",    MODE_JMP,   "PC <- adr" },
 { "CNZ",    MODE_JMP,   "if NZ, CALL adr" },
-{ "PUSH B", MODE_IMPL,  "(sp-2)<-C; (sp-1)<-B; sp <- sp - 2" },
+{ "PUSH B", MODE_IMPL,  "(SP-2) <- C;(SP-1) <- B;SP <- SP-2" },
 { "ADI",    MODE_D8,    "A <- A + byte [Z,S,P,CY,AC]" },
 { "RST 0",  MODE_RST,   "CALL 00H" },
 { "RZ",     MODE_RET,   "if Z, RET" },
-{ "RET",    MODE_RET,   "PC.lo <- (sp); PC.hi<-(sp+1); SP <- SP+2" },
+{ "RET",    MODE_RET,   "PC.lo <- (SP);PC.hi <- (SP+1);SP <- SP+2" },
 { "JZ",     MODE_JMP,   "if Z, PC <- adr" },
 UNDEFINED,
 { "CZ",     MODE_JMP,   "if Z, CALL adr" },
-{ "CALL",   MODE_JMP,   "(SP-1)<-PC.hi;(SP-2)<-PC.lo;SP<-SP-2;PC=adr" },
+{ "CALL",   MODE_JMP,   "(SP-1) <- PC.hi;(SP-2) <- PC.lo;SP <- SP-2;PC <- adr" },
 { "ACI",    MODE_D8,    "A <- A + data + CY [Z,S,P,CY,AC]" },
 { "RST 1",  MODE_RST,   "CALL 08H" },
 
     // D0H - DFH
 
 { "RNC",    MODE_RET,   "if NCY, RET" },
-{ "POP D",  MODE_IMPL,  "E <- (sp); D <- (sp+1); sp <- sp+2" },
+{ "POP D",  MODE_IMPL,  "E <- (SP);D <- (SP+1);SP <- SP+2" },
 { "JNC",    MODE_JMP,   "if NCY, PC<-adr" },
 { "OUT",    MODE_D8,    "OUTput A to device num" },
 { "CNC",    MODE_JMP,   "if NCY, CALL adr" },
-{ "PUSH D", MODE_IMPL,  "(sp-2)<-E; (sp-1)<-D; sp <- sp - 2" },
+{ "PUSH D", MODE_IMPL,  "(SP-2) <- E;(SP-1) <- D;SP <- SP-2" },
 { "SUI",    MODE_D8,    "A <- A - data [Z,S,P,CY,AC]" },
 { "RST 2",  MODE_RST,   "CALL 10H" },
 { "RC",     MODE_RET,   "if CY, RET" },
 UNDEFINED,
-{ "JC",     MODE_JMP,   "if CY, PC<-adr" },
+{ "JC",     MODE_JMP,   "if CY, PC <- adr" },
 { "IN",     MODE_D8,    "INput from device num to A" },
 { "CC",     MODE_JMP,   "if CY, CALL adr" },
 UNDEFINED,
@@ -307,17 +317,17 @@ UNDEFINED,
     // E0H - EFH
 
 { "RPO",    MODE_RET,   "if POdd, RET" },
-{ "POP H",  MODE_IMPL,  "L <- (sp); H <- (sp+1); sp <- sp+2" },
+{ "POP H",  MODE_IMPL,  "L <- (SP);H <- (SP+1);SP <- SP+2" },
 { "JPO",    MODE_JMP,   "if POdd, PC <- adr" },
-{ "XTHL",   MODE_IMPL,  "L <-> (SP); H <-> (SP+1)" },
+{ "XTHL",   MODE_IMPL,  "L <-> (SP);H <-> (SP+1)" },
 { "CPO",    MODE_JMP,   "if POdd, CALL adr" },
-{ "PUSH H", MODE_IMPL,  "(sp-2)<-L; (sp-1)<-H; sp <- sp - 2" },
+{ "PUSH H", MODE_IMPL,  "(SP-2) <- L;(SP-1) <- H;SP <- SP - 2" },
 { "ANI",    MODE_D8,    "A <- A & data [Z,S,P,CY,AC]" },
 { "RST 4",  MODE_RST,   "CALL 20H" },
 { "RPE",    MODE_RET,   "if PEven, RET" },
-{ "PCHL",   MODE_IMPL,  "PC.hi <- H; PC.lo <- L" },     // unknown "jump"
+{ "PCHL",   MODE_IMPL,  "PC.hi <- H;PC.lo <- L" },     // unknown "jump"
 { "JPE",    MODE_JMP,   "if PEven, PC <- adr" },
-{ "XCHG",   MODE_IMPL,  "H <-> D; L <-> E" },
+{ "XCHG",   MODE_IMPL,  "H <-> D;L <-> E" },
 { "CPE",    MODE_JMP,   "if PEven, CALL adr" },
 UNDEFINED,
 { "XRI",    MODE_D8,    "A <- A ^ data [Z,S,P,CY,AC]" },
@@ -326,15 +336,15 @@ UNDEFINED,
     // F0H - FFH
 
 { "RP",     MODE_RET,   "if Plus, RET" },
-{ "POP PSW",MODE_IMPL,  "flags <- (sp); A <- (sp+1); sp <- sp+2 [Z,S,P,CY,AC]" },
+{ "POP PSW",MODE_IMPL,  "flags <- (SP);A <- (SP+1);SP <- SP+2 [Z,S,P,CY,AC]" },
 { "JP",     MODE_JMP,   "if Plus, PC <- adr" },
 { "DI",     MODE_IMPL,  "Disable Interrupts" },
 { "CP",     MODE_JMP,   "if Plus, PC <- adr" },
-{ "PUSH PSW", MODE_IMPL,"(sp-2)<-flags; (sp-1)<-A; sp <- sp - 2" },
+{ "PUSH PSW", MODE_IMPL,"(SP-2)<-flags;(SP-1)<-A;SP <- SP-2" },
 { "ORI",    MODE_D8,    "A <- A | data [Z, S, P, CY, AC]" },
 { "RST 6",  MODE_RST,   "CALL 30H" },
 { "RM",     MODE_RET,   "if Minus, RET" },
-{ "SPHL",   MODE_IMPL,  "SP=HL" },
+{ "SPHL",   MODE_IMPL,  "SP <- HL" },
 { "JM",     MODE_JMP,   "if Minus, PC <- adr" },
 { "EI",     MODE_IMPL,  "Enable Interrupts" },
 { "CM",     MODE_JMP,   "if Minus, CALL adr" },
@@ -495,3 +505,34 @@ void Disassembler8080::trace(quint64 address) {
     } // tracelist
     delete[] mark;
 }
+
+QString Disassembler8080::getDescriptionAt(quint64 address) {
+    quint64 start = segments[currentSegment].start;
+    quint8 *data = segments[currentSegment].data;
+    quint8 *datatypes = segments[currentSegment].datatypes;
+
+    int i = address - start;
+
+    if (datatypes[i] != DT_CODE)
+        return "";
+
+    quint8 opcode = data[i];
+    quint8 m = distab[opcode].mode;
+
+    QString descr = distab[opcode].descr;
+    descr = descr.replace(";", "<br>");
+    descr = descr.replace("[", "<br><br><i>flags: ");
+    descr = descr.replace("]", "</i><br>");
+    descr = descr.replace("<->", "&lt;-&gt;");
+    descr = descr.replace("<-", "&lt;-");           // &larr; looks ugly
+    descr = descr.replace("->", "-&gt;");           // &rarr; looks ugly
+    descr = descr.replace("d8", "<i>d8</i>");
+    descr = descr.replace("d16", "<i>d16</i>");
+    descr = descr.replace("adr", "<i>adr</i>");
+
+    descr = "<h3>" + QString(distab[opcode].inst) + " <i>" +
+            operand_description[m] + "</i></h3>" + descr;
+
+    return descr;
+}
+
