@@ -20,9 +20,9 @@
 //
 // ---------------------------------------------------------------------------
 
-#include <QDebug>
-#include "frida.h"
 #include "disassembler.h"
+#include "frida.h"
+#include <QDebug>
 
 enum addressing_mode {
 
@@ -72,7 +72,7 @@ static const char * const fmts[MODE_LAST] = {
     [MODE_ZP_REL]    = "%1,%2",         // 65C02 only (Rockwell/WDC)
 };
 
-static const char isizes[MODE_LAST] = {
+static const int isizes[MODE_LAST] = {
     [MODE_ACCU]      = 1,
     [MODE_IMPL]      = 1,
     [MODE_IMM]       = 2,
@@ -91,7 +91,7 @@ static const char isizes[MODE_LAST] = {
     [MODE_ZP_REL]    = 3,               // 65C02 only (Rockwell/WDC)
 };
 
-static const char can_be_label[MODE_LAST] = {
+static const int can_be_label[MODE_LAST] = {
     [MODE_ACCU]      = 0,
     [MODE_IMPL]      = 0,
     [MODE_IMM]       = 0,
@@ -182,7 +182,7 @@ struct distabitem {
     const char mode;
 };
 
-#define UNDEFINED { "UNDEFINED", MODE_IMPL }
+constexpr struct distabitem UNDEFINED = { "UNDEFINED", MODE_IMPL };
 
 static struct distabitem distabNMOS6502[256] = {
 
@@ -1045,9 +1045,12 @@ int Disassembler6502::getInstructionSizeAt(quint64 address) {
     return isizes[(enum addressing_mode)distab[data[address]].mode];
 }
 
-void Disassembler6502::createOperandLabels(quint64 i) {
+void Disassembler6502::createOperandLabels(quint64 address) {
     quint8 *data = segments[currentSegment].data;
-    quint64 addr = 0, addr2 = 0, start = segments[currentSegment].start;
+    quint64 addr = 0;
+    quint64 addr2 = 0;
+    quint64 start = segments[currentSegment].start;
+    quint64 i = address;
     int n = isizes[(enum addressing_mode)distab[data[i]].mode];
     QString hex;
 
@@ -1093,19 +1096,24 @@ void Disassembler6502::createOperandLabels(quint64 i) {
     }
 }
 
-void Disassembler6502::disassembleInstructionAt(quint64 i,
+void Disassembler6502::disassembleInstructionAt(quint64 address,
                                              struct disassembly &dis, int &n) {
     QMap<quint64,QString> *localLabels = &segments[currentSegment].localLabels;
     quint8 *flags = segments[currentSegment].flags;
     quint8 *data = segments[currentSegment].data;
     quint64 start = segments[currentSegment].start;
-    quint16 opcode, operand = 0, operand2 = 0;
-    QString temps, hex, hex2;
+    quint16 opcode;
+    quint16 operand = 0;
+    quint16 operand2 = 0;
+    QString temps;
+    QString hex;
+    QString hex2;
+    quint64 i = address;
 
     opcode = data[i];
 
     struct distabitem item = distab[opcode];
-    enum addressing_mode m = (enum addressing_mode) item.mode;
+    auto m = (enum addressing_mode) item.mode;
 
     n = isizes[m];
 
@@ -1203,7 +1211,7 @@ void Disassembler6502::trace(quint64 address) {
     quint64 start = segments[currentSegment].start;
     quint64 end = segments[currentSegment].end;
     quint64 size = end - start + 1;
-    quint8 *mark = new quint8[size]();  // () --> all zeroed
+    auto *mark = new quint8[size]();  // () --> all zeroed
     QList<quint64> tracelist;
     tracelist.append(address);
 
@@ -1218,11 +1226,13 @@ void Disassembler6502::trace(quint64 address) {
         address = tracelist.first();
         tracelist.removeFirst();
 
-        while (1) {
-            int i = address - start;
-            quint16 opcode = data[i], operand = 0, operand2 = 0;
+        while (true) {
+            quint64 i = address - start;
+            quint16 opcode = data[i];
+            quint16 operand = 0;
+            quint16 operand2 = 0;
             struct distabitem item = distab[opcode];
-            enum addressing_mode m = (enum addressing_mode) item.mode;
+            auto m = (enum addressing_mode) item.mode;
             int n = isizes[m];
 
             if (address+n-1>end)
@@ -1283,8 +1293,13 @@ QString Disassembler6502::getDescriptionAt(quint64 address) {
     quint64 start = segments[currentSegment].start;
     quint8 *data = segments[currentSegment].data;
     quint8 *datatypes = segments[currentSegment].datatypes;
-    QString instr, descr, action, flags, fulldescr;
-    int i, x;
+    QString instr;
+    QString descr;
+    QString action;
+    QString flags;
+    QString fulldescr;
+    quint64 i;
+    int x;
 
     i = address - start;
 

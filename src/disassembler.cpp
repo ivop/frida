@@ -20,11 +20,11 @@
 //
 // ---------------------------------------------------------------------------
 
+#include "disassembler.h"
+#include "frida.h"
 #include <QDebug>
 #include <QMessageBox>
 #include <lowhighbytewindow.h>
-#include "frida.h"
-#include "disassembler.h"
 
 class Disassembler *Disassembler;
 
@@ -115,14 +115,20 @@ static inline quint8 cbm_screen_to_ascii(quint8 v) {
 
 void Disassembler::generateDisassembly(void) {
     struct segment *s = &segments[currentSegment];
-    quint64 start = s->start, end = s->end, size = end - start + 1;
-    quint64 val = 0, val2 = 0;
-    quint8 *data  = s->data;
+    quint64 start = s->start;
+    quint64 end = s->end;
+    quint64 size = end - start + 1;
+    quint64 val = 0;
+    quint64 val2 = 0;
+    quint8 *data = s->data;
     quint8 *datatypes = s->datatypes;
-    QList<struct disassembly> *dislist  = &s->disassembly;
+    QList<struct disassembly> *dislist = &s->disassembly;
     struct disassembly dis;
-    QString hex, instr;
-    int n, perline, prevtype;
+    QString hex;
+    QString instr;
+    int n;
+    int perline;
+    int prevtype;
     bool labelled;
 
     initTables();
@@ -131,7 +137,7 @@ void Disassembler::generateDisassembly(void) {
     // Check consistency of datatypes
 
     for (quint64 i = 0; i < size; i++) {
-        enum datatypes type = (enum datatypes)datatypes[i];
+        auto type = (enum datatypes)datatypes[i];
         n = 0;
 
         switch(type) {
@@ -261,7 +267,7 @@ also_wrong2:
     perline = 0;
     prevtype = -1;
     for (quint64 i = 0; i < size; i++) {
-        enum datatypes type = (enum datatypes)datatypes[i];
+        auto type = (enum datatypes)datatypes[i];
         n = 0;
         switch(type) {
 

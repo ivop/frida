@@ -20,8 +20,8 @@
 //
 // ---------------------------------------------------------------------------
 
-#include <QApplication>
 #include "frida.h"
+#include <QApplication>
 
 QList<struct filetype> filetypes = {
 { "Raw",                                            FT_RAW_FILE },

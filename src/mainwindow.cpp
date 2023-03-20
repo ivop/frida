@@ -21,26 +21,24 @@
 // ---------------------------------------------------------------------------
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "commentwindow.h"
-#include "labelswindow.h"
+#include "addlabelwindow.h"
 #include "changesegmentwindow.h"
-#include "lowhighbytewindow.h"
-#include "loadsaveproject.h"
-#include <QDebug>
-#include <QScrollBar>
-#include <QMenu>
-#include <QMessageBox>
-#include <QBrush>
-#include <QPushButton>
-#include <QComboBox>
-#include <sstream>
-#include <algorithm>
-#include "frida.h"
+#include "commentwindow.h"
 #include "disassembler.h"
 #include "exportassembly.h"
+#include "frida.h"
 #include "jumptowindow.h"
-#include "addlabelwindow.h"
+#include "labelswindow.h"
+#include "loadsaveproject.h"
+#include "lowhighbytewindow.h"
+#include "ui_mainwindow.h"
+#include <QBrush>
+#include <QComboBox>
+#include <QDebug>
+#include <QMenu>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QScrollBar>
 
 QBrush datatypeBrushes[DT_LAST] = {
     [DT_UNDEFINED_BYTES] = { QColor(255, 255, 255, 255), Qt::SolidPattern }, // white
@@ -156,12 +154,12 @@ MainWindow::MainWindow(QWidget *parent) :
         t->addAction(ui->actionSet_To_Undefined);
         t->addAction(ui->actionSet_To_Code);
 
-        QMenu *men = new QMenu();
+        auto *men = new QMenu();
         men->addAction(ui->actionSet_To_WordLE);
         men->addAction(ui->actionSet_To_DWordLE);
         men->addAction(ui->actionSet_To_QWordLE);
         men->addAction(ui->actionSet_To_XWordLE);
-        QAction *act = new QAction("Set to Little-Endian", ui->tableHexadecimal);
+        auto *act = new QAction("Set to Little-Endian", ui->tableHexadecimal);
         act->setMenu(men);
         t->addAction(act);
 
@@ -468,10 +466,10 @@ void MainWindow::linkASCIIHexSelection() {
 
 // --------------------------------------------------------------------------
 
-void MainWindow::Set_To_Foo(QList<QTableWidgetSelectionRange> Ranges,
+void MainWindow::Set_To_Foo(const QList<QTableWidgetSelectionRange>& Ranges,
                                                        quint8 datatype) {
     for (int i=0; i<Ranges.size(); i++) {
-        QTableWidgetSelectionRange range = Ranges.at(i);
+        const QTableWidgetSelectionRange& range = Ranges.at(i);
         for (int y = range.topRow(); y <= range.bottomRow(); y++) {
             for (int x = range.leftColumn(); x <= range.rightColumn(); x++) {
                 unsigned int pos = y*8+x;
@@ -559,12 +557,12 @@ void MainWindow::actionSet_To_CBM_Screen_Codes(void) {
 // But Low and High bytes must contain a single cell! That's guaranteed
 // by their respective actions below.
 
-void MainWindow::Set_Flag(QList<QTableWidgetSelectionRange> Ranges, quint8 flag) {
+void MainWindow::Set_Flag(const QList<QTableWidgetSelectionRange>& Ranges, quint8 flag) {
     const struct segment *s = &segments.at(currentSegment);
     unsigned int pos;
 
     for (int i=0; i<Ranges.size(); i++) {
-        QTableWidgetSelectionRange range = Ranges.at(i);
+        const QTableWidgetSelectionRange& range = Ranges.at(i);
         for (int y = range.topRow(); y <= range.bottomRow(); y++) {
             for (int x = range.leftColumn(); x <= range.rightColumn(); x++) {
                 pos = y*8+x;
@@ -830,7 +828,9 @@ void MainWindow::onDisassemblySectionClicked(int index) {
         break;
     }
 
-    quint64 a = s.toULongLong(0,16), row, column;
+    quint64 a = s.toULongLong(0,16);
+    quint64 row;
+    quint64 column;
     a -= segments[currentSegment].start;
     row    = a / 8;
     column = a % 8;
@@ -847,13 +847,14 @@ void MainWindow::onDisassemblySectionClicked(int index) {
 void MainWindow::actionTrace(void) {
     QTableWidget *t = ui->tableHexadecimal;
     QList<QTableWidgetSelectionRange> Ranges = t->selectedRanges();
-    int x = INT_MAX, y = INT_MAX;
+    int x = INT_MAX;
+    int y = INT_MAX;
 
     if (Ranges.isEmpty())
         return;
 
     for (int i=0; i<Ranges.size(); i++) {
-        QTableWidgetSelectionRange range = Ranges.at(i);
+        const QTableWidgetSelectionRange& range = Ranges.at(i);
         if (range.topRow() < y)
             y = range.topRow();
         if (range.leftColumn() < x)
@@ -885,7 +886,7 @@ void MainWindow::actionComment() {
     quint64 a = s.toULongLong(0, 16);
     QString c = segments[currentSegment].comments.value(a);
 
-    commentwindow *cw = new commentwindow(s, c);
+    auto *cw = new commentwindow(s, c);
     cw->exec();
     c = cw->retrieveComment();
     if (c.isEmpty())
@@ -984,7 +985,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
                 operand_list.replace(i, operand_list.at(i).trimmed());
             }
 
-            jumpToWindow *jtw = new jumpToWindow(nullptr, &operand_list);
+            auto *jtw = new jumpToWindow(nullptr, &operand_list);
 
             jtw->exec();
 

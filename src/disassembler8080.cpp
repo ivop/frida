@@ -20,9 +20,9 @@
 //
 // ---------------------------------------------------------------------------
 
-#include <QDebug>
-#include "frida.h"
 #include "disassembler.h"
+#include "frida.h"
+#include <QDebug>
 
 enum addressing_mode {
     MODE_IMPL = 0,      // single byte instructions, except for RST
@@ -64,7 +64,7 @@ static const QString operand_description[MODE_LAST] = {
 // Thanks to http://www.emulator101.com/reference/8080-by-opcode.html for
 // this fine table :) Massaged it to fit my needs.
 
-#define UNDEFINED { "UNDEFINED", MODE_IMPL, "UNDEFINED" }
+constexpr struct distabitem UNDEFINED = { "UNDEFINED", MODE_IMPL, "UNDEFINED" };
 
 static struct distabitem distab8080[256] = {
 
@@ -390,16 +390,18 @@ int Disassembler8080::getInstructionSizeAt(quint64 address) {
     return isizes[(enum addressing_mode)distab[data[address]].mode];
 }
 
-void Disassembler8080::createOperandLabels(quint64 i) {
+void Disassembler8080::createOperandLabels(quint64 address) {
     QMap<quint64,QString> *localLabels = &segments[currentSegment].localLabels;
     quint8 *data = segments[currentSegment].data;
-    quint16 opcode, operand = 0;
+    quint16 opcode;
+    quint16 operand = 0;
     QString temps;
+    quint64 i = address;
 
     opcode = data[i];
 
     struct distabitem item = distab[opcode];
-    enum addressing_mode m = (enum addressing_mode) item.mode;
+    auto m = (enum addressing_mode) item.mode;
 
     if (m == MODE_ADR || m == MODE_JMP) {
         operand = data[i+1] + (data[i+2]<<8);
@@ -415,19 +417,21 @@ void Disassembler8080::createOperandLabels(quint64 i) {
     }
 }
 
-void Disassembler8080::disassembleInstructionAt(quint64 i,
+void Disassembler8080::disassembleInstructionAt(quint64 address,
                                             struct disassembly &dis, int &n) {
     QMap<quint64,QString> *localLabels = &segments[currentSegment].localLabels;
 //    quint8 *flags = segments[currentSegment].flags;
     quint8 *data = segments[currentSegment].data;
     quint64 start = segments[currentSegment].start;
-    quint16 opcode, operand = 0;
+    quint16 opcode;
+    quint16 operand = 0;
     QString temps;
+    quint64 i = address;
 
     opcode = data[i];
 
     struct distabitem item = distab[opcode];
-    enum addressing_mode m = (enum addressing_mode) item.mode;
+    auto m = (enum addressing_mode) item.mode;
 
     n = isizes[m];
 
@@ -468,7 +472,7 @@ void Disassembler8080::trace(quint64 address) {
     quint64 start = segments[currentSegment].start;
     quint64 end = segments[currentSegment].end;
     quint64 size = end - start + 1;
-    quint8 *mark = new quint8[size]();  // () --> all zeroed
+    auto *mark = new quint8[size]();  // () --> all zeroed
     QList<quint64> tracelist;
     tracelist.append(address);
 
@@ -483,11 +487,12 @@ void Disassembler8080::trace(quint64 address) {
         address = tracelist.first();
         tracelist.removeFirst();
 
-        while (1) {
-            int i = address - start;
-            quint16 opcode = data[i], operand = 0;
+        while (true) {
+            quint64 i = address - start;
+            quint16 opcode = data[i];
+            quint16 operand = 0;
             struct distabitem item = distab[opcode];
-            enum addressing_mode m = (enum addressing_mode) item.mode;
+            auto m = (enum addressing_mode) item.mode;
             int n = isizes[m];
 
             if (address+n-1>end)
@@ -533,7 +538,7 @@ QString Disassembler8080::getDescriptionAt(quint64 address) {
     quint8 *data = segments[currentSegment].data;
     quint8 *datatypes = segments[currentSegment].datatypes;
 
-    int i = address - start;
+    quint64 i = address - start;
 
     if (datatypes[i] != DT_CODE)
         return "";

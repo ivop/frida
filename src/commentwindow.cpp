@@ -31,7 +31,7 @@ commentwindow::commentwindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
-commentwindow::commentwindow(QString s, QString c, QWidget *parent) :
+commentwindow::commentwindow(const QString& s, const QString& c, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::commentwindow)
 {

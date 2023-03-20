@@ -50,7 +50,7 @@ struct cputype {
     enum cputypeid id;
 };
 
-extern QList<struct cputype> cputypes;
+extern const QList<struct cputype> cputypes;
 
 // --------------------------------------------------------------------------
 

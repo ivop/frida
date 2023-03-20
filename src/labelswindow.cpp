@@ -21,13 +21,13 @@
 // ---------------------------------------------------------------------------
 
 #include "labelswindow.h"
-#include "ui_labelswindow.h"
-#include "frida.h"
 #include "addlabelwindow.h"
+#include "frida.h"
+#include "ui_labelswindow.h"
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QTextStream>
 #include <QPushButton>
+#include <QTextStream>
 
 labelswindow::labelswindow(QWidget *parent) :
     QDialog(parent),
@@ -72,7 +72,8 @@ void labelswindow::onDoneButton_clicked() {
     close();
 }
 
-void labelswindow::showLabels(QTableWidget *t, QMap<quint64, QString> *labels) {
+void labelswindow::showLabels(QTableWidget *t,
+                                     QMap<quint64, QString> *labels) {
     QList<quint64> keys = labels->keys();
     QString hex;
     QTableWidgetItem *item;
@@ -109,7 +110,6 @@ static void get_contents(QTableWidget *t, int row, QString *label,
     QString addr  = t->item(row, 0)->text();
     *label = t->item(row, 1)->text();
     *address = addr.toULongLong(0, 16);
-    return;
 }
 
 void labelswindow::onTableAutoLabels_cellChanged(int row, int column) {

@@ -21,14 +21,14 @@
 // ---------------------------------------------------------------------------
 
 #include "startdialog.h"
-#include "ui_startdialog.h"
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QDebug>
+#include "disassembler.h"
 #include "frida.h"
 #include "loader.h"
-#include "disassembler.h"
 #include "loadsaveproject.h"
+#include "ui_startdialog.h"
+#include <QDebug>
+#include <QFileDialog>
+#include <QMessageBox>
 
 QString FileToDisassemble;
 
@@ -171,7 +171,7 @@ void StartDialog::onButtonNewProject_clicked()
 
     file.close();
 
-    if (!segments.size()) {
+    if (segments.empty()) {
         msg.setText("File contains no segments (" + FileToDisassemble + ")");
         msg.exec();
         return;

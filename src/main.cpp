@@ -21,19 +21,19 @@
 // ---------------------------------------------------------------------------
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "startdialog.h"
-#include <QApplication>
-#include <QFile>
-#include <QTextStream>
-#include <QFontDatabase>
-#include <QDebug>
-#include <QDialog>
-#include <QMessageBox>
-#include <QHash>
-#include <QDesktopWidget>
 #include "disassembler.h"
 #include "frida.h"
+#include "startdialog.h"
+#include "ui_mainwindow.h"
+#include <QApplication>
+#include <QDebug>
+#include <QDesktopWidget>
+#include <QDialog>
+#include <QFile>
+#include <QFontDatabase>
+#include <QHash>
+#include <QMessageBox>
+#include <QTextStream>
 
 QList<struct segment> segments;
 int currentSegment;
@@ -76,6 +76,8 @@ int main(int argc, char *argv[])
         break;
     case CT_INTEL_8080:
         Disassembler = new Disassembler8080();
+    default:
+        break;      // should not happen
     }
 
     Disassembler->cputype = cputype;        // be able to detect variants

@@ -75,7 +75,7 @@ public slots:
 private slots:
     void linkHexASCIISelection(void);
     void linkASCIIHexSelection(void);
-    void linkSelections(QTableWidget *from, QTableWidget *to);
+    static void linkSelections(QTableWidget *from, QTableWidget *to);
     void onHexSectionClicked(int index);
     void onDisassemblySectionClicked(int index);
 
@@ -93,12 +93,12 @@ private slots:
     void onComboBox_currentIndexChanged(int index);
     void onTableDisassembly_doubleClicked(const QModelIndex &index);
 
-    void rememberValue(int value);
+    static void rememberValue(int value);
 
 private:
     Ui::MainWindow *ui;
-    void Set_To_Foo(QList<QTableWidgetSelectionRange> ranges, quint8 datatype);
-    void Set_Flag(QList<QTableWidgetSelectionRange> ranges, quint8 flag);
+    void Set_To_Foo(const QList<QTableWidgetSelectionRange>& ranges, quint8 datatype);
+    void Set_Flag(const QList<QTableWidgetSelectionRange>& ranges, quint8 flag);
     void Set_Flag_Low_or_High_Byte(bool bLow);
 };
 

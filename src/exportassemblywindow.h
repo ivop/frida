@@ -38,7 +38,7 @@ public:
     ~exportAssemblyWindow();
 
 
-    int asm_format;
+    int asm_format{};
 
 public slots:
     void accept() override;

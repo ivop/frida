@@ -54,7 +54,7 @@ private slots:
 private:
     Ui::labelswindow *ui;
 
-    void showLabels(QTableWidget *t, QMap<quint64, QString> *labels);
+    static void showLabels(QTableWidget *t, QMap<quint64, QString> *labels);
     void showAutoLabels(void);
     void showUserLabels(void);
     void showLocalLabels(void);

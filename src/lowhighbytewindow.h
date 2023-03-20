@@ -44,7 +44,7 @@ private slots:
 
 private:
     Ui::lowhighbytewindow *ui;
-    quint16 *fulladdr;
+    quint16 *fulladdr{};
 };
 
 #endif // LOWHIGHBYTEWINDOW_H

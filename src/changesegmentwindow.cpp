@@ -22,8 +22,8 @@
 
 #include "changesegmentwindow.h"
 #include "ui_changesegmentwindow.h"
-#include <QMessageBox>
 #include <QDebug>
+#include <QMessageBox>
 
 changesegmentwindow::changesegmentwindow(quint64 oldaddr, quint64 *newaddr,
                                          QWidget *parent) :
@@ -35,7 +35,7 @@ changesegmentwindow::changesegmentwindow(quint64 oldaddr, quint64 *newaddr,
     connect(ui->buttonBox, &QDialogButtonBox::accepted,
         this, &changesegmentwindow::onButtonBox_accepted);
 
-    QString hex = QString("%1").arg(oldaddr, 4, 16, (QChar)'0');
+    QString hex = QString("%1").arg(oldaddr, 4, 16, QChar('0'));
     ui->oldAddress->setText(hex);
     newaddress = newaddr;
     ui->newAddress->setText(hex);
@@ -49,7 +49,7 @@ changesegmentwindow::~changesegmentwindow()
 
 void changesegmentwindow::onButtonBox_accepted()
 {
-    bool ok;
+    bool ok = false;
     quint64 n = ui->newAddress->text().toULongLong(&ok, 16);
     if (ok) {
         *newaddress = n;

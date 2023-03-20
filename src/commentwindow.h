@@ -35,14 +35,14 @@ class commentwindow : public QDialog
 
 public:
     explicit commentwindow(QWidget *parent = 0);
-    commentwindow(QString s, QString c, QWidget *parent = 0);
+    commentwindow(const QString& s, const QString& c, QWidget *parent = 0);
     ~commentwindow();
 
     QString retrieveComment(void);
 
 private:
     Ui::commentwindow *ui;
-    quint64 address;
+    quint64 address{};
 };
 
 #endif // COMMENTWINDOW_H

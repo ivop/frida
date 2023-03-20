@@ -23,14 +23,14 @@
 #include "loadsaveproject.h"
 #include "frida.h"
 #include "loader.h"
-#include <QString>
-#include <QFileDialog>
+#include <QDataStream>
+#include <QDebug>
 #include <QFile>
+#include <QFileDialog>
 #include <QMap>
 #include <QMessageBox>
-#include <QDebug>
+#include <QString>
 #include <QTextStream>
-#include <QDataStream>
 
 static const char *magic = "FRIDA";
 static char checkmagic[5];
@@ -61,7 +61,7 @@ bool load_project(QWidget *widget) {
 
     in.readRawData(checkmagic, 5);
 
-    if (memcmp(magic, checkmagic, 5)) {
+    if (memcmp(magic, checkmagic, 5) != 0) {
         error = QFile::OpenError;
         errorstring = "This is not a Frida Project file";
         goto error_out;
@@ -84,12 +84,13 @@ bool load_project(QWidget *widget) {
 
     in >> cputype;
 
-    quint32 numsegments;
+    qint32 numsegments;
 
     in >> numsegments;
 
-    for (unsigned int i=0; i<numsegments; i++) {
-        quint64 start, end;
+    for (int i=0; i<numsegments; i++) {
+        quint64 start;
+        quint64 end;
 
         in >> start >> end;
 
@@ -127,12 +128,12 @@ error_out:          // goto here with error and errorstring set.
         msg.setText("Failed to load " + name + "\n\n" + errorstring);
         msg.exec();
         return false;
-    } else {
-        QMessageBox msg;
-        msg.setText("Succesfully loaded " + name + "\n");
-        msg.exec();
-        return true;
     }
+
+    QMessageBox msg;
+    msg.setText("Succesfully loaded " + name + "\n");
+    msg.exec();
+    return true;
 }
 
 void save_project(QWidget *widget) {
@@ -171,11 +172,11 @@ void save_project(QWidget *widget) {
 
     out << cputype;
 
-    quint32 numsegments = segments.size();
+    qint32 numsegments = segments.size();
 
     out << numsegments;
 
-    for (unsigned int i=0; i<numsegments; i++) {
+    for (int i=0; i<numsegments; i++) {
         struct segment *s = &segments[i];
 
         out << s->start << s->end << s->name;

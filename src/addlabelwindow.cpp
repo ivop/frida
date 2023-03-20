@@ -21,10 +21,10 @@
 // ---------------------------------------------------------------------------
 
 #include "addlabelwindow.h"
+#include "frida.h"
 #include "ui_addlabelwindow.h"
 #include <QDebug>
 #include <QMessageBox>
-#include "frida.h"
 
 addLabelWindow::addLabelWindow(QWidget *parent) :
     QDialog(parent),
@@ -52,7 +52,7 @@ void addLabelWindow::onPushButtonAdd_clicked() {
     QMessageBox msg;
     QString address = ui->lineEditAddress->text();
     QString label   = ui->lineEditLabel->text();
-    bool ok;
+    bool ok = false;
     quint64 addr = address.toULongLong(&ok,16);
 
     if (!ok) {
@@ -62,10 +62,11 @@ void addLabelWindow::onPushButtonAdd_clicked() {
         msg.setText("No label specified!");
         msg.exec();
     } else {
-        if (ui->checkBoxLocalLabel->isChecked())
+        if (ui->checkBoxLocalLabel->isChecked()) {
             segments[currentSegment].localLabels.insert(addr, label);
-        else
+        } else {
             userLabels.insert(addr, label);
+        }
         close();
     }
 }

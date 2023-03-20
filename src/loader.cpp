@@ -20,18 +20,16 @@
 //
 // ---------------------------------------------------------------------------
 
+#include "disassembler.h"
+#include "frida.h"
+#include "loader.h"
 #include <QDebug>
 #include <QFileInfo>
 #include <QRegularExpression>
-#include <string.h>
-#include <stdio.h>
-#include "frida.h"
-#include "loader.h"
-#include "disassembler.h"
 
-#define LE16(x) ((x)[0] | (x)[1]<<8)
+#define LE16(x) ((x)[1]<<8 | (x)[0])
 #define BE16(x) ((x)[0]<<8 | (x)[1])
-#define LE32(x) ((x)[0] | (x)[1]<<8 | (x)[2]<<16 | (x)[3]<<24)
+#define LE32(x) ((x)[3]<<24 | (x)[2]<<16 | (x)[1]<<8 | (x)[0])
 #define BE32(x) ((x)[0]<<24 | (x)[1]<<16 | (x)[2]<<8 | (x)[3])
 
 // note on zeroed memory:
@@ -77,7 +75,10 @@ bool LoaderRaw::Load(QFile& file) {
 
 bool LoaderAtari8bitBinary::Load(QFile& file) {
     quint8 tmp[2];
-    quint64 ffff, start, end, size;
+    quint64 ffff;
+    quint64 start;
+    quint64 end;
+    quint64 size;
 
     file.read((char *)tmp, 2);
     ffff = LE16(tmp);
@@ -86,7 +87,7 @@ bool LoaderAtari8bitBinary::Load(QFile& file) {
         return false;
     }
 
-    while (1) {
+    while (true) {
         if (file.read((char *)tmp, 2) != 2)
             break;
         start = LE16(tmp);
@@ -120,14 +121,15 @@ bool LoaderAtari8bitBinary::Load(QFile& file) {
 
 bool LoaderAtari8bitSAP::Load(QFile& file) {
     quint8 tmp[5];
-    unsigned int init, play;
+    unsigned int init;
+    unsigned int play;
     quint8 c;
     QChar type;
     QString header;
 
     file.read((char*) tmp, 5);
 
-    if (strncmp((char *) tmp, "SAP\x0d\x0a", 5)) {
+    if (strncmp((char *) tmp, "SAP\x0d\x0a", 5) != 0) {
         this->error_message = "SAP Identifier not found!\n";
         return false;
     }
@@ -150,7 +152,7 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
     re.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
     re.setPattern("INIT[ ]*([0-9A-Fa-f]{1,4})");
     match = re.match(header);
-    if (match.hasMatch() == false) {
+    if (!match.hasMatch()) {
         this->error_message = "No INIT address found\n";
         return false;
     }
@@ -158,7 +160,7 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
 
     re.setPattern("PLAYER[ ]*([0-9A-Fa-f]{1,4})");
     match = re.match(header);
-    if (match.hasMatch() == false) {
+    if (!match.hasMatch()) {
         this->error_message = "No PLAYER address found\n";
         return false;
     }
@@ -166,7 +168,7 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
 
     re.setPattern("TYPE[ ]*([BCDRS])");
     match = re.match(header);
-    if (match.hasMatch() == false) {
+    if (!match.hasMatch()) {
         this->error_message = "No PLAYER address found\n";
         return false;
     }
@@ -175,7 +177,7 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
     file.ungetChar(c);
 
     LoaderAtari8bitBinary la8b;
-    if (la8b.Load(file) == false)
+    if (!la8b.Load(file))
         return false;
 
     userLabels.insert(init, "init");
@@ -189,7 +191,9 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
 
 bool LoaderC64Binary::Load(QFile& file) {
     quint8 tmp[2];
-    quint64 start, end, size;
+    quint64 start;
+    quint64 end;
+    quint64 size;
 
     file.read((char *) tmp, 2);
     start = LE16(tmp);
@@ -231,7 +235,12 @@ bool LoaderC64Binary::Load(QFile& file) {
 
 bool LoaderC64PSID::Load(QFile &file) {
     quint8 tmp[4];
-    quint64 start = 0, end, size, init, play, version;
+    quint64 start = 0;
+    quint64 end;
+    quint64 size;
+    quint64 init;
+    quint64 play;
+    quint64 version;
 
     file.read((char*) tmp, 4);
     if ((tmp[0] != 'P' && tmp[0] != 'R') || tmp[1] != 'S' || tmp[2] != 'I' || tmp[3] != 'D') {
@@ -289,7 +298,9 @@ bool LoaderC64PSID::Load(QFile &file) {
 
 bool LoaderAtari2600ROM2K4K::Load(QFile &file) {
     quint64 size;
-    quint16 start, end, init;
+    quint16 start;
+    quint16 end;
+    quint16 init;
 
     size = file.size();
 
@@ -328,7 +339,9 @@ bool LoaderAtari2600ROM2K4K::Load(QFile &file) {
 bool LoaderOricTap::Load(QFile &file) {
     char c;
     quint8 data[9];
-    quint64 start, end, size;
+    quint64 start;
+    quint64 end;
+    quint64 size;
 
     // Synchronisation bytes: 0x16
 
@@ -379,7 +392,9 @@ bool LoaderOricTap::Load(QFile &file) {
 
 bool LoaderApple2DOS33::Load(QFile &file) {
     quint8 tmp[4];
-    quint16 start, end, size;
+    quint16 start;
+    quint16 end;
+    quint16 size;
 
     file.read((char*) tmp, 4);
     start = LE16(tmp);
@@ -403,9 +418,17 @@ bool LoaderApple2DOS33::Load(QFile &file) {
 
 bool LoaderApple2AppleSingle::Load(QFile &file) {
     quint8 tmp[12];
-    quint16 numentries, start, end, size;
-    quint32 magic, version, entry_id, offset, length;
-    quint32 prodos_offset, data_fork_offset;
+    quint16 numentries;
+    quint16 start;
+    quint16 end;
+    quint16 size;
+    quint32 magic;
+    quint32 version;
+    quint32 entry_id;
+    quint32 offset;
+    quint32 length;
+    quint32 prodos_offset;
+    quint32 data_fork_offset;
 
     file.read((char*) tmp, 8);
     magic   = BE32(tmp);
@@ -481,11 +504,15 @@ bool LoaderApple2AppleSingle::Load(QFile &file) {
 
 bool LoaderNESSongFile::Load(QFile &file) {
     quint8 tmp[8];
-    quint64 start, end, size, init, play;
+    quint64 start;
+    quint64 end;
+    quint64 size;
+    quint64 init;
+    quint64 play;
     int x = 0;
 
     file.read((char*) tmp, 5);
-    if (strncmp((char*) tmp, "NESM\x1a", 5)) {
+    if (strncmp((char*) tmp, "NESM\x1a", 5) != 0) {
         this->error_message = "Magic Number not found!\n";
         return false;
     }
@@ -536,7 +563,7 @@ bool LoaderNESSongFile::Load(QFile &file) {
 
 bool LoaderCPMBinary::Load(QFile &file) {
     LoaderRaw raw;
-    if (raw.Load(file) == false)
+    if (!raw.Load(file))
         return false;
 
     segments[0].start += 0x0100;
