@@ -59,7 +59,7 @@ StartDialog::StartDialog(QWidget *parent) :
         ui->comboCPUType->addItem(cputypes.at(i).name);
     }
 
-    ui->labelVersion->setText(QStringLiteral("Version: %1").arg(FRIDA_VERSION_STRING));
+    ui->labelVersion->setText(QStringLiteral("Version: %1").arg(QStringLiteral(FRIDA_VERSION_STRING)));
     ui->labelBuild->setText(QStringLiteral("Build date: ") + QStringLiteral(__DATE__) +
                             QStringLiteral(" ") + QStringLiteral(__TIME__));
 }

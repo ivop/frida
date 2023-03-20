@@ -195,47 +195,47 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // sync hex and ascii scrollbars and vice versa
     connect(ui->tableHexadecimal->verticalScrollBar(),
-            SIGNAL(valueChanged(int)),
+            &QAbstractSlider::valueChanged,
             ui->tableASCII->verticalScrollBar(),
-            SLOT(setValue(int)));
+            &QAbstractSlider::setValue);
     connect(ui->tableASCII->verticalScrollBar(),
-            SIGNAL(valueChanged(int)),
+            &QAbstractSlider::valueChanged,
             ui->tableHexadecimal->verticalScrollBar(),
-            SLOT(setValue(int)));
+            &QAbstractSlider::setValue);
 
     // disconnect existing Pressed and Clicked on vertical headers
     disconnect(ui->tableHexadecimal->verticalHeader(),
-               SIGNAL(sectionPressed(int)), 0, 0);
+               qOverload<int>(&QHeaderView::sectionPressed), 0, 0);
     disconnect(ui->tableHexadecimal->verticalHeader(),
-               SIGNAL(sectionClicked(int)), 0, 0);
+               qOverload<int>(&QHeaderView::sectionClicked), 0, 0);
     disconnect(ui->tableASCII->verticalHeader(),
-               SIGNAL(sectionPressed(int)), 0, 0);
+               qOverload<int>(&QHeaderView::sectionPressed), 0, 0);
     disconnect(ui->tableASCII->verticalHeader(),
-               SIGNAL(sectionClicked(int)), 0, 0);
+               qOverload<int>(&QHeaderView::sectionClicked), 0, 0);
 
     // connect our sectionClicked function on vertical headers
     connect(ui->tableHexadecimal->verticalHeader(),
-            SIGNAL(sectionClicked(int)),
-            this, SLOT(onHexSectionClicked(int)));
+            &QHeaderView::sectionClicked,
+            this, &MainWindow::onHexSectionClicked);
     connect(ui->tableASCII->verticalHeader(),
-            SIGNAL(sectionClicked(int)),
-            this, SLOT(onHexSectionClicked(int)));
+            &QHeaderView::sectionClicked,
+            this, &MainWindow::onHexSectionClicked);
 
     // set tableDisassembly
 
     t = ui->tableDisassembly;
     disconnect(ui->tableDisassembly->verticalHeader(),
-               SIGNAL(sectionPressed(int)), 0, 0);
+               qOverload<int>(&QHeaderView::sectionPressed), 0, 0);
     disconnect(ui->tableDisassembly->verticalHeader(),
-               SIGNAL(sectionClicked(int)), 0, 0);
+               qOverload<int>(&QHeaderView::sectionClicked), 0, 0);
     connect(ui->tableDisassembly->verticalHeader(),
-            SIGNAL(sectionClicked(int)),
-            this, SLOT(onDisassemblySectionClicked(int)));
+            &QHeaderView::sectionClicked,
+            this, &MainWindow::onDisassemblySectionClicked);
 
     connect(ui->tableDisassembly->verticalScrollBar(),
-            SIGNAL(valueChanged(int)),
+            qOverload<int>(&QScrollBar::valueChanged),
             this,
-            SLOT(rememberValue(int)));
+            &MainWindow::rememberValue);
 
     t->addAction(ui->actionComment);
     t->addAction(ui->actionAdd_Label);

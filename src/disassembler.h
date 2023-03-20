@@ -29,6 +29,7 @@ extern class Disassembler *Disassembler;
 
 class Disassembler {
 public:
+	Disassembler() = default;
     void generateDisassembly(void);
     virtual void trace(quint64 address) = 0;
     virtual QString getDescriptionAt(quint64 address) = 0;
@@ -43,6 +44,7 @@ protected:
     virtual void createOperandLabels(quint64 address) = 0;
     virtual void disassembleInstructionAt(quint64 address,
                                           struct disassembly &dis, int&n) = 0;
+	Q_DISABLE_COPY(Disassembler)
 };
 
 class Disassembler6502 : public Disassembler {
