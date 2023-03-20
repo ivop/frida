@@ -6,6 +6,8 @@
 
 QT += core gui widgets
 
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
+
 QMAKE_CXXFLAGS += -std=c++17
 
 TARGET = frida
