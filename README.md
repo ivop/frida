@@ -7,7 +7,7 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 ##### Runs on:
 * Linux, debian 11.6 bullseye (stable), and equivalents  
 * Windows 10, and above  
-* macOS 10.15.7 Catalina, and above  
+* macOS Catalina 10.15.7, and above  
 
 ##### Supported CPUs:
 * NMOS 6502  
