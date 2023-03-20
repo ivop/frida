@@ -1,4 +1,4 @@
-![frida logo](logo/frida-logo-test.png)
+![frida logo](src/logo/frida-logo-test.png)
 
 ## FRee Interactive DisAssembler  
 Copyright (C) 2017,2023 by Ivo van Poorten  
