@@ -29,5 +29,7 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 * CP/M Binary at 0100H (.COM)  
 
 ##### Build instructions:
-qmake frida.pro  
-make  
+mkdir build  
+cd build  
+qmake ../src/frida.pro  
+make -j8  
