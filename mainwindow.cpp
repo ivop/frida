@@ -238,7 +238,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // use very large sizes so they will be scaled to fit the screen
     // (unless your screen is larger than 10kx10k :)
 
-    ui->splitterSegNotes->setSizes(       { 6000, 2000, 2000 } );
+    ui->splitterSegNotes->setSizes(       { 4000, 3000, 3000 } );
     ui->splitterDisRef->setSizes(         { 8500, 1500 } );
     ui->splitterHexAsciiLegend->setSizes( { 7000, 3000 } );
     ui->splitterMain->setSizes(           { 2000, 4500, 3500 });
@@ -928,7 +928,10 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         QString descr = Disassembler->getDescriptionAt(address);
 
-        ui->instructionDescription->document()->setHtml(descr);
+        if (descr.isEmpty())
+            ui->instructionDescription->document()->setHtml("Not available.");
+        else
+            ui->instructionDescription->document()->setHtml(descr);
     }
 
     // operand(s)

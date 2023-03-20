@@ -88,6 +88,73 @@ static const char can_be_label[MODE_LAST] = {
     [MODE_ZP_REL]    = 1,               // 65C02 only (Rockwell/WDC)
 };
 
+struct instr_descr {
+    const char * const instr;
+    const char * const descr;
+    const char * const action;
+    const char * const flags;
+};
+
+static struct instr_descr instruction_descriptions[] = {
+{ "adc", "Add Memory to Accumulator with Carry", "A + M + C → A, C", "NVZC" },
+{ "and", "AND Memory with Accumulator", "A ∧ M → A", "NZ" },
+{ "asl", "Arithmetic Shift Left", "C ← /M7...M0/ ← 0", "NZC" },
+{ "bcc", "Branch on Carry Clear", "Branch on C = 0", "" },
+{ "bcs", "Branch on Carry Set", "Branch on C = 1", "" },
+{ "beq", "Branch on Equal / Zero", "Branch on Z = 1", ""},
+{ "bit", "Test Bits in Memory with Accumulator", "A ∧ M, M7 → N, M6 → V", "NVZ" },
+{ "bmi", "Branch on Result Minus", "Branch on N = 1", "" },
+{ "bne", "Branch on Not Equal / Not Zero", "Branch on Z = 0", "" },
+{ "bpl", "Branch on Result Plus", "Branch on N = 0", "" },
+{ "brk", "Break Command", "PC + 2↓, [FFFE] → PCL, [FFFF] → PCH", "I" },
+{ "bvc", "Branch on Overflow Clear", "Branch on V = 0", "" },
+{ "bvs", "Branch on Overflow Set", "Branch on V = 1", "" },
+{ "clc", "Clear Carry Flag", "0 → C", "C" },
+{ "cld", "Clear Decimal Mode", "0 → D", "D" },
+{ "cli", "Clear Interrupt Disable", "0 → I", "I" },
+{ "clv", "Clear Overflow Flag", "0 → V", "V" },
+{ "cmp", "Compare Memory and Accumulator", "A - M", "NZC" },
+{ "cpx", "Compare Index Register X To Memory", "X - M", "NZC" },
+{ "cpy", "Compare Index Register Y To Memory", "Y - M", "NZC" },
+{ "dec", "Decrement Memory By One", "M - 1 → M", "NZ" },
+{ "dex", "Decrement Index Register X By One", "X - 1 → X", "NZ" },
+{ "dey", "Decrement Index Register Y By One", "Y - 1 → Y", "NZ" },
+{ "eor", "Exclusive OR Memory with Accumulator", "A ⊻ M → A", "NZ" },
+{ "inc", "Increment Memory By One", "M + 1 → M", "NZ" },
+{ "inx", "Increment Index Register X By One", "X + 1 → X", "NZ" },
+{ "iny", "Increment Index Register Y By One", "Y + 1 → Y", "NZ" },
+{ "jmp", "Jump To Location", "[PC + 1] → PCL, [PC + 2] → PCH", "" },
+{ "jsr", "Jump To Subroutine", "PC + 2↓, [PC + 1] → PCL, [PC + 2] → PCH", "" },
+{ "lda", "Load Accumulator with Memory", "M → A", "NZ" },
+{ "ldx", "Load Index Register X From Memory", "M → X", "NZ" },
+{ "ldy", "Load Index Register Y From Memory", "M → Y", "NZ" },
+{ "lsr", "Logical Shift Right", "0 → /M7...M0/ → C", "NZC" },
+{ "nop", "No Operation", "", "" },
+{ "ora", "OR Memory with Accumulator", "A ∨ M → A", "NZ" },
+{ "pha", "Push Accumulator On Stack", "A↓", "" },
+{ "php", "Push Processor Status On Stack", "P↓", "" },
+{ "pla", "Pull Accumulator From Stack", "A↑", "NZ" },
+{ "plp", "Pull Processor Status From Stack", "P↑", "NVDIZC" },
+{ "rol", "Rotate Left", "C ← /M7...M0/ ← C", "NZC" },
+{ "ror", "Rotate Right", "C → /M7...M0/ → C", "NZC" },
+{ "rti", "Return From Interrupt", "P↑ PC↑", "NVDIZC" },
+{ "rts", "Return From Subroutine", "PC↑, PC + 1 → PC", "" },
+{ "sbc", "Subtract Memory from Accumulator with Borrow", "A - M - ~C → A", "NVZC" },
+{ "sec", "Set Carry Flag", "1 → C", "C" },
+{ "sed", "Set Decimal Mode", "1 → D", "D" },
+{ "sei", "Set Interrupt Disable", "1 → I", "I" },
+{ "sta", "Store Accumulator in Memory", "A → M", "" },
+{ "stx", "Store Index Register X In Memory", "X → M", "" },
+{ "sty", "Store Index Register Y In Memory", "Y → M", "" },
+{ "tax", "Transfer Accumulator To Index X", "A → X", "NZ" },
+{ "tay", "Transfer Accumulator To Index Y", "A → Y", "NZ" },
+{ "tsx", "Transfer Stack Pointer To Index X", "S → X", "NZ" },
+{ "txa", "Transfer Index X To Accumulator", "X → A", "NZ" },
+{ "txs", "Transfer Index X To Stack Pointer", "X → S", "" },
+{ "tya", "Transfer Index Y To Accumulator", "Y → A", "NZ" },
+{ 0, 0, 0, 0 },
+};
+
 struct distabitem {
     const char * const inst;
     const char mode;
@@ -1191,6 +1258,46 @@ void Disassembler6502::trace(quint64 address) {
 }
 
 QString Disassembler6502::getDescriptionAt(quint64 address) {
-    return "";
-}
+    quint64 start = segments[currentSegment].start;
+    quint8 *data = segments[currentSegment].data;
+    quint8 *datatypes = segments[currentSegment].datatypes;
+    QString instr, descr, action, flags, fulldescr;
+    int i, x;
 
+    i = address - start;
+
+    if (datatypes[i] != DT_CODE)
+        return "";
+
+    quint8 opcode = data[i];
+//    quint8 m = distab[opcode].mode;
+
+    instr = distab[opcode].inst;
+
+    // find instruction
+
+    for (x=0; instruction_descriptions[x].descr; x++) {
+        if (instruction_descriptions[x].instr == instr) {
+            descr  = instruction_descriptions[x].descr;
+            action = instruction_descriptions[x].action;
+            flags  = instruction_descriptions[x].flags;
+            qDebug() << descr;
+            break;
+        }
+    }
+
+    if (descr.isEmpty())
+        return "";
+
+    action = action.replace(", ", "<br>");
+    action = action.replace("M7", "M<sub>7</sub>");
+    action = action.replace("M6", "M<sub>6</sub>");
+    action = action.replace("M0", "M<sub>0</sub>");
+
+    instr = instr.toUpper();
+
+    fulldescr = "<h2>" + instr + "</h2><h4>" + descr + "</h4>" +
+                action + "<br><br><i>flags: " + flags + "</i>";
+
+    return fulldescr;
+}
