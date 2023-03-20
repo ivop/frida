@@ -39,7 +39,7 @@ public:
                       quint16 *fulladdr, QWidget *parent = 0);
     ~lowhighbytewindow();
 
-private slots:
+private Q_SLOTS:
     void onButtonBox_accepted();
 
 private:

@@ -37,7 +37,7 @@ public:
     explicit addLabelWindow(QWidget *parent = 0);
     ~addLabelWindow();
 
-private slots:
+private Q_SLOTS:
     void onPushButtonCancel_clicked();
     void onPushButtonAdd_clicked();
 

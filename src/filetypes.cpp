@@ -23,7 +23,7 @@
 #include "frida.h"
 #include <QApplication>
 
-QList<struct filetype> filetypes = {
+QVector<struct filetype> filetypes = {
 { "Raw",                                            FT_RAW_FILE },
 { "Atari 8-bit Binary (.XEX)",                      FT_ATARI8BIT_BINARY },
 { "Atari 8-bit Slight Atari Player (.SAP)",         FT_ATARI8BIT_SAP },

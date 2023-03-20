@@ -1035,8 +1035,8 @@ void Disassembler6502::initTables(void) {
         default: break;
     }
 
-    hexPrefix = "$";
-    hexSuffix = "";
+    hexPrefix = QStringLiteral("$");
+    hexSuffix = QLatin1String("");
     toUpper   = false;
 }
 
@@ -1062,7 +1062,7 @@ void Disassembler6502::createOperandLabels(quint64 address) {
         if ( ! (segments[currentSegment].localLabels.contains(addr)
                 || userLabels.contains(addr))) {
 
-            hex = QString("L%1").arg(addr,4,16,(QChar)'0');
+            hex = QStringLiteral("L%1").arg(addr,4,16,(QChar)'0');
             if (toUpper)
                 hex = hex.toUpper();
             autoLabels.insert(addr, hex);
@@ -1071,7 +1071,7 @@ void Disassembler6502::createOperandLabels(quint64 address) {
         if ( ! (segments[currentSegment].localLabels.contains(addr2)
                 || userLabels.contains(addr2))) {
 
-            hex = QString("L%1").arg(addr2,4,16,(QChar)'0');
+            hex = QStringLiteral("L%1").arg(addr2,4,16,(QChar)'0');
             if (toUpper)
                 hex = hex.toUpper();
             autoLabels.insert(addr2, hex);
@@ -1089,7 +1089,7 @@ void Disassembler6502::createOperandLabels(quint64 address) {
            || userLabels.contains(addr))
             return;
 
-        hex = QString("L%1").arg(addr,4,16,(QChar)'0');
+        hex = QStringLiteral("L%1").arg(addr,4,16,(QChar)'0');
         if (toUpper)
             hex = hex.toUpper();
         autoLabels.insert(addr, hex);
@@ -1141,7 +1141,7 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
             else if (autoLabels.contains(operand2))
                 hex = autoLabels.value(operand);
             else
-                hex = QString("$%1").arg(operand, 2, 16, (QChar)'0');
+                hex = QStringLiteral("$%1").arg(operand, 2, 16, (QChar)'0');
 
             if (localLabels->contains(operand2))
                 hex2 = localLabels->value(operand2);
@@ -1150,7 +1150,7 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
             else if (autoLabels.contains(operand2))
                 hex2 = autoLabels.value(operand2);
             else
-                hex2 = QString("$%1").arg(operand2, 2, 16, (QChar)'0');
+                hex2 = QStringLiteral("$%1").arg(operand2, 2, 16, (QChar)'0');
 
 
         } else if (can_be_label[m] && (   autoLabels.contains(operand)
@@ -1177,16 +1177,16 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
             }
             quint16 addr = map->value(i+1);
             if (localLabels->contains(addr))
-                hex = pref + QString("%1").arg(localLabels->value(addr));
+                hex = pref + QStringLiteral("%1").arg(localLabels->value(addr));
             else if (userLabels.contains(addr))
-                hex = pref + QString("%1").arg(userLabels.value(addr));
+                hex = pref + QStringLiteral("%1").arg(userLabels.value(addr));
             else if (autoLabels.contains(addr))
-                hex = pref + QString("%1").arg(autoLabels.value(addr));
+                hex = pref + QStringLiteral("%1").arg(autoLabels.value(addr));
             else
-                hex = pref + QString("$%1").arg(addr, 4, 16, (QChar)'0');
+                hex = pref + QStringLiteral("$%1").arg(addr, 4, 16, (QChar)'0');
 
         } else {
-                hex   = QString("$%1").arg(operand, 2, 16, (QChar)'0');
+                hex   = QStringLiteral("$%1").arg(operand, 2, 16, (QChar)'0');
         }
 
         // build final string
@@ -1277,7 +1277,7 @@ void Disassembler6502::trace(quint64 address) {
             if (opcode == 0x60 || opcode == 0x40 || opcode == 0x4c)
                 break;
 
-            if (distab[opcode].inst == QString("UNDEFINED")) {
+            if (distab[opcode].inst == QStringLiteral("UNDEFINED")) {
                 datatypes[i] = DT_UNDEFINED_CODE;
                 break;
             }
@@ -1304,7 +1304,7 @@ QString Disassembler6502::getDescriptionAt(quint64 address) {
     i = address - start;
 
     if (datatypes[i] != DT_CODE)
-        return "";
+        return QLatin1String("");
 
     quint8 opcode = data[i];
 //    quint8 m = distab[opcode].mode;
@@ -1324,12 +1324,12 @@ QString Disassembler6502::getDescriptionAt(quint64 address) {
     }
 
     if (descr.isEmpty())
-        return "";
+        return QLatin1String("");
 
-    action = action.replace(", ", "<br>");
-    action = action.replace("M7", "M<sub>7</sub>");
-    action = action.replace("M6", "M<sub>6</sub>");
-    action = action.replace("M0", "M<sub>0</sub>");
+    action = action.replace(QLatin1String(", "), QLatin1String("<br>"));
+    action = action.replace(QLatin1String("M7"), QLatin1String("M<sub>7</sub>"));
+    action = action.replace(QLatin1String("M6"), QLatin1String("M<sub>6</sub>"));
+    action = action.replace(QLatin1String("M0"), QLatin1String("M<sub>0</sub>"));
 
     instr = instr.toUpper();
 

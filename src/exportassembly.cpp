@@ -43,12 +43,12 @@ static int asm_format;
 // Output formats
 
 static void mads_assembler(QString *instr) {
-    instr->replace(".wordle", ".word");
-    instr->replace(".atascii", ".byte");
-    instr->replace(".anticscreen", ".sb");
-    instr->replace(".invatascii", ".byte +128");
-    instr->replace(".invanticscreen", ".sb +128");
-    instr->replace(".org", "org");
+    instr->replace(QLatin1String(".wordle"), QLatin1String(".word"));
+    instr->replace(QLatin1String(".atascii"), QLatin1String(".byte"));
+    instr->replace(QLatin1String(".anticscreen"), QLatin1String(".sb"));
+    instr->replace(QLatin1String(".invatascii"), QLatin1String(".byte +128"));
+    instr->replace(QLatin1String(".invanticscreen"), QLatin1String(".sb +128"));
+    instr->replace(QLatin1String(".org"), QLatin1String("org"));
 }
 
 // ---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ void export_assembly(QWidget *widget) {
 
     asm_format = asw->asm_format;
 
-    QString name = QFileDialog::getSaveFileName(widget, "Export assembly as...");
+    QString name = QFileDialog::getSaveFileName(widget, QStringLiteral("Export assembly as..."));
 
     if (name.isEmpty()) return;
 
@@ -116,7 +116,7 @@ void export_assembly(QWidget *widget) {
 
     for(iter = autoLabels.constBegin(); iter != autoLabels.constEnd(); iter++) {
 
-        if (iter.value().contains("+") || iter.value().contains("-"))
+        if (iter.value().contains(QLatin1String("+")) || iter.value().contains(QLatin1String("-")))
             continue;
 
         if (userLabels.contains(iter.key()))
@@ -146,7 +146,7 @@ void export_assembly(QWidget *widget) {
             continue;
 
         out << iter.value() << '=' << hexPrefix;
-        out << QString("%1").arg(iter.key(), 0, 16) << hexSuffix << "\n";
+        out << QStringLiteral("%1").arg(iter.key(), 0, 16) << hexSuffix << "\n";
     }
 
     out << "\n";
@@ -160,7 +160,7 @@ void export_assembly(QWidget *widget) {
 
     for(iter = userLabels.constBegin(); iter != userLabels.constEnd(); iter++) {
 
-        if (iter.value().contains("+") || iter.value().contains("-"))
+        if (iter.value().contains(QLatin1String("+")) || iter.value().contains(QLatin1String("-")))
             continue;
 
         bool found_local = false;
@@ -187,7 +187,7 @@ void export_assembly(QWidget *widget) {
             continue;
 
         out << iter.value() << '=' << hexPrefix;
-        out << QString("%1").arg(iter.key(), 0, 16) << hexSuffix << "\n";
+        out << QStringLiteral("%1").arg(iter.key(), 0, 16) << hexSuffix << "\n";
     }
 
     out << "\n";
@@ -207,9 +207,9 @@ void export_assembly(QWidget *widget) {
         out << "\n; SEGMENT: " << i+1 << "\n\n";
         out << "; Name    : " << s->name << "\n";
         out << "; Start   : ";
-        out << hexPrefix << QString("%1").arg(s->start, 0, 16) << hexSuffix;
+        out << hexPrefix << QStringLiteral("%1").arg(s->start, 0, 16) << hexSuffix;
         out << "\n; End     : ";
-        out << hexPrefix << QString("%1").arg(s->end, 0, 16) << hexSuffix;
+        out << hexPrefix << QStringLiteral("%1").arg(s->end, 0, 16) << hexSuffix;
         out << "\n\n; LOCAL LABELS\n\n";
 
         // output local labels that are not inside a segment or contain +/-
@@ -217,7 +217,7 @@ void export_assembly(QWidget *widget) {
         for(iter  = s->localLabels.constBegin();
             iter != s->localLabels.constEnd(); iter++) {
 
-            if (iter.value().contains("+") || iter.value().contains("-"))
+            if (iter.value().contains(QLatin1String("+")) || iter.value().contains(QLatin1String("-")))
                 continue;
 
             bool inside_segment = false;
@@ -234,7 +234,7 @@ void export_assembly(QWidget *widget) {
                 continue;
 
             out << iter.value() << '=' << hexPrefix;
-            out << QString("%1").arg(iter.key(), 0, 16) << hexSuffix << "\n";
+            out << QStringLiteral("%1").arg(iter.key(), 0, 16) << hexSuffix << "\n";
         }
 
         out << "\n";
@@ -252,7 +252,7 @@ void export_assembly(QWidget *widget) {
 
             if (comments->contains(dis.address)) {
                 com = comments->value(dis.address);
-                com.replace("\n", "\n; ");
+                com.replace(QLatin1String("\n"), QLatin1String("\n; "));
                 out << "; " << com << "\n";
             }
 

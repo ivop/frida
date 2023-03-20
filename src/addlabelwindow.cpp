@@ -56,10 +56,10 @@ void addLabelWindow::onPushButtonAdd_clicked() {
     quint64 addr = address.toULongLong(&ok,16);
 
     if (!ok) {
-        msg.setText("Invalid address!");
+        msg.setText(QStringLiteral("Invalid address!"));
         msg.exec();
     } else if (label.isEmpty()) {
-        msg.setText("No label specified!");
+        msg.setText(QStringLiteral("No label specified!"));
         msg.exec();
     } else {
         if (ui->checkBoxLocalLabel->isChecked()) {

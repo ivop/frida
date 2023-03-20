@@ -380,8 +380,8 @@ static struct distabitem *distab;
 
 void Disassembler8080::initTables(void) {
     distab = distab8080;
-    hexPrefix = "";
-    hexSuffix = "H";
+    hexPrefix = QLatin1String("");
+    hexSuffix = QStringLiteral("H");
     toUpper = true;
 }
 
@@ -409,7 +409,7 @@ void Disassembler8080::createOperandLabels(quint64 address) {
         if (  localLabels->contains(operand) || userLabels.contains(operand))
             return;
 
-        temps = QString("L%1").arg(operand,4,16,(QChar)'0');
+        temps = QStringLiteral("L%1").arg(operand,4,16,(QChar)'0');
         if (toUpper)
             temps = temps.toUpper();
         autoLabels.insert(operand, temps);
@@ -521,7 +521,7 @@ void Disassembler8080::trace(quint64 address) {
             if (opcode == 0xe9) // PCHL is also a jump
                 break;
 
-            if (distab[opcode].inst == QString("UNDEFINED")) {
+            if (distab[opcode].inst == QStringLiteral("UNDEFINED")) {
                 datatypes[i] = DT_UNDEFINED_CODE;
                 break;
             }
@@ -541,21 +541,21 @@ QString Disassembler8080::getDescriptionAt(quint64 address) {
     quint64 i = address - start;
 
     if (datatypes[i] != DT_CODE)
-        return "";
+        return QLatin1String("");
 
     quint8 opcode = data[i];
     quint8 m = distab[opcode].mode;
 
     QString descr = distab[opcode].descr;
-    descr = descr.replace(";", "<br>");
-    descr = descr.replace("[", "<br><br><i>flags: ");
-    descr = descr.replace("]", "</i><br>");
-    descr = descr.replace("<->", "&lt;-&gt;");
-    descr = descr.replace("<-", "&lt;-");           // &larr; looks ugly
-    descr = descr.replace("->", "-&gt;");           // &rarr; looks ugly
-    descr = descr.replace("d8", "<i>d8</i>");
-    descr = descr.replace("d16", "<i>d16</i>");
-    descr = descr.replace("adr", "<i>adr</i>");
+    descr = descr.replace(QLatin1String(";"), QLatin1String("<br>"));
+    descr = descr.replace(QLatin1String("["), QLatin1String("<br><br><i>flags: "));
+    descr = descr.replace(QLatin1String("]"), QLatin1String("</i><br>"));
+    descr = descr.replace(QLatin1String("<->"), QLatin1String("&lt;-&gt;"));
+    descr = descr.replace(QLatin1String("<-"), QLatin1String("&lt;-"));           // &larr; looks ugly
+    descr = descr.replace(QLatin1String("->"), QLatin1String("-&gt;"));           // &rarr; looks ugly
+    descr = descr.replace(QLatin1String("d8"), QLatin1String("<i>d8</i>"));
+    descr = descr.replace(QLatin1String("d16"), QLatin1String("<i>d16</i>"));
+    descr = descr.replace(QLatin1String("adr"), QLatin1String("<i>adr</i>"));
 
     descr = "<h3>" + QString(distab[opcode].inst) + " <i>" +
             operand_description[m] + "</i></h3>" + descr;

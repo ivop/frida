@@ -40,7 +40,7 @@ public:
 
     int asm_format{};
 
-public slots:
+public Q_SLOTS:
     void accept() override;
 
 private:

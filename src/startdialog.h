@@ -40,7 +40,7 @@ public:
     bool load_existing_project = false;
     bool create_new_project    = false;
 
-private slots:
+private Q_SLOTS:
     void onButtonBrowseFileDisasm_clicked();
     void onButtonLoadExistingProject_clicked();
     void onButtonNewProject_clicked();

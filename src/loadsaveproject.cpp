@@ -43,7 +43,7 @@ enum {
 };
 
 bool load_project(QWidget *widget) {
-    QString name = QFileDialog::getOpenFileName(widget, "Open existing project...");
+    QString name = QFileDialog::getOpenFileName(widget, QStringLiteral("Open existing project..."));
 
     if (name.isEmpty()) return false;
 
@@ -63,7 +63,7 @@ bool load_project(QWidget *widget) {
 
     if (memcmp(magic, checkmagic, 5) != 0) {
         error = QFile::OpenError;
-        errorstring = "This is not a Frida Project file";
+        errorstring = QStringLiteral("This is not a Frida Project file");
         goto error_out;
     }
 
@@ -137,7 +137,7 @@ error_out:          // goto here with error and errorstring set.
 }
 
 void save_project(QWidget *widget) {
-    QString name = QFileDialog::getSaveFileName(widget, "Save project as...");
+    QString name = QFileDialog::getSaveFileName(widget, QStringLiteral("Save project as..."));
 
     if (name.isEmpty()) return;
 

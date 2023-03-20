@@ -83,7 +83,7 @@ void labelswindow::showLabels(QTableWidget *t,
     t->setRowCount(n);
 
     for (int i=0; i<n; i++) {
-        hex = QString("%1").arg(keys[i], 4, 16, QChar('0'));
+        hex = QStringLiteral("%1").arg(keys[i], 4, 16, QChar('0'));
         item = new QTableWidgetItem(hex);
         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         t->setItem(i,0, item);
@@ -227,7 +227,7 @@ void labelswindow::onAddLabelButton_clicked() {
 // ---------------------------------------------------------------------------
 
 void labelswindow::onExportButton_clicked() {
-    QString name = QFileDialog::getSaveFileName(this, "Export labels to...");
+    QString name = QFileDialog::getSaveFileName(this, QStringLiteral("Export labels to..."));
 
     if (name.isEmpty()) return;
 
@@ -271,14 +271,14 @@ void labelswindow::onExportButton_clicked() {
 }
 
 void labelswindow::onImportButton_clicked() {
-    QString name = QFileDialog::getOpenFileName(this, "Import labels from...");
+    QString name = QFileDialog::getOpenFileName(this, QStringLiteral("Import labels from..."));
 
     if (name.isEmpty()) return;
 
     QFile file(name);
     if (!file.exists()) {
         QMessageBox msg;
-        msg.setText("No such file!");
+        msg.setText(QStringLiteral("No such file!"));
         msg.exec();
         return;
     }

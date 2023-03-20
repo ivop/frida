@@ -42,12 +42,12 @@ lowhighbytewindow::lowhighbytewindow(quint64 location, bool low, quint8 byte,
     connect(ui->buttonBox, &QDialogButtonBox::accepted,
             this, &lowhighbytewindow::onButtonBox_accepted);
 
-    ui->location->setText(QString("%1").arg(location, 4, 16, (QChar)'0'));
+    ui->location->setText(QStringLiteral("%1").arg(location, 4, 16, (QChar)'0'));
     if (low)
-        ui->lowhighbyteLabel->setText(QString("Low Byte"));
+        ui->lowhighbyteLabel->setText(QStringLiteral("Low Byte"));
     else
-        ui->lowhighbyteLabel->setText(QString("High Byte"));
-    ui->lowhighbyte->setText(QString("%1").arg(byte, 2, 16, (QChar)'0'));
+        ui->lowhighbyteLabel->setText(QStringLiteral("High Byte"));
+    ui->lowhighbyte->setText(QStringLiteral("%1").arg(byte, 2, 16, (QChar)'0'));
     fulladdr = full;
 
     ui->fullAddress->setFocus();
@@ -69,9 +69,9 @@ void lowhighbytewindow::onButtonBox_accepted()
     } else {
         QMessageBox msg;
         if (addr > 0xffff)
-            msg.setText("Address larger than 16-bit");
+            msg.setText(QStringLiteral("Address larger than 16-bit"));
         else
-            msg.setText("Invalid address");
+            msg.setText(QStringLiteral("Invalid address"));
         msg.exec();
     }
 }

@@ -38,7 +38,7 @@ public:
     changesegmentwindow(quint64 oldaddr, quint64 *newaddr, QWidget *parent = 0);
     ~changesegmentwindow();
 
-private slots:
+private Q_SLOTS:
     void onButtonBox_accepted();
 
 private:

@@ -45,7 +45,7 @@ public:
 
     void closeEvent (QCloseEvent *event);
 
-public slots:
+public Q_SLOTS:
     void actionTrace(void);
     void actionSet_To_Undefined(void);
     void actionSet_To_Byte(void);
@@ -72,7 +72,7 @@ public slots:
     void actionChange_Start_Address(void);
     void actionAdd_Label(void);
 
-private slots:
+private Q_SLOTS:
     void linkHexASCIISelection(void);
     void linkASCIIHexSelection(void);
     static void linkSelections(QTableWidget *from, QTableWidget *to);

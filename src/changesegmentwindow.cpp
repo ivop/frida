@@ -35,7 +35,7 @@ changesegmentwindow::changesegmentwindow(quint64 oldaddr, quint64 *newaddr,
     connect(ui->buttonBox, &QDialogButtonBox::accepted,
         this, &changesegmentwindow::onButtonBox_accepted);
 
-    QString hex = QString("%1").arg(oldaddr, 4, 16, QChar('0'));
+    QString hex = QStringLiteral("%1").arg(oldaddr, 4, 16, QChar('0'));
     ui->oldAddress->setText(hex);
     newaddress = newaddr;
     ui->newAddress->setText(hex);
@@ -55,7 +55,7 @@ void changesegmentwindow::onButtonBox_accepted()
         *newaddress = n;
     } else {
         QMessageBox msg;
-        msg.setText("Invalid address!");
+        msg.setText(QStringLiteral("Invalid address!"));
         msg.setStandardButtons(QMessageBox::Close);
         msg.exec();
         ui->newAddress->setText(ui->oldAddress->text());

@@ -59,9 +59,9 @@ StartDialog::StartDialog(QWidget *parent) :
         ui->comboCPUType->addItem(cputypes.at(i).name);
     }
 
-    ui->labelVersion->setText(QString("Version: %1").arg(FRIDA_VERSION_STRING));
-    ui->labelBuild->setText(QString("Build date: ") + QString(__DATE__) +
-                            QString(" ") + QString(__TIME__));
+    ui->labelVersion->setText(QStringLiteral("Version: %1").arg(FRIDA_VERSION_STRING));
+    ui->labelBuild->setText(QStringLiteral("Build date: ") + QStringLiteral(__DATE__) +
+                            QStringLiteral(" ") + QStringLiteral(__TIME__));
 }
 
 StartDialog::~StartDialog()
@@ -87,7 +87,7 @@ void StartDialog::onButtonNewProject_clicked()
 {
     if (ui->lineFileDisasm->text().isEmpty()) {
         QMessageBox msg;
-        msg.setText("Some fields are left empty!");
+        msg.setText(QStringLiteral("Some fields are left empty!"));
         msg.exec();
         return;
     }
@@ -150,7 +150,7 @@ void StartDialog::onButtonNewProject_clicked()
         Loader = new LoaderCPMBinary();
         break;
     default:
-        msg.setText("Unknown filetype! (this shouldn't happen)");
+        msg.setText(QStringLiteral("Unknown filetype! (this shouldn't happen)"));
         msg.exec();
         return;
     }
@@ -160,7 +160,7 @@ void StartDialog::onButtonNewProject_clicked()
     if (!Loader->Load(file)) {
         QString text = QString("Failed to load " + FileToDisassemble + "\n\n");
         if (Loader->error_message.isEmpty()) {
-            text += "File type mismatch or corrupted file!\n";
+            text += QLatin1String("File type mismatch or corrupted file!\n");
         } else {
             text += Loader->error_message;
         }

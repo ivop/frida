@@ -38,7 +38,7 @@ public:
     explicit labelswindow(QWidget *parent = 0);
     ~labelswindow();
 
-private slots:
+private Q_SLOTS:
     void actionChange_To_Local_Label();
     void actionChange_To_User_Label();
     void actionDelete_Label();

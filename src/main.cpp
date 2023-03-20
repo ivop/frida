@@ -35,7 +35,7 @@
 #include <QMessageBox>
 #include <QTextStream>
 
-QList<struct segment> segments;
+QVector<struct segment> segments;
 int currentSegment;
 
 QString globalNotes;
@@ -49,13 +49,13 @@ QMap<quint64, QString> autoLabels, userLabels;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QFontDatabase::addApplicationFont(":/fonts/AtariClassic-Regular.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/C64_Pro_Mono-STYLE.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/SpaceMono-Regular.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/DroidSansMono.ttf");
-    QFont font("Droid Sans Mono", 10);
+    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/AtariClassic-Regular.ttf"));
+    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/C64_Pro_Mono-STYLE.ttf"));
+    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/SpaceMono-Regular.ttf"));
+    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/DroidSansMono.ttf"));
+    QFont font(QStringLiteral("Droid Sans Mono"), 10);
 
-    a.setStyle("fusion");
+    a.setStyle(QStringLiteral("fusion"));
     a.setFont(font);
 
     StartDialog f;

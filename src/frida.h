@@ -50,7 +50,7 @@ struct cputype {
     enum cputypeid id;
 };
 
-extern const QList<struct cputype> cputypes;
+extern const QVector<struct cputype> cputypes;
 
 // --------------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ struct filetype {
     enum filetypeid id;
 };
 
-extern QList<struct filetype> filetypes;
+extern QVector<struct filetype> filetypes;
 
 // --------------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ struct segment {
     int scrollbarValue;
 };
 
-extern QList<struct segment> segments;      // currently in main.cpp
+extern QVector<struct segment> segments;      // currently in main.cpp
 extern int currentSegment;
 extern QMap<quint64, QString> autoLabels, userLabels;
 extern quint32 cputype;

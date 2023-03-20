@@ -38,9 +38,9 @@
 
 void Loader::genericComment(QFile& file, struct segment *segment) {
     segment->comments.insert(0,
-        QString("\n") +
-        QString("Disassembled from: ") + file.fileName().section("/",-1,-1) +
-        QString("\n"));
+        QStringLiteral("\n") +
+        QStringLiteral("Disassembled from: ") + file.fileName().section(QStringLiteral("/"),-1,-1) +
+        QStringLiteral("\n"));
 }
 
 struct segment Loader::createEmptySegment(quint64 start, quint64 end) {
@@ -83,7 +83,7 @@ bool LoaderAtari8bitBinary::Load(QFile& file) {
     file.read((char *)tmp, 2);
     ffff = LE16(tmp);
     if (ffff != 0xffff) {
-        this->error_message = "Start marker (0xffff) not found!\n";
+        this->error_message = QStringLiteral("Start marker (0xffff) not found!\n");
         return false;
     }
 
@@ -101,16 +101,16 @@ bool LoaderAtari8bitBinary::Load(QFile& file) {
 
         struct segment segment = createEmptySegment(start, end);
         if ((quint64)file.read((char*)segment.data, size) != size) {
-            this->error_message = "Premature end of file!\n";
+            this->error_message = QStringLiteral("Premature end of file!\n");
             return false;
         }
 
         if (start == 0x02e0 && end == 0x02e1)
-            segment.name = "Run Address";
+            segment.name = QStringLiteral("Run Address");
         if (start == 0x02e2 && end == 0x02e3)
-            segment.name = "Init Address";
+            segment.name = QStringLiteral("Init Address");
         if (start == 0x02e0 && end == 0x02e3)
-            segment.name = "Run/Init Addresses";
+            segment.name = QStringLiteral("Run/Init Addresses");
 
         genericComment(file, &segment);
         segments.append(segment);
@@ -130,7 +130,7 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
     file.read((char*) tmp, 5);
 
     if (strncmp((char *) tmp, "SAP\x0d\x0a", 5) != 0) {
-        this->error_message = "SAP Identifier not found!\n";
+        this->error_message = QStringLiteral("SAP Identifier not found!\n");
         return false;
     }
 
@@ -139,7 +139,7 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
         header += c;
         file.getChar((char *) &c);
         if (file.atEnd()) {
-            this->error_message = "Premature end of file!\n";
+            this->error_message = QStringLiteral("Premature end of file!\n");
             return false;
         }
     }
@@ -150,26 +150,26 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
     QRegularExpressionMatch match;
 
     re.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
-    re.setPattern("INIT[ ]*([0-9A-Fa-f]{1,4})");
+    re.setPattern(QStringLiteral("INIT[ ]*([0-9A-Fa-f]{1,4})"));
     match = re.match(header);
     if (!match.hasMatch()) {
-        this->error_message = "No INIT address found\n";
+        this->error_message = QStringLiteral("No INIT address found\n");
         return false;
     }
     init = match.captured(1).toInt(nullptr, 16);
 
-    re.setPattern("PLAYER[ ]*([0-9A-Fa-f]{1,4})");
+    re.setPattern(QStringLiteral("PLAYER[ ]*([0-9A-Fa-f]{1,4})"));
     match = re.match(header);
     if (!match.hasMatch()) {
-        this->error_message = "No PLAYER address found\n";
+        this->error_message = QStringLiteral("No PLAYER address found\n");
         return false;
     }
     play = match.captured(1).toInt(nullptr, 16);
 
-    re.setPattern("TYPE[ ]*([BCDRS])");
+    re.setPattern(QStringLiteral("TYPE[ ]*([BCDRS])"));
     match = re.match(header);
     if (!match.hasMatch()) {
-        this->error_message = "No PLAYER address found\n";
+        this->error_message = QStringLiteral("No PLAYER address found\n");
         return false;
     }
     type = match.captured(1).toInt(nullptr, 16);
@@ -180,8 +180,8 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
     if (!la8b.Load(file))
         return false;
 
-    userLabels.insert(init, "init");
-    userLabels.insert(play, "play");
+    userLabels.insert(init, QStringLiteral("init"));
+    userLabels.insert(play, QStringLiteral("play"));
 
     return true;
 }
@@ -202,7 +202,7 @@ bool LoaderC64Binary::Load(QFile& file) {
 
     struct segment segment = createEmptySegment(start, end);
     if ((quint64)file.read((char*)segment.data, size) != size) {
-        this->error_message = "Premature end of file!\n";
+        this->error_message = QStringLiteral("Premature end of file!\n");
         return false;
     }
 
@@ -224,7 +224,7 @@ bool LoaderC64Binary::Load(QFile& file) {
         segment.datatypes[i] = DT_PETSCII;
 
         int sys = QString((const char *)&segment.data[5]).toInt();
-        QString hex = QString("SYS $%1").arg(sys, 4, 16, QLatin1Char('0'));
+        QString hex = QStringLiteral("SYS $%1").arg(sys, 4, 16, QChar('0'));
         segment.comments.insert(start+4, hex);
     }
 
@@ -244,7 +244,7 @@ bool LoaderC64PSID::Load(QFile &file) {
 
     file.read((char*) tmp, 4);
     if ((tmp[0] != 'P' && tmp[0] != 'R') || tmp[1] != 'S' || tmp[2] != 'I' || tmp[3] != 'D') {
-        this->error_message = "SID Identifier not found!\n";
+        this->error_message = QStringLiteral("SID Identifier not found!\n");
         return false;
     }
 
@@ -280,15 +280,15 @@ bool LoaderC64PSID::Load(QFile &file) {
 
     struct segment segment = createEmptySegment(start, end);
     if ((quint64)file.read((char*)segment.data, size) != size) {
-        this->error_message = "Premature end of file!\n";
+        this->error_message = QStringLiteral("Premature end of file!\n");
         return false;
     }
 
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(init, "init");
-    userLabels.insert(play, "play");
+    userLabels.insert(init, QStringLiteral("init"));
+    userLabels.insert(play, QStringLiteral("play"));
 
     return true;
 }
@@ -305,7 +305,7 @@ bool LoaderAtari2600ROM2K4K::Load(QFile &file) {
     size = file.size();
 
     if (size != 2048 && size != 4096) {
-        this->error_message = "File size if not 2KB or 4KB.\n";
+        this->error_message = QStringLiteral("File size if not 2KB or 4KB.\n");
         return false;
     }
 
@@ -314,7 +314,7 @@ bool LoaderAtari2600ROM2K4K::Load(QFile &file) {
 
     struct segment segment = createEmptySegment(start, end);
     if ((quint64)file.read((char*)segment.data, size) != size) {
-        this->error_message = "Premature end of file!\n";
+        this->error_message = QStringLiteral("Premature end of file!\n");
         return false;
     }
 
@@ -328,7 +328,7 @@ bool LoaderAtari2600ROM2K4K::Load(QFile &file) {
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(init, "init");
+    userLabels.insert(init, QStringLiteral("init"));
 
     return true;
 }
@@ -347,7 +347,7 @@ bool LoaderOricTap::Load(QFile &file) {
 
     file.getChar(&c);
     if (c != 0x16) {
-        this->error_message = "Synchronisation bytes not found!\n";
+        this->error_message = QStringLiteral("Synchronisation bytes not found!\n");
         return false;
     }
 
@@ -358,7 +358,7 @@ bool LoaderOricTap::Load(QFile &file) {
     // End of synchronisation: $24
 
     if (c != 0x24) {
-        this->error_message = "Proper synchronistion end not found!\n";
+        this->error_message = QStringLiteral("Proper synchronistion end not found!\n");
         return false;
     }
 
@@ -375,14 +375,14 @@ bool LoaderOricTap::Load(QFile &file) {
 
     struct segment segment = createEmptySegment(start, end);
     if ((quint64)file.read((char*)segment.data, size) != size) {
-        this->error_message = "Premature end of file!\n";
+        this->error_message = QStringLiteral("Premature end of file!\n");
         return false;
     }
 
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(start, "start");
+    userLabels.insert(start, QStringLiteral("start"));
 
     return true;
 }
@@ -404,14 +404,14 @@ bool LoaderApple2DOS33::Load(QFile &file) {
 
     struct segment segment = createEmptySegment(start, end);
     if ((quint64)file.read((char*)segment.data, size) != size) {
-        this->error_message = "Premature end of file!\n";
+        this->error_message = QStringLiteral("Premature end of file!\n");
         return false;
     }
 
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(start, "start");
+    userLabels.insert(start, QStringLiteral("start"));
 
     return true;
 };
@@ -435,7 +435,7 @@ bool LoaderApple2AppleSingle::Load(QFile &file) {
     version = BE32(tmp+4);
 
     if (magic != 0x00051600 || version != 0x00020000) {
-        this->error_message = "Magic Number not found!\n";
+        this->error_message = QStringLiteral("Magic Number not found!\n");
         return false;       // fix if anything other than 0x00020000 exists
     }
 
@@ -466,15 +466,15 @@ bool LoaderApple2AppleSingle::Load(QFile &file) {
     }
 
     if (size == 0) {
-        this->error_message = "Size of data fork is zero!\n";
+        this->error_message = QStringLiteral("Size of data fork is zero!\n");
         return false;
     }
     if (data_fork_offset == 0xffffffff) {
-        this->error_message = "Data fork not found!\n";
+        this->error_message = QStringLiteral("Data fork not found!\n");
         return false;
     }
     if (prodos_offset == 0xffffffff) {
-        this->error_message = "ProDOS File Info not found!\n";
+        this->error_message = QStringLiteral("ProDOS File Info not found!\n");
         return false;
     }
 
@@ -487,14 +487,14 @@ bool LoaderApple2AppleSingle::Load(QFile &file) {
     file.seek(data_fork_offset);
     struct segment segment = createEmptySegment(start, end);
     if ((quint64)file.read((char*)segment.data, size) != size) {
-        this->error_message = "Premature end of file!\n";
+        this->error_message = QStringLiteral("Premature end of file!\n");
         return false;
     }
 
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(start, "start");
+    userLabels.insert(start, QStringLiteral("start"));
 
     return true;
 };
@@ -513,7 +513,7 @@ bool LoaderNESSongFile::Load(QFile &file) {
 
     file.read((char*) tmp, 5);
     if (strncmp((char*) tmp, "NESM\x1a", 5) != 0) {
-        this->error_message = "Magic Number not found!\n";
+        this->error_message = QStringLiteral("Magic Number not found!\n");
         return false;
     }
 
@@ -530,7 +530,7 @@ bool LoaderNESSongFile::Load(QFile &file) {
     for (int i=0; i<8; i++)
         x += tmp[i];
     if (x) {
-        this->error_message = "Bankswitching NSF file not supported!\n";
+        this->error_message = QStringLiteral("Bankswitching NSF file not supported!\n");
         return false;
     }
 
@@ -545,15 +545,15 @@ bool LoaderNESSongFile::Load(QFile &file) {
 
     struct segment segment = createEmptySegment(start, end);
     if ((quint64)file.read((char*)segment.data, size) != size) {
-        this->error_message = "Premature end of file!\n";
+        this->error_message = QStringLiteral("Premature end of file!\n");
         return false;
     }
 
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(init, "init");
-    userLabels.insert(play, "play");
+    userLabels.insert(init, QStringLiteral("init"));
+    userLabels.insert(play, QStringLiteral("play"));
 
     return true;
 }
@@ -569,6 +569,6 @@ bool LoaderCPMBinary::Load(QFile &file) {
     segments[0].start += 0x0100;
     segments[0].end   += 0x0100;
 
-    userLabels.insert(segments[0].start, "RUN");
+    userLabels.insert(segments[0].start, QStringLiteral("RUN"));
     return true;
 }

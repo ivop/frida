@@ -39,7 +39,7 @@ public:
 
     QString jump_to_location;
 
-public slots:
+public Q_SLOTS:
     void accept() override;
 
 private:

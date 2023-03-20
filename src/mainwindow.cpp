@@ -159,7 +159,7 @@ MainWindow::MainWindow(QWidget *parent) :
         men->addAction(ui->actionSet_To_DWordLE);
         men->addAction(ui->actionSet_To_QWordLE);
         men->addAction(ui->actionSet_To_XWordLE);
-        auto *act = new QAction("Set to Little-Endian", ui->tableHexadecimal);
+        auto *act = new QAction(QStringLiteral("Set to Little-Endian"), ui->tableHexadecimal);
         act->setMenu(men);
         t->addAction(act);
 
@@ -168,7 +168,7 @@ MainWindow::MainWindow(QWidget *parent) :
         men->addAction(ui->actionSet_To_DWordBE);
         men->addAction(ui->actionSet_To_QWordBE);
         men->addAction(ui->actionSet_To_XWordBE);
-        act = new QAction("Set to Big-Endian", ui->tableHexadecimal);
+        act = new QAction(QStringLiteral("Set to Big-Endian"), ui->tableHexadecimal);
         act->setMenu(men);
         t->addAction(act);
 
@@ -178,7 +178,7 @@ MainWindow::MainWindow(QWidget *parent) :
         men->addAction(ui->actionSet_To_PETSCII);
         men->addAction(ui->actionSet_To_ANTIC_Screen_Codes);
         men->addAction(ui->actionSet_To_CBM_Screen_Codes);
-        act = new QAction("Set to String", ui->tableHexadecimal);
+        act = new QAction(QStringLiteral("Set to String"), ui->tableHexadecimal);
         act->setMenu(men);
         t->addAction(act);
 
@@ -187,7 +187,7 @@ MainWindow::MainWindow(QWidget *parent) :
         men->addAction(ui->actionSet_Flag_Low_Byte);
         men->addAction(ui->actionSet_Flag_High_Byte);
         men->addAction(ui->actionSet_Flag_Clear);
-        act = new QAction("Set Flag", ui->tableHexadecimal);
+        act = new QAction(QStringLiteral("Set Flag"), ui->tableHexadecimal);
         act->setMenu(men);
         t->addAction(act);
 
@@ -285,12 +285,12 @@ void MainWindow::showSegments(void) {
     for (int i=0; i<segments.size(); i++) {
         const struct segment *s = &segments.at(i);
 
-        QString hex = QString("%1").arg(s->start, 8, 16, (QChar)'0');
+        QString hex = QStringLiteral("%1").arg(s->start, 8, 16, (QChar)'0');
         item = new QTableWidgetItem(hex);
         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         t->setItem(i,0, item);
 
-        hex = QString("%1").arg(s->end, 8, 16, (QChar)'0');
+        hex = QStringLiteral("%1").arg(s->end, 8, 16, (QChar)'0');
         item = new QTableWidgetItem(hex);
         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         t->setItem(i,1, item);
@@ -330,9 +330,9 @@ void MainWindow::actionDelete_Segment() {
 
     if (!t->hasFocus()) return;
 
-    msg.setText("WARNING! Do you really want to delete this segment?");
-    msg.addButton("No", QMessageBox::RejectRole);
-    msg.addButton("Yes, DELETE this segment", QMessageBox::AcceptRole);
+    msg.setText(QStringLiteral("WARNING! Do you really want to delete this segment?"));
+    msg.addButton(QStringLiteral("No"), QMessageBox::RejectRole);
+    msg.addButton(QStringLiteral("Yes, DELETE this segment"), QMessageBox::AcceptRole);
     if (!msg.exec()) return;
 
     segments.removeAt(cur);
@@ -386,7 +386,7 @@ void MainWindow::showHex(void) {
     for (int i=0; i<size; i++) {
         const struct segment *s = &segments.at(currentSegment);
 
-        QString hex = QString("%1").arg(data[i], 2, 16, (QChar)'0');
+        QString hex = QStringLiteral("%1").arg(data[i], 2, 16, (QChar)'0');
         t->setItem(i/8, i%8, new QTableWidgetItem(hex));
 
         QBrush brush = datatypeBrushes[(quint8)s->datatypes[i]];
@@ -395,7 +395,7 @@ void MainWindow::showHex(void) {
         t->item(i/8, i%8)->setBackground(brush);
 
         if (!(i%8)) {
-            hex = QString("%1").arg(s->start + i, 2, 16, (QChar)'0');
+            hex = QStringLiteral("%1").arg(s->start + i, 2, 16, (QChar)'0');
             t->setVerticalHeaderItem(i/8, new QTableWidgetItem(hex));
         }
     }
@@ -408,11 +408,11 @@ void MainWindow::showAscii(void) {
     qint32 offset = 0;
 
     if (altfont == FONT_ATARI8BIT) {
-        font = QFont("Atari Classic Int", 10, 1);
+        font = QFont(QStringLiteral("Atari Classic Int"), 10, 1);
         offset = 0xe000;
     }
     if (altfont == FONT_C64) {
-        font = QFont("C64 Pro Mono", 10, 1);
+        font = QFont(QStringLiteral("C64 Pro Mono"), 10, 1);
         offset = 0xe100;
     }
 
@@ -436,7 +436,7 @@ void MainWindow::showAscii(void) {
         if (altfont)
             t->item(i/8, i%8)->setFont(font);
         if (!(i%8)) {
-            QString hex = QString("%1").arg(s->start + i, 2, 16, (QChar)'0');
+            QString hex = QStringLiteral("%1").arg(s->start + i, 2, 16, (QChar)'0');
             t->setVerticalHeaderItem(i/8, new QTableWidgetItem(hex));
         }
     }
@@ -598,8 +598,8 @@ void MainWindow::Set_Flag_Low_or_High_Byte(bool bLow) {
 
     if (nranges != 1 || !single_cell) {
         QMessageBox msg;
-        msg.setText("Select a single byte to flag as Low or High Byte     ");
-        msg.addButton("OK", QMessageBox::AcceptRole);
+        msg.setText(QStringLiteral("Select a single byte to flag as Low or High Byte     "));
+        msg.addButton(QStringLiteral("OK"), QMessageBox::AcceptRole);
         msg.exec();
         return;
     }
@@ -680,13 +680,13 @@ void MainWindow::showDisassembly(void) {
 
             row = t->rowCount();
             t->setRowCount(row+1);
-            QString hex = QString("%1").arg(dis.address, 0, 16, (QChar)'0');
+            QString hex = QStringLiteral("%1").arg(dis.address, 0, 16, (QChar)'0');
             t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
             t->verticalHeaderItem(row)->setTextAlignment(Qt::AlignTop | Qt::AlignRight);
 
             t->setSpan(row,1,1,2);
 
-            item = new QTableWidgetItem(";");
+            item = new QTableWidgetItem(QStringLiteral(";"));
             item->setTextAlignment(Qt::AlignTop);
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
             t->setItem(row, 0, item);
@@ -719,7 +719,7 @@ void MainWindow::showDisassembly(void) {
             if (!label.contains(QChar('+')) && !label.contains(QChar('-'))) {
                 row = t->rowCount();
                 t->setRowCount(row+1);
-                QString hex = QString("%1").arg(dis.address, 0, 16, (QChar)'0');
+                QString hex = QStringLiteral("%1").arg(dis.address, 0, 16, (QChar)'0');
                 t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
 
                 t->setSpan(row,0,1,3);
@@ -730,10 +730,10 @@ void MainWindow::showDisassembly(void) {
         row = t->rowCount();
         t->setRowCount(row+1);
 
-        QString hex = QString("%1").arg(dis.address, 0, 16, (QChar)'0');
+        QString hex = QStringLiteral("%1").arg(dis.address, 0, 16, (QChar)'0');
         t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
 
-        item = new QTableWidgetItem("");
+        item = new QTableWidgetItem(QLatin1String(""));
         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         t->setItem(row, 0, item);
 
@@ -745,14 +745,14 @@ void MainWindow::showDisassembly(void) {
         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         t->setItem(row, 2, item);
 
-        if (dis.instruction.at(0) == QString("."))
+        if (dis.instruction.at(0) == QStringLiteral("."))
             t->item(row,1)->setForeground(QColor(0,96,0));
 
         if (dis.changes_pc) {
             row = t->rowCount();
             t->setRowCount(row+1);
             t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
-            item = new QTableWidgetItem("");
+            item = new QTableWidgetItem(QLatin1String(""));
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
             t->setSpan(row,0,1,3);
             t->setItem(row, 0, item);
@@ -930,7 +930,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
     QString first = t->item(index.row(), 0)->text();
 
-    if (first == ";") {
+    if (first == QLatin1String(";")) {
         actionComment();
         return;
     }
@@ -952,7 +952,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
         QString descr = Disassembler->getDescriptionAt(address);
 
         if (descr.isEmpty())
-            ui->instructionDescription->document()->setHtml("Not available.");
+            ui->instructionDescription->document()->setHtml(QStringLiteral("Not available."));
         else
             ui->instructionDescription->document()->setHtml(descr);
     }
@@ -965,7 +965,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         // check for #<label and #>label
 
-        if ((operand.left(2) == "#<") || (operand.left(2) == "#>")) {
+        if ((operand.left(2) == QLatin1String("#<")) || (operand.left(2) == QLatin1String("#>"))) {
             operand = operand.mid(2);
         }
 
@@ -973,13 +973,13 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         QStringList operand_list;
 
-        if (operand.contains(",")) {
-            operand_list = operand.split(",");
+        if (operand.contains(QLatin1String(","))) {
+            operand_list = operand.split(QStringLiteral(","));
 
-            operand_list.replaceInStrings("(", ""); // (label)
-            operand_list.replaceInStrings(")", "");
-            operand_list.replaceInStrings("<", ""); // <label in .byte
-            operand_list.replaceInStrings(">", "");
+            operand_list.replaceInStrings(QStringLiteral("("), QLatin1String("")); // (label)
+            operand_list.replaceInStrings(QStringLiteral(")"), QLatin1String(""));
+            operand_list.replaceInStrings(QStringLiteral("<"), QLatin1String("")); // <label in .byte
+            operand_list.replaceInStrings(QStringLiteral(">"), QLatin1String(""));
 
             for (int i = 0; i < operand_list.size(); i++) {
                 operand_list.replace(i, operand_list.at(i).trimmed());
@@ -1081,7 +1081,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
                 continue;
 
             // found row:
-            if (td->item(row,0)->text() == QString(";")) row++; // skip comment
+            if (td->item(row,0)->text() == QStringLiteral(";")) row++; // skip comment
             td->scrollToItem(td->item(row,0), QAbstractItemView::PositionAtCenter);
             td->clearSelection();   // if segment is the same, clear selected
             td->clearFocus();       // and focus
@@ -1103,9 +1103,9 @@ void MainWindow::closeEvent (QCloseEvent *event)
 {
     QMessageBox msg;
 
-    msg.setText("Do you really want to exit Frida?");
-    msg.addButton("No", QMessageBox::RejectRole);
-    msg.addButton("Yes", QMessageBox::AcceptRole);
+    msg.setText(QStringLiteral("Do you really want to exit Frida?"));
+    msg.addButton(QStringLiteral("No"), QMessageBox::RejectRole);
+    msg.addButton(QStringLiteral("Yes"), QMessageBox::AcceptRole);
     if (!msg.exec()) {
         event->ignore();
         return;

@@ -159,9 +159,9 @@ void Disassembler::generateDisassembly(void) {
 
             if (i+n-1 >= size) {
 also_wrong:
-                hex = QString("%1").arg(start+i, 4, 16, (QChar)'0');
+                hex = QStringLiteral("%1").arg(start+i, 4, 16, (QChar)'0');
                 QMessageBox msg;
-                msg.setText(hex + ": type needs " + QString("%1").arg(n) +
+                msg.setText(hex + ": type needs " + QStringLiteral("%1").arg(n) +
                                                                 " bytes");
                 msg.exec();
                 return;
@@ -185,10 +185,10 @@ also_wrong:
 
             if (i+n-1 >= size) {
 also_wrong2:
-                hex = QString("%1").arg(start+i, 4, 16, (QChar)'0');
+                hex = QStringLiteral("%1").arg(start+i, 4, 16, (QChar)'0');
                 QMessageBox msg;
                 msg.setText(hex + ": full instruction needs " +
-                            QString("%1").arg(n) + " bytes");
+                            QStringLiteral("%1").arg(n) + " bytes");
                 msg.exec();
                 return;
             }
@@ -255,7 +255,7 @@ also_wrong2:
     // Generate disassembly
 
     struct disassembly org = {};
-    org.instruction = QString(".org ");
+    org.instruction = QStringLiteral(".org ");
     org.arguments = QString(hexPrefix + "%1" + hexSuffix).arg(s->start, 0, 16);
     if (toUpper) {
         org.instruction = org.instruction.toUpper();
@@ -280,7 +280,7 @@ also_wrong2:
                    (quint64) data[i+ 5] << 16 | (quint64) data[i+ 4]<<24 |
                    (quint64) data[i+ 3] << 32 | (quint64) data[i+ 2]<<40 |
                    (quint64) data[i+ 1] << 48 | (quint64) data[i+ 0]<<56;
-            instr = ".xwordbe";
+            instr = QStringLiteral(".xwordbe");
             n = 16;
             goto do_directive;
 
@@ -293,7 +293,7 @@ also_wrong2:
                    (quint64) data[i+10] << 16 | (quint64) data[i+11]<<24 |
                    (quint64) data[i+12] << 32 | (quint64) data[i+13]<<40 |
                    (quint64) data[i+14] << 48 | (quint64) data[i+15]<<56;
-            instr = ".xwordle";
+            instr = QStringLiteral(".xwordle");
             n = 16;
             goto do_directive;
 
@@ -302,7 +302,7 @@ also_wrong2:
                   (quint64) data[i+5] << 16 | (quint64) data[i+4]<<24 |
                   (quint64) data[i+3] << 32 | (quint64) data[i+2]<<40 |
                   (quint64) data[i+1] << 48 | (quint64) data[i+0]<<56;
-            instr = ".qwordbe";
+            instr = QStringLiteral(".qwordbe");
             n = 8;
             goto do_directive;
 
@@ -311,40 +311,40 @@ also_wrong2:
                   (quint64) data[i+2] << 16 | (quint64) data[i+3]<<24 |
                   (quint64) data[i+4] << 32 | (quint64) data[i+5]<<40 |
                   (quint64) data[i+6] << 48 | (quint64) data[i+7]<<56;
-            instr = ".qwordle";
+            instr = QStringLiteral(".qwordle");
             n = 8;
             goto do_directive;
 
         case DT_DWORDBE:
             val = (quint32) data[i+3] <<  0 | (quint32) data[i+2]<<8 |
                   (quint32) data[i+1] << 16 | (quint32) data[i+0]<<24;
-            instr = ".dwordbe";
+            instr = QStringLiteral(".dwordbe");
             n = 4;
             goto do_directive;
 
         case DT_DWORDLE:
             val = (quint32) data[i+0] <<  0 | (quint32) data[i+1]<<8 |
                   (quint32) data[i+2] << 16 | (quint32) data[i+3]<<24;
-            instr = ".dwordle";
+            instr = QStringLiteral(".dwordle");
             n = 4;
             goto do_directive;
 
         case DT_WORDBE:
             val = (quint16) data[i+1] | (quint16) data[i]<<8;
-            instr = ".wordbe";
+            instr = QStringLiteral(".wordbe");
             n = 2;
             goto do_directive;
 
         case DT_WORDLE:
             val = (quint16) data[i] | (quint16) data[i+1]<<8;
-            instr = ".wordle";
+            instr = QStringLiteral(".wordle");
             n = 2;
             goto do_directive;
 
         case DT_BYTES:
         case DT_UNDEFINED_BYTES:
             val = data[i];
-            instr = ".byte";
+            instr = QStringLiteral(".byte");
             n = 1;
 
 do_directive:
@@ -375,7 +375,7 @@ do_directive:
                     hex = autoLabels.value(key);
                 if (hex.isEmpty())
                     hex = hexPrefix +
-                          QString("%1").arg(key, 4, 16, (QChar)'0') +
+                          QStringLiteral("%1").arg(key, 4, 16, (QChar)'0') +
                           hexSuffix;
                 if (s->flags[i] & FLAG_HIGH_BYTE)
                     hex = '>' + hex;
@@ -387,10 +387,10 @@ do_directive:
             if (hex.isEmpty()) {
                 hex  = hexPrefix;
                 if (n>8) {
-                    hex += QString("%1").arg(val,  16, 16, (QChar)'0');
-                    hex += QString("%1").arg(val2, 16, 16, (QChar)'0');
+                    hex += QStringLiteral("%1").arg(val,  16, 16, (QChar)'0');
+                    hex += QStringLiteral("%1").arg(val2, 16, 16, (QChar)'0');
                 } else {
-                    hex += QString("%1").arg(val, n*2, 16, (QChar)'0');
+                    hex += QStringLiteral("%1").arg(val, n*2, 16, (QChar)'0');
                 }
                 hex += hexSuffix;
                 if (toUpper)
@@ -412,37 +412,37 @@ do_directive:
 
         case DT_ATASCII:
             val = atascii_to_ascii(data[i]);
-            instr = ".atascii";
+            instr = QStringLiteral(".atascii");
             goto do_string_directive;
 
         case DT_INVERSE_ATASCII:
             val = atascii_to_ascii(data[i]-128);
-            instr = ".invatascii";
+            instr = QStringLiteral(".invatascii");
             goto do_string_directive;
 
         case DT_PETSCII:
             val = petscii_to_ascii(data[i]);
-            instr = ".petscii";
+            instr = QStringLiteral(".petscii");
             goto do_string_directive;
 
         case DT_ANTIC_SCREEN:
             val = antic_screen_to_ascii(data[i]);
-            instr = ".anticscreen";
+            instr = QStringLiteral(".anticscreen");
             goto do_string_directive;
 
         case DT_INVERSE_ANTIC_SCREEN:
             val = antic_screen_to_ascii(data[i]-128);
-            instr = ".invanticscreen";
+            instr = QStringLiteral(".invanticscreen");
             goto do_string_directive;
 
         case DT_CBM_SCREEN:
             val = cbm_screen_to_ascii(data[i]);
-            instr = ".cbmscreen";
+            instr = QStringLiteral(".cbmscreen");
             goto do_string_directive;
 
         case DT_ASCII:
             val = data[i];
-            instr = ".ascii";
+            instr = QStringLiteral(".ascii");
 
 do_string_directive:
             n = 1;
