@@ -7,3 +7,4 @@ moc_*
 ui_*
 qrc_*
 frida.pro.user
+build
