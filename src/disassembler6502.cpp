@@ -118,8 +118,8 @@ struct instr_descr {
 };
 
 static struct instr_descr instruction_descriptions[] = {
-{ "adc", "Add Memory to Accumulator with Carry", "A + M + C → A, C", "NVZC" },
-{ "and", "AND Memory with Accumulator", "A ∧ M → A", "NZ" },
+{ "adc", "Add Value To Accumulator With Carry", "A + M + C → A, C", "NVZC" },
+{ "and", "AND Value with Accumulator", "A ∧ M → A", "NZ" },
 { "asl", "Arithmetic Shift Left", "C ← /M7...M0/ ← 0", "NZC" },
 { "bcc", "Branch on Carry Clear", "Branch on C = 0", "" },
 { "bcs", "Branch on Carry Set", "Branch on C = 1", "" },
@@ -135,24 +135,24 @@ static struct instr_descr instruction_descriptions[] = {
 { "cld", "Clear Decimal Mode", "0 → D", "D" },
 { "cli", "Clear Interrupt Disable", "0 → I", "I" },
 { "clv", "Clear Overflow Flag", "0 → V", "V" },
-{ "cmp", "Compare Memory and Accumulator", "A - M", "NZC" },
-{ "cpx", "Compare Index Register X To Memory", "X - M", "NZC" },
-{ "cpy", "Compare Index Register Y To Memory", "Y - M", "NZC" },
+{ "cmp", "Compare Value And Accumulator", "A - M", "NZC" },
+{ "cpx", "Compare Index Register X To Value", "X - M", "NZC" },
+{ "cpy", "Compare Index Register Y To Value", "Y - M", "NZC" },
 { "dec", "Decrement Memory By One", "M - 1 → M", "NZ" },
 { "dex", "Decrement Index Register X By One", "X - 1 → X", "NZ" },
 { "dey", "Decrement Index Register Y By One", "Y - 1 → Y", "NZ" },
-{ "eor", "Exclusive OR Memory with Accumulator", "A ⊻ M → A", "NZ" },
+{ "eor", "Exclusive OR Value with Accumulator", "A ⊻ M → A", "NZ" },
 { "inc", "Increment Memory By One", "M + 1 → M", "NZ" },
 { "inx", "Increment Index Register X By One", "X + 1 → X", "NZ" },
 { "iny", "Increment Index Register Y By One", "Y + 1 → Y", "NZ" },
 { "jmp", "Jump To Location", "[PC + 1] → PCL, [PC + 2] → PCH", "" },
 { "jsr", "Jump To Subroutine", "PC + 2↓, [PC + 1] → PCL, [PC + 2] → PCH", "" },
-{ "lda", "Load Accumulator with Memory", "M → A", "NZ" },
-{ "ldx", "Load Index Register X From Memory", "M → X", "NZ" },
-{ "ldy", "Load Index Register Y From Memory", "M → Y", "NZ" },
+{ "lda", "Load Accumulator With Value", "M → A", "NZ" },
+{ "ldx", "Load Index Register X With Value", "M → X", "NZ" },
+{ "ldy", "Load Index Register Y With Value", "M → Y", "NZ" },
 { "lsr", "Logical Shift Right", "0 → /M7...M0/ → C", "NZC" },
 { "nop", "No Operation", "", "" },
-{ "ora", "OR Memory with Accumulator", "A ∨ M → A", "NZ" },
+{ "ora", "OR Value With Accumulator", "A ∨ M → A", "NZ" },
 { "pha", "Push Accumulator On Stack", "A↓", "" },
 { "php", "Push Processor Status On Stack", "P↓", "" },
 { "pla", "Pull Accumulator From Stack", "A↑", "NZ" },
@@ -161,11 +161,11 @@ static struct instr_descr instruction_descriptions[] = {
 { "ror", "Rotate Right", "C → /M7...M0/ → C", "NZC" },
 { "rti", "Return From Interrupt", "P↑ PC↑", "NVDIZC" },
 { "rts", "Return From Subroutine", "PC↑, PC + 1 → PC", "" },
-{ "sbc", "Subtract Memory from Accumulator with Borrow", "A - M - ~C → A", "NVZC" },
+{ "sbc", "Subtract Value From Accumulator With Borrow", "A - M - ~C → A", "NVZC" },
 { "sec", "Set Carry Flag", "1 → C", "C" },
 { "sed", "Set Decimal Mode", "1 → D", "D" },
 { "sei", "Set Interrupt Disable", "1 → I", "I" },
-{ "sta", "Store Accumulator in Memory", "A → M", "" },
+{ "sta", "Store Accumulator In Memory", "A → M", "" },
 { "stx", "Store Index Register X In Memory", "X → M", "" },
 { "sty", "Store Index Register Y In Memory", "Y → M", "" },
 { "tax", "Transfer Accumulator To Index X", "A → X", "NZ" },
@@ -1333,8 +1333,8 @@ QString Disassembler6502::getDescriptionAt(quint64 address) {
 
     instr = instr.toUpper();
 
-    fulldescr = "<h2>" + instr + "</h2><h4>" + descr + "</h4>" +
-                action + "<br><br><i>flags: " + flags + "</i>";
+    fulldescr = "<h2 style=\"color: red\">" + instr + "</h2><h4>" + descr + "</h4>" +
+                action + "<br><br><i style=\"color: blue\">flags: " + flags + "</i>";
 
     return fulldescr;
 }
