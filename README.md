@@ -29,7 +29,7 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 * CP/M Binary at 0100H (.COM)  
 
 ##### Build instructions:
-https://github.com/ivop/frida  
+git clone https://github.com/ivop/frida  
 cd frida  
 mkdir build  
 cd build  
