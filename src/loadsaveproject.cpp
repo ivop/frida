@@ -20,9 +20,9 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "loadsaveproject.h"
 #include "frida.h"
 #include "loader.h"
+#include "loadsaveproject.h"
 #include <QDataStream>
 #include <QDebug>
 #include <QFile>

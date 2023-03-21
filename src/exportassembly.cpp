@@ -113,8 +113,8 @@ void export_assembly(QWidget *widget) {
             continue;
 
         bool found_local = false;
-        for (int i=0; i<segments.size(); i++) {
-            if (segments[i].localLabels.contains(iter.key())) {
+        for (auto & segment : segments) {
+            if (segment.localLabels.contains(iter.key())) {
                 found_local = true;
                 break;
             }
@@ -123,9 +123,9 @@ void export_assembly(QWidget *widget) {
             continue;
 
         bool inside_segment = false;
-        for (int i=0; i<segments.size(); i++) {
-            quint64 start = segments[i].start;
-            quint64 end   = segments[i].end;
+        for (auto & segment : segments) {
+            quint64 start = segment.start;
+            quint64 end   = segment.end;
             quint64 key = iter.key();
             if ((key >= start) && (key <= end)) {
                 inside_segment = true;
@@ -154,8 +154,8 @@ void export_assembly(QWidget *widget) {
             continue;
 
         bool found_local = false;
-        for (int i=0; i<segments.size(); i++) {
-            if (segments[i].localLabels.contains(iter.key())) {
+        for (auto & segment : segments) {
+            if (segment.localLabels.contains(iter.key())) {
                 found_local = true;
                 break;
             }
@@ -164,9 +164,9 @@ void export_assembly(QWidget *widget) {
             continue;
 
         bool inside_segment = false;
-        for (int i=0; i<segments.size(); i++) {
-            quint64 start = segments[i].start;
-            quint64 end   = segments[i].end;
+        for (auto & segment : segments) {
+            quint64 start = segment.start;
+            quint64 end   = segment.end;
             quint64 key = iter.key();
             if ((key >= start) && (key <= end)) {
                 inside_segment = true;
@@ -211,9 +211,9 @@ void export_assembly(QWidget *widget) {
                 continue;
 
             bool inside_segment = false;
-            for (int j=0; j<segments.size(); j++) {
-                quint64 start = segments[j].start;
-                quint64 end   = segments[j].end;
+            for (auto & segment : segments) {
+                quint64 start = segment.start;
+                quint64 end   = segment.end;
                 quint64 key = iter.key();
                 if ((key >= start) && (key <= end)) {
                     inside_segment = true;

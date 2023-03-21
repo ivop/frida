@@ -94,8 +94,8 @@ private Q_SLOTS:
     void onComboBox_currentIndexChanged(int index);
     void onTableDisassembly_doubleClicked(const QModelIndex &index);
 
-    void onReferences_returnPressed();
-    void onFindButton_clicked();
+    static void onReferences_returnPressed();
+    static void onFindButton_clicked();
 
     static void rememberValue(int value);
 

@@ -20,11 +20,11 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "startdialog.h"
 #include "disassembler.h"
 #include "frida.h"
 #include "loader.h"
 #include "loadsaveproject.h"
+#include "startdialog.h"
 #include "ui_startdialog.h"
 #include <QDebug>
 #include <QFileDialog>
@@ -49,14 +49,14 @@ StartDialog::StartDialog(QWidget *parent) :
             this, &StartDialog::onButtonNewProject_clicked);
 
     ui->comboFileType->clear();
-    for (int i=0; i<filetypes.size(); i++) {
-        ui->comboFileType->addItem(filetypes.at(i).name);
+    for (const auto & filetype : qAsConst(filetypes)) {
+        ui->comboFileType->addItem(filetype.name);
     }
     ui->comboFileType->setCurrentIndex(1);
 
     ui->comboCPUType->clear();
-    for (int i=0; i<cputypes.size(); i++) {
-        ui->comboCPUType->addItem(cputypes.at(i).name);
+    for (const auto & cputype : cputypes) {
+        ui->comboCPUType->addItem(cputype.name);
     }
 
     ui->labelVersion->setText(QStringLiteral("Version: %1").arg(QStringLiteral(FRIDA_VERSION_STRING)));

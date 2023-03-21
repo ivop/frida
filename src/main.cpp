@@ -20,9 +20,9 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "mainwindow.h"
 #include "disassembler.h"
 #include "frida.h"
+#include "mainwindow.h"
 #include "startdialog.h"
 #include "ui_mainwindow.h"
 #include <QApplication>

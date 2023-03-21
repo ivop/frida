@@ -20,9 +20,9 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "labelswindow.h"
 #include "addlabelwindow.h"
 #include "frida.h"
+#include "labelswindow.h"
 #include "ui_labelswindow.h"
 #include <QFileDialog>
 #include <QMessageBox>
@@ -301,9 +301,9 @@ void labelswindow::onExportButton_clicked() {
     QTextStream out(&file);
 
     QList<quint64> keys = userLabels.keys();
-    for (int i=0; i<keys.size(); i++) {
-        out << Qt::hex << Qt::showbase << keys.at(i) << " "
-            << userLabels.value(keys.at(i)) << Qt::endl;
+    for (quint64 key : keys) {
+        out << Qt::hex << Qt::showbase << key << " "
+            << userLabels.value(key) << Qt::endl;
     }
 
     if (file.error()) {

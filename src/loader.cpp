@@ -527,8 +527,8 @@ bool LoaderNESSongFile::Load(QFile &file) {
     file.seek(file.pos() + 3*32 + 2);   // skip name, artist, copyright, NTSC speed
 
     file.read((char*) tmp, 8);
-    for (int i=0; i<8; i++)
-        x += tmp[i];
+    for (unsigned char i : tmp)
+        x += i;
     if (x) {
         this->error_message = QStringLiteral("Bankswitching NSF file not supported!\n");
         return false;

@@ -20,7 +20,6 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "mainwindow.h"
 #include "addlabelwindow.h"
 #include "changesegmentwindow.h"
 #include "commentwindow.h"
@@ -31,6 +30,7 @@
 #include "labelswindow.h"
 #include "loadsaveproject.h"
 #include "lowhighbytewindow.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QBrush>
 #include <QComboBox>
@@ -146,8 +146,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // create context menus for tableHexadecimal and tableASCII
 
     QTableWidget *two[2] = {ui->tableHexadecimal, ui->tableASCII};
-    for (int i=0; i<2; i++) {
-        t = two[i];
+    for (auto & i : two) {
+        t = i;
 
         t->horizontalHeader()->setSectionsClickable(false);
         t->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -256,8 +256,8 @@ MainWindow::MainWindow(QWidget *parent) :
         col ^= 1;
     }
 
-    for (int i=0; i<FONT_LAST; i++) {
-        ui->comboFonts->addItem(fontnames[i]);
+    for (auto & fontname : fontnames) {
+        ui->comboFonts->addItem(fontname);
     }
     ui->comboFonts->setCurrentIndex(altfont);
 
@@ -453,8 +453,7 @@ void MainWindow::showAscii(void) {
 
 void MainWindow::Set_To_Foo(const QList<QTableWidgetSelectionRange>& Ranges,
                                                        quint8 datatype) {
-    for (int i=0; i<Ranges.size(); i++) {
-        const QTableWidgetSelectionRange& range = Ranges.at(i);
+    for (const auto & range : Ranges) {
         for (int y = range.topRow(); y <= range.bottomRow(); y++) {
             for (int x = range.leftColumn(); x <= range.rightColumn(); x++) {
                 unsigned int pos = y*8+x;
@@ -547,8 +546,7 @@ void MainWindow::Set_Flag(const QList<QTableWidgetSelectionRange>& Ranges, quint
     const struct segment *s = &segments.at(currentSegment);
     unsigned int pos;
 
-    for (int i=0; i<Ranges.size(); i++) {
-        const QTableWidgetSelectionRange& range = Ranges.at(i);
+    for (const auto & range : Ranges) {
         for (int y = range.topRow(); y <= range.bottomRow(); y++) {
             for (int x = range.leftColumn(); x <= range.rightColumn(); x++) {
                 pos = y*8+x;
@@ -756,8 +754,8 @@ void MainWindow::linkSelections(QTableWidget *from, QTableWidget *to) {
     QList<QTableWidgetSelectionRange> Ranges = from->selectedRanges();
 
     to->clearSelection();
-    for (int i=0; i<Ranges.size(); i++) {
-        to->setRangeSelected(Ranges.at(i), true);
+    for (const auto & Range : Ranges) {
+        to->setRangeSelected(Range, true);
     }
 
 }
@@ -800,8 +798,7 @@ void MainWindow::actionTrace(void) {
     if (Ranges.isEmpty())
         return;
 
-    for (int i=0; i<Ranges.size(); i++) {
-        const QTableWidgetSelectionRange& range = Ranges.at(i);
+    for (const auto & range : Ranges) {
         if (range.topRow() < y)
             y = range.topRow();
         if (range.leftColumn() < x)
