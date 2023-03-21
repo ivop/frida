@@ -48,6 +48,8 @@ labelswindow::labelswindow(QWidget *parent) :
             this, &labelswindow::onTableAutoLabels_cellChanged);
     connect(ui->tableUserLabels, &QTableWidget::cellChanged,
             this, &labelswindow::onTableUserLabels_cellChanged);
+    connect(ui->tableLocalLabels, &QTableWidget::cellChanged,
+            this, &labelswindow::onTableLocalLabels_cellChanged);
 
     connect(ui->doneButton, &QPushButton::clicked,
             this, &labelswindow::onDoneButton_clicked);
@@ -121,6 +123,11 @@ void labelswindow::onTableAutoLabels_cellChanged(int row, int column) {
 
     get_contents(t, row, &label, &address);
 
+    if (label.isEmpty()) {
+        QString txt = autoLabels.value(address);
+        t->item(row,column)->setText(txt);
+        return;
+    }
     autoLabels.remove(address);
     userLabels.insert(address, label);
     showAutoLabels();
@@ -135,8 +142,35 @@ void labelswindow::onTableUserLabels_cellChanged(int row, int column) {
     if (!t->item(row,column)->isSelected()) return; // not by user action
 
     get_contents(t, row, &label, &address);
+
+    if (label.isEmpty()) {
+        QString txt = userLabels.value(address);
+        t->item(row,column)->setText(txt);
+        return;
+    }
+
     userLabels.insert(address, label);
     showUserLabels();
+}
+
+void labelswindow::onTableLocalLabels_cellChanged(int row, int column) {
+    struct segment *s = &segments[currentSegment];
+    QTableWidget *t = ui->tableLocalLabels;
+    QString label;
+    quint64 address;
+
+    if (!t->item(row,column)->isSelected()) return; // not by user action
+
+    get_contents(t, row, &label, &address);
+
+    if (label.isEmpty()) {
+        QString txt = s->localLabels.value(address);
+        t->item(row,column)->setText(txt);
+        return;
+    }
+
+    s->localLabels.insert(address, label);
+    showLocalLabels();
 }
 
 void labelswindow::actionChange_To_Local_Label() {

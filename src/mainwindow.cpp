@@ -111,6 +111,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::onSaveButton_clicked);
     connect(ui->exportAsmButton, &QPushButton::clicked,
             this, &MainWindow::onExportAsmButton_clicked);
+    connect(ui->findButton, &QPushButton::clicked,
+            this, &MainWindow::onFindButton_clicked);
 
     connect(ui->tableSegments, &QTableWidget::itemSelectionChanged,
             this, &MainWindow::onTableSegments_itemSelectionChanged);
@@ -131,6 +133,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->tableDisassembly, &QTableWidget::cellChanged,
             this, &MainWindow::onTableDisassembly_cellChanged);
+
+    connect(ui->inputReference, &QLineEdit::returnPressed,
+            this, &MainWindow::onReferences_returnPressed);
 
     t = ui->tableSegments;
     t->horizontalHeader()->setSectionsClickable(false);
@@ -239,6 +244,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     t->addAction(ui->actionComment);
     t->addAction(ui->actionAdd_Label);
+    t->addAction(ui->actionFind);
     t->setRowCount(0);
 
     t = ui->tableLegend;
@@ -258,8 +264,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // use very large sizes so they will be scaled to fit the screen
     // (unless your screen is larger than 10kx10k :)
 
-    ui->splitterSegNotes->setSizes(       { 4000, 3000, 3000 } );
-    ui->splitterDisRef->setSizes(         { 8500, 1500 } );
+    ui->splitterSegNotes->setSizes(       { 3400, 3300, 3300 } );
+    ui->splitterDisRef->setSizes(         { 7500, 2500 } );
     ui->splitterHexAsciiLegend->setSizes( { 7000, 3000 } );
     ui->splitterMain->setSizes(           { 2000, 4500, 3500 });
 
@@ -775,6 +781,21 @@ void MainWindow::onTableDisassembly_cellChanged(int row, int column) {
     quint64 address = t->verticalHeaderItem(row)->text().toULongLong(0,16);
     QString label = t->item(row,column)->text();
 
+    if (label.isEmpty()) {
+        // restore old key value
+
+        QString txt = s->localLabels.value(address);
+
+        if (txt.isEmpty())
+            txt = userLabels.value(address);
+        if (txt.isEmpty())
+            txt = autoLabels.value(address);
+
+        t->item(row,column)->setText(txt);
+
+        return;
+    }
+
     if (s->localLabels.contains(address)) {
         s->localLabels.insert(address, label);
     } else if (userLabels.contains(address)) {
@@ -1121,4 +1142,16 @@ void MainWindow::actionAdd_Label(void) {
     addLabelWindow alw;
     alw.exec();
     showDisassembly();
+}
+
+void MainWindow::onReferences_returnPressed() {
+    qDebug() << "returnPressed";
+}
+
+void MainWindow::actionFind(void) {
+    ui->inputReference->setFocus();
+}
+
+void MainWindow::onFindButton_clicked(void) {
+    qDebug() << "find clicked";
 }

@@ -71,6 +71,7 @@ public Q_SLOTS:
     void actionDelete_Segment(void);
     void actionChange_Start_Address(void);
     void actionAdd_Label(void);
+    void actionFind(void);
 
 private Q_SLOTS:
     void linkHexASCIISelection(void);
@@ -92,6 +93,9 @@ private Q_SLOTS:
     void onRadioButtonFullscreen_toggled(bool checked);
     void onComboBox_currentIndexChanged(int index);
     void onTableDisassembly_doubleClicked(const QModelIndex &index);
+
+    void onReferences_returnPressed();
+    void onFindButton_clicked();
 
     static void rememberValue(int value);
 

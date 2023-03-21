@@ -45,6 +45,7 @@ private Q_SLOTS:
 
     void onTableAutoLabels_cellChanged(int row, int column);
     void onTableUserLabels_cellChanged(int row, int column);
+    void onTableLocalLabels_cellChanged(int row, int column);
 
     void onDoneButton_clicked();
     void onAddLabelButton_clicked();

@@ -333,6 +333,12 @@
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <widget class="QLabel" name="labelDisassembly">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Disassembly</string>
              </property>
@@ -358,6 +364,12 @@
          </item>
          <item>
           <widget class="QTableWidget" name="tableDisassembly">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="contextMenuPolicy">
             <enum>Qt::ActionsContextMenu</enum>
            </property>
@@ -404,6 +416,37 @@
             </property>
            </column>
           </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="verticalLayoutWidget_20">
+        <layout class="QVBoxLayout" name="verticalReferences">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalReferences" stretch="0,0,0">
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="labelReferences">
+             <property name="text">
+              <string>References</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="inputReference"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="findButton">
+             <property name="text">
+              <string>Find</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QTableView" name="tableReferences"/>
          </item>
         </layout>
        </widget>
@@ -941,6 +984,14 @@
     <string>Ctrl+A</string>
    </property>
   </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>Find</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -1379,6 +1430,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionFind</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionFind()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>linkHexASCIISelection()</slot>
@@ -1409,5 +1476,6 @@
   <slot>actionSet_Flag_High_Byte()</slot>
   <slot>actionSet_Flag_Clear()</slot>
   <slot>actionAdd_Label()</slot>
+  <slot>actionFind()</slot>
  </slots>
 </ui>
