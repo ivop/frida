@@ -4,6 +4,9 @@
 #
 #-------------------------------------------------
 
+CONFIG += precompile_header
+PRECOMPILED_HEADER = pch.h
+
 QT += core gui widgets
 
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
