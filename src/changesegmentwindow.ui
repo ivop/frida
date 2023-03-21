@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Change Start Address</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Old Start Address</string>
+      <string>Old Start Address (hexadecimal)</string>
      </property>
     </widget>
    </item>
@@ -31,7 +31,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>New Start Address</string>
+      <string>New Start Address (hexadecimal)</string>
      </property>
     </widget>
    </item>

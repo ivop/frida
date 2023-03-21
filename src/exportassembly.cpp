@@ -58,6 +58,8 @@ static void write_line(QTextStream *out) {
     *out << "------------------\n";
 }
 
+// ---------------------------------------------------------------------------
+
 void export_assembly(QWidget *widget) {
     auto *asw = new exportAssemblyWindow();
 
@@ -67,23 +69,11 @@ void export_assembly(QWidget *widget) {
 
     asm_format = asw->asm_format;
 
-    QString name = QFileDialog::getSaveFileName(widget, QStringLiteral("Export assembly as..."));
+    QString name = QFileDialog::getSaveFileName(widget, QStringLiteral("Export Assembly As..."));
 
     if (name.isEmpty()) return;
 
     QFile file(name);
-
-#if 0   // QFileDialog already handles this
-    if (file.exists()) {
-        QMessageBox msg;
-        msg.setText("File " + name + " exists. Overwrite?");
-        msg.setStandardButtons(QMessageBox::Yes);
-        msg.addButton(QMessageBox::No);
-        msg.setDefaultButton(QMessageBox::No);
-        if(msg.exec() != QMessageBox::Yes)
-            return;
-    }
-#endif
 
     file.open(QIODevice::WriteOnly);
     if (!file.isOpen()) {

@@ -42,8 +42,11 @@ enum {
     FRIDA_FILE_FORMAT_1
 };
 
+//-----------------------------------------------------------------------------
+// LOAD PROJECT
+
 bool load_project(QWidget *widget) {
-    QString name = QFileDialog::getOpenFileName(widget, QStringLiteral("Open existing project..."));
+    QString name = QFileDialog::getOpenFileName(widget, QStringLiteral("Loca Existing Project..."));
 
     if (name.isEmpty()) return false;
 
@@ -136,24 +139,15 @@ error_out:          // goto here with error and errorstring set.
     return true;
 }
 
+//-----------------------------------------------------------------------------
+// SAVE PROJECT
+
 void save_project(QWidget *widget) {
     QString name = QFileDialog::getSaveFileName(widget, QStringLiteral("Save project as..."));
 
     if (name.isEmpty()) return;
 
     QFile file(name);
-
-#if 0   // QFileDialog already handles this
-    if (file.exists()) {
-        QMessageBox msg;
-        msg.setText("File " + name + " exists. Overwrite?");
-        msg.setStandardButtons(QMessageBox::Yes);
-        msg.addButton(QMessageBox::No);
-        msg.setDefaultButton(QMessageBox::No);
-        if(msg.exec() != QMessageBox::Yes)
-            return;
-    }
-#endif
 
     file.open(QIODevice::WriteOnly);
     if (!file.isOpen()) {

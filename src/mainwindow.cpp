@@ -280,6 +280,7 @@ MainWindow::~MainWindow()
 }
 
 // --------------------------------------------------------------------------
+// SEGMENTS
 
 void MainWindow::showSegments(void) {
     QTableWidget *t = ui->tableSegments;
@@ -322,11 +323,6 @@ void MainWindow::onTableSegments_itemSelectionChanged()
 
     sb->setMaximum(t->rowCount() - sb->pageStep());
     sb->setValue(value);
-}
-
-void MainWindow::rememberValue(int value) {
-    if (currentSegment < 0) return;
-    segments[currentSegment].scrollbarValue = value;
 }
 
 void MainWindow::actionDelete_Segment() {
@@ -375,6 +371,7 @@ void MainWindow::onTableSegments_cellChanged(int row, int column) {
 }
 
 // --------------------------------------------------------------------------
+// RENDER HEX
 
 void MainWindow::showHex(void) {
     const struct segment *s = &segments.at(currentSegment);
@@ -406,6 +403,9 @@ void MainWindow::showHex(void) {
         }
     }
 }
+
+// --------------------------------------------------------------------------
+// RENDER ASCII
 
 void MainWindow::showAscii(void) {
     const struct segment *s = &segments.at(currentSegment);
@@ -449,28 +449,7 @@ void MainWindow::showAscii(void) {
 }
 
 // --------------------------------------------------------------------------
-
-void MainWindow::linkSelections(QTableWidget *from, QTableWidget *to) {
-    QList<QTableWidgetSelectionRange> Ranges = from->selectedRanges();
-
-    to->clearSelection();
-    for (int i=0; i<Ranges.size(); i++) {
-        to->setRangeSelected(Ranges.at(i), true);
-    }
-
-}
-
-void MainWindow::linkHexASCIISelection() {
-    if (ui->tableHexadecimal->hasFocus())
-        linkSelections(ui->tableHexadecimal, ui->tableASCII);
-}
-
-void MainWindow::linkASCIIHexSelection() {
-    if (ui->tableASCII->hasFocus())
-        linkSelections(ui->tableASCII, ui->tableHexadecimal);
-}
-
-// --------------------------------------------------------------------------
+// CODE AND DATA ACTIONS
 
 void MainWindow::Set_To_Foo(const QList<QTableWidgetSelectionRange>& Ranges,
                                                        quint8 datatype) {
@@ -558,6 +537,7 @@ void MainWindow::actionSet_To_CBM_Screen_Codes(void) {
 }
 
 // --------------------------------------------------------------------------
+// FLAGS ACTIONS
 
 // Set_Flags can in fact flag complete regions. Labelled data uses that.
 // But Low and High bytes must contain a single cell! That's guaranteed
@@ -656,6 +636,7 @@ void MainWindow::actionSet_Flag_Clear(void) {
 }
 
 // --------------------------------------------------------------------------
+// RENDER DISASSEMBLY
 
 void MainWindow::showDisassembly(void) {
     struct segment *s = &segments[currentSegment];
@@ -768,6 +749,156 @@ void MainWindow::showDisassembly(void) {
     }
 }
 
+// --------------------------------------------------------------------------
+// HEX AND ASCII LINKED
+
+void MainWindow::linkSelections(QTableWidget *from, QTableWidget *to) {
+    QList<QTableWidgetSelectionRange> Ranges = from->selectedRanges();
+
+    to->clearSelection();
+    for (int i=0; i<Ranges.size(); i++) {
+        to->setRangeSelected(Ranges.at(i), true);
+    }
+
+}
+
+void MainWindow::linkHexASCIISelection() {
+    if (ui->tableHexadecimal->hasFocus())
+        linkSelections(ui->tableHexadecimal, ui->tableASCII);
+}
+
+void MainWindow::linkASCIIHexSelection() {
+    if (ui->tableASCII->hasFocus())
+        linkSelections(ui->tableASCII, ui->tableHexadecimal);
+}
+
+// Used same function for both Hex and Ascii Sections
+
+void MainWindow::onHexSectionClicked(int index) {
+    QTableWidget *th = ui->tableHexadecimal;
+    QTableWidget *td = ui->tableDisassembly;
+    QString s = th->verticalHeaderItem(index)->text();
+    int n = td->rowCount();
+
+    for (int i=0; i<n; i++) {
+        if (td->verticalHeaderItem(i)->text().toULongLong(0,16) < s.toULongLong(0,16))
+            continue;
+        td->scrollToItem(td->item(i,0), QAbstractItemView::PositionAtCenter);
+        break;
+    }
+}
+
+// --------------------------------------------------------------------------
+// TRACE
+
+void MainWindow::actionTrace(void) {
+    QTableWidget *t = ui->tableHexadecimal;
+    QList<QTableWidgetSelectionRange> Ranges = t->selectedRanges();
+    int x = INT_MAX;
+    int y = INT_MAX;
+
+    if (Ranges.isEmpty())
+        return;
+
+    for (int i=0; i<Ranges.size(); i++) {
+        const QTableWidgetSelectionRange& range = Ranges.at(i);
+        if (range.topRow() < y)
+            y = range.topRow();
+        if (range.leftColumn() < x)
+            x = range.leftColumn();
+    }
+    int pos = y*8 + x;
+    pos += segments[currentSegment].start;
+
+    Disassembler->trace(pos);
+    Disassembler->generateDisassembly();
+    showHex();
+    showAscii();
+    showDisassembly();
+}
+
+// --------------------------------------------------------------------------
+// COMMENTS
+
+void MainWindow::actionComment() {
+    QTableWidget *t = ui->tableDisassembly;
+    QList<QTableWidgetSelectionRange> Ranges = t->selectedRanges();
+
+    if (Ranges.isEmpty())
+        return;
+
+    // assume UI is properly setup to only allow ONE cell to be selected
+
+    int i = Ranges.at(0).topRow();
+    QString s = t->verticalHeaderItem(i)->text();
+    quint64 a = s.toULongLong(0, 16);
+    QString c = segments[currentSegment].comments.value(a);
+
+    auto *cw = new commentwindow(s, c);
+    cw->exec();
+    c = cw->retrieveComment();
+    if (c.isEmpty())
+        segments[currentSegment].comments.remove(a);
+    else
+        segments[currentSegment].comments.insert(a, c);
+    showDisassembly();
+}
+
+// ----------------------------------------------------------------------------
+// BUTTONS
+
+void MainWindow::onLabelsButton_clicked() {
+    labelswindow lw;
+    lw.exec();
+    Disassembler->generateDisassembly();
+    showHex();
+    showAscii();
+    showDisassembly();
+}
+
+void MainWindow::onExitButton_clicked() {
+    close();
+}
+
+void MainWindow::onRadioButtonFullscreen_toggled(bool checked) {
+    checked ? this->showFullScreen() : this->showMaximized();
+}
+
+void MainWindow::onComboBox_currentIndexChanged(int index) {
+    QFont f = this->font();
+    f.setPointSize(10+index);
+    this->setFont(f);
+}
+
+void MainWindow::onComboFonts_activated(int index) {
+    altfont = (enum fonts) index;
+    showAscii();
+    linkSelections(ui->tableHexadecimal, ui->tableASCII);
+}
+
+void MainWindow::onSaveButton_clicked() {
+    globalNotes = ui->plainTextEditNotes->toPlainText();
+    save_project(this);
+}
+
+
+void MainWindow::onExportAsmButton_clicked() {
+    export_assembly(this);
+}
+void MainWindow::actionAdd_Label(void) {
+    addLabelWindow alw;
+    alw.exec();
+    showDisassembly();
+}
+
+// ----------------------------------------------------------------------------
+// TABLE DISASSEMBLY
+
+void MainWindow::rememberValue(int value) {
+    if (currentSegment < 0) return;
+    segments[currentSegment].scrollbarValue = value;
+}
+
 void MainWindow::onTableDisassembly_cellChanged(int row, int column) {
     struct segment *s = &segments[currentSegment];
     QTableWidget *t = ui->tableDisassembly;
@@ -810,32 +941,6 @@ void MainWindow::onTableDisassembly_cellChanged(int row, int column) {
     showDisassembly();
 }
 
-// --------------------------------------------------------------------------
-
-// Used for bot Hex and Ascii Sections
-
-void MainWindow::onHexSectionClicked(int index) {
-    QTableWidget *th = ui->tableHexadecimal;
-    QTableWidget *td = ui->tableDisassembly;
-    QString s = th->verticalHeaderItem(index)->text();
-    int n = td->rowCount();
-
-    for (int i=0; i<n; i++) {
-        if (td->verticalHeaderItem(i)->text().toULongLong(0,16) < s.toULongLong(0,16))
-            continue;
-        td->scrollToItem(td->item(i,0), QAbstractItemView::PositionAtCenter);
-        break;
-    }
-}
-
-void MainWindow::onComboFonts_activated(int index) {
-    altfont = (enum fonts) index;
-    showAscii();
-    linkSelections(ui->tableHexadecimal, ui->tableASCII);
-}
-
-// --------------------------------------------------------------------------
-
 void MainWindow::onDisassemblySectionClicked(int index) {
     QTableWidget *th = ui->tableHexadecimal;
     QTableWidget *td = ui->tableDisassembly;
@@ -861,83 +966,6 @@ void MainWindow::onDisassemblySectionClicked(int index) {
     ui->tableHexadecimal->setRangeSelected(range, true);
     ui->tableASCII->clearSelection();
     ui->tableASCII->setRangeSelected(range, true);
-}
-
-// --------------------------------------------------------------------------
-
-void MainWindow::actionTrace(void) {
-    QTableWidget *t = ui->tableHexadecimal;
-    QList<QTableWidgetSelectionRange> Ranges = t->selectedRanges();
-    int x = INT_MAX;
-    int y = INT_MAX;
-
-    if (Ranges.isEmpty())
-        return;
-
-    for (int i=0; i<Ranges.size(); i++) {
-        const QTableWidgetSelectionRange& range = Ranges.at(i);
-        if (range.topRow() < y)
-            y = range.topRow();
-        if (range.leftColumn() < x)
-            x = range.leftColumn();
-    }
-    int pos = y*8 + x;
-    pos += segments[currentSegment].start;
-
-    Disassembler->trace(pos);
-    Disassembler->generateDisassembly();
-    showHex();
-    showAscii();
-    showDisassembly();
-}
-
-// --------------------------------------------------------------------------
-
-void MainWindow::actionComment() {
-    QTableWidget *t = ui->tableDisassembly;
-    QList<QTableWidgetSelectionRange> Ranges = t->selectedRanges();
-
-    if (Ranges.isEmpty())
-        return;
-
-    // assume UI is properly setup to only allow ONE cell to be selected
-
-    int i = Ranges.at(0).topRow();
-    QString s = t->verticalHeaderItem(i)->text();
-    quint64 a = s.toULongLong(0, 16);
-    QString c = segments[currentSegment].comments.value(a);
-
-    auto *cw = new commentwindow(s, c);
-    cw->exec();
-    c = cw->retrieveComment();
-    if (c.isEmpty())
-        segments[currentSegment].comments.remove(a);
-    else
-        segments[currentSegment].comments.insert(a, c);
-    showDisassembly();
-}
-
-void MainWindow::onLabelsButton_clicked() {
-    labelswindow lw;
-    lw.exec();
-    Disassembler->generateDisassembly();
-    showHex();
-    showAscii();
-    showDisassembly();
-}
-
-void MainWindow::onExitButton_clicked() {
-    close();
-}
-
-void MainWindow::onRadioButtonFullscreen_toggled(bool checked) {
-    checked ? this->showFullScreen() : this->showMaximized();
-}
-
-void MainWindow::onComboBox_currentIndexChanged(int index) {
-    QFont f = this->font();
-    f.setPointSize(10+index);
-    this->setFont(f);
 }
 
 void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
@@ -1115,10 +1143,8 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
     // this function.
 }
 
-void MainWindow::onSaveButton_clicked() {
-    globalNotes = ui->plainTextEditNotes->toPlainText();
-    save_project(this);
-}
+// ----------------------------------------------------------------------------
+// MISC
 
 void MainWindow::closeEvent (QCloseEvent *event)
 {
@@ -1135,14 +1161,8 @@ void MainWindow::closeEvent (QCloseEvent *event)
     event->accept();
 }
 
-void MainWindow::onExportAsmButton_clicked() {
-    export_assembly(this);
-}
-void MainWindow::actionAdd_Label(void) {
-    addLabelWindow alw;
-    alw.exec();
-    showDisassembly();
-}
+// ----------------------------------------------------------------------------
+// REFERENCES
 
 void MainWindow::onReferences_returnPressed() {
     qDebug() << "returnPressed";

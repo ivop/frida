@@ -74,6 +74,9 @@ void labelswindow::onDoneButton_clicked() {
     close();
 }
 
+//-----------------------------------------------------------------------------
+// RENDER TABLES OF LABELS
+
 void labelswindow::showLabels(QTableWidget *t,
                                      QMap<quint64, QString> *labels) {
     QList<quint64> keys = labels->keys();
@@ -106,6 +109,7 @@ void labelswindow::showLocalLabels(void) {
 }
 
 // ---------------------------------------------------------------------------
+// INLINE EDITTING
 
 static void get_contents(QTableWidget *t, int row, QString *label,
                                                         quint64 *address) {
@@ -173,6 +177,9 @@ void labelswindow::onTableLocalLabels_cellChanged(int row, int column) {
     showLocalLabels();
 }
 
+//-----------------------------------------------------------------------------
+// CHANGE BETWEEN USER AND LOCAL
+
 void labelswindow::actionChange_To_Local_Label() {
     QTableWidget *t = ui->tableUserLabels;
     QString label;
@@ -212,6 +219,9 @@ void labelswindow::actionChange_To_User_Label() {
     showUserLabels();
     showLocalLabels();
 }
+
+//-----------------------------------------------------------------------------
+// DELETE LABEL
 
 void labelswindow::actionDelete_Label() {
     QTableWidget *t;
@@ -259,6 +269,7 @@ void labelswindow::onAddLabelButton_clicked() {
 }
 
 // ---------------------------------------------------------------------------
+// EXPORT
 
 void labelswindow::onExportButton_clicked() {
     QString name = QFileDialog::getSaveFileName(this, QStringLiteral("Export labels to..."));
@@ -303,6 +314,9 @@ void labelswindow::onExportButton_clicked() {
 
     file.close();
 }
+
+//-----------------------------------------------------------------------------
+// IMPORT
 
 void labelswindow::onImportButton_clicked() {
     QString name = QFileDialog::getOpenFileName(this, QStringLiteral("Import labels from..."));
