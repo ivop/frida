@@ -146,7 +146,7 @@ struct segment {
 
 extern QVector<struct segment> segments;      // currently in main.cpp
 extern int currentSegment;
-extern QMap<quint64, QString> autoLabels, userLabels;
+extern QMap<quint64, QString> globalLabels;
 extern quint32 cputype;
 extern QString globalNotes;
 

@@ -406,14 +406,13 @@ void Disassembler8080::createOperandLabels(quint64 address) {
     if (m == MODE_ADR || m == MODE_JMP) {
         operand = data[i+1] + (data[i+2]<<8);
 
-        if (  localLabels->contains(operand) || userLabels.contains(operand))
+        if (  localLabels->contains(operand) || globalLabels.contains(operand))
             return;
 
         temps = QStringLiteral("L%1").arg(operand,4,16,(QChar)'0');
         if (toUpper)
             temps = temps.toUpper();
-        autoLabels.insert(operand, temps);
-
+        globalLabels.insert(operand, temps);
     }
 }
 
@@ -448,10 +447,8 @@ void Disassembler8080::disassembleInstructionAt(quint64 address,
 
         if (localLabels->contains(operand))
             temps = localLabels->value(operand);
-        else if (userLabels.contains(operand))
-            temps = userLabels.value(operand);
         else
-            temps = autoLabels.value(operand);
+            temps = globalLabels.value(operand);
 
         if (temps.isEmpty()) {
             temps = QString(hexPrefix + "%1" + hexSuffix).arg(operand, 4, 16, QChar('0'));

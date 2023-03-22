@@ -36,18 +36,16 @@ labelswindow::labelswindow(QWidget *parent) :
     QTableWidget *t;
     ui->setupUi(this);
 
-    t = ui->tableUserLabels;
+    t = ui->tableGlobalLabels;
     t->addAction(ui->actionChange_To_Local_Label);
     t->addAction(ui->actionDelete_Label);
 
     t = ui->tableLocalLabels;
-    t->addAction(ui->actionChange_To_User_Label);
+    t->addAction(ui->actionChange_To_Global_Label);
     t->addAction(ui->actionDelete_Label);
 
-    connect(ui->tableAutoLabels, &QTableWidget::cellChanged,
-            this, &labelswindow::onTableAutoLabels_cellChanged);
-    connect(ui->tableUserLabels, &QTableWidget::cellChanged,
-            this, &labelswindow::onTableUserLabels_cellChanged);
+    connect(ui->tableGlobalLabels, &QTableWidget::cellChanged,
+            this, &labelswindow::onTableGlobalLabels_cellChanged);
     connect(ui->tableLocalLabels, &QTableWidget::cellChanged,
             this, &labelswindow::onTableLocalLabels_cellChanged);
 
@@ -60,8 +58,7 @@ labelswindow::labelswindow(QWidget *parent) :
     connect(ui->importButton, &QPushButton::clicked,
             this, &labelswindow::onImportButton_clicked);
 
-    showAutoLabels();
-    showUserLabels();
+    showGlobalLabels();
     showLocalLabels();
 }
 
@@ -96,12 +93,8 @@ void labelswindow::showLabels(QTableWidget *t,
     }
 }
 
-void labelswindow::showAutoLabels(void) {
-    showLabels(ui->tableAutoLabels, &autoLabels);
-}
-
-void labelswindow::showUserLabels(void) {
-    showLabels(ui->tableUserLabels, &userLabels);
+void labelswindow::showGlobalLabels(void) {
+    showLabels(ui->tableGlobalLabels, &globalLabels);
 }
 
 void labelswindow::showLocalLabels(void) {
@@ -118,28 +111,8 @@ static void get_contents(QTableWidget *t, int row, QString *label,
     *address = addr.toULongLong(0, 16);
 }
 
-void labelswindow::onTableAutoLabels_cellChanged(int row, int column) {
-    QTableWidget *t = ui->tableAutoLabels;
-    QString label;
-    quint64 address;
-
-    if (!t->item(row, column)->isSelected()) return; // not by user action
-
-    get_contents(t, row, &label, &address);
-
-    if (label.isEmpty()) {
-        QString txt = autoLabels.value(address);
-        t->item(row,column)->setText(txt);
-        return;
-    }
-    autoLabels.remove(address);
-    userLabels.insert(address, label);
-    showAutoLabels();
-    showUserLabels();
-}
-
-void labelswindow::onTableUserLabels_cellChanged(int row, int column) {
-    QTableWidget *t = ui->tableUserLabels;
+void labelswindow::onTableGlobalLabels_cellChanged(int row, int column) {
+    QTableWidget *t = ui->tableGlobalLabels;
     QString label;
     quint64 address;
 
@@ -148,13 +121,13 @@ void labelswindow::onTableUserLabels_cellChanged(int row, int column) {
     get_contents(t, row, &label, &address);
 
     if (label.isEmpty()) {
-        QString txt = userLabels.value(address);
+        QString txt = globalLabels.value(address);
         t->item(row,column)->setText(txt);
         return;
     }
 
-    userLabels.insert(address, label);
-    showUserLabels();
+    globalLabels.insert(address, label);
+    showGlobalLabels();
 }
 
 void labelswindow::onTableLocalLabels_cellChanged(int row, int column) {
@@ -181,7 +154,7 @@ void labelswindow::onTableLocalLabels_cellChanged(int row, int column) {
 // CHANGE BETWEEN USER AND LOCAL
 
 void labelswindow::actionChange_To_Local_Label() {
-    QTableWidget *t = ui->tableUserLabels;
+    QTableWidget *t = ui->tableGlobalLabels;
     QString label;
     quint64 address;
     QList<QTableWidgetSelectionRange> Ranges = t->selectedRanges();
@@ -194,13 +167,13 @@ void labelswindow::actionChange_To_Local_Label() {
 
     get_contents(t, row, &label, &address);
 
-    userLabels.remove(address);
+    globalLabels.remove(address);
     segments[currentSegment].localLabels.insert(address, label);
-    showUserLabels();
+    showGlobalLabels();
     showLocalLabels();
 }
 
-void labelswindow::actionChange_To_User_Label() {
+void labelswindow::actionChange_To_Global_Label() {
     QTableWidget *t = ui->tableLocalLabels;
     QString label;
     quint64 address;
@@ -215,8 +188,8 @@ void labelswindow::actionChange_To_User_Label() {
     get_contents(t, row, &label, &address);
 
     segments[currentSegment].localLabels.remove(address);
-    userLabels.insert(address, label);
-    showUserLabels();
+    globalLabels.insert(address, label);
+    showGlobalLabels();
     showLocalLabels();
 }
 
@@ -229,9 +202,9 @@ void labelswindow::actionDelete_Label() {
     QString label;
     quint64 address;
 
-    if (ui->tableUserLabels->hasFocus()) {
-        t = ui->tableUserLabels;
-        labels = &userLabels;
+    if (ui->tableGlobalLabels->hasFocus()) {
+        t = ui->tableGlobalLabels;
+        labels = &globalLabels;
     } else if (ui->tableLocalLabels->hasFocus()) {
         t = ui->tableLocalLabels;
         labels = &segments[currentSegment].localLabels;
@@ -264,7 +237,7 @@ void labelswindow::actionDelete_Label() {
 void labelswindow::onAddLabelButton_clicked() {
     addLabelWindow alw;
     alw.exec();
-    showUserLabels();
+    showGlobalLabels();
     showLocalLabels();
 }
 
@@ -300,10 +273,10 @@ void labelswindow::onExportButton_clicked() {
 
     QTextStream out(&file);
 
-    QList<quint64> keys = userLabels.keys();
+    QList<quint64> keys = globalLabels.keys();
     for (quint64 key : keys) {
         out << Qt::hex << Qt::showbase << key << " "
-            << userLabels.value(key) << Qt::endl;
+            << globalLabels.value(key) << Qt::endl;
     }
 
     if (file.error()) {
@@ -348,8 +321,8 @@ void labelswindow::onImportButton_clicked() {
         in >> addr >> label;
         if (in.atEnd()) break;
         if (!label.isEmpty())
-            userLabels.insert(addr, label);
+            globalLabels.insert(addr, label);
     }
     file.close();
-    showUserLabels();
+    showGlobalLabels();
 }

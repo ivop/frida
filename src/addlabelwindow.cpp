@@ -65,7 +65,7 @@ void addLabelWindow::onPushButtonAdd_clicked() {
         if (ui->checkBoxLocalLabel->isChecked()) {
             segments[currentSegment].localLabels.insert(addr, label);
         } else {
-            userLabels.insert(addr, label);
+            globalLabels.insert(addr, label);
         }
         close();
     }

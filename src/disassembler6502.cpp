@@ -1060,21 +1060,21 @@ void Disassembler6502::createOperandLabels(quint64 address) {
         addr2 = 3 + start + i + addr2 - (addr2>0x7f ? 0x100 : 0);
 
         if ( ! (segments[currentSegment].localLabels.contains(addr)
-                || userLabels.contains(addr))) {
+                || globalLabels.contains(addr))) {
 
             hex = QStringLiteral("L%1").arg(addr,4,16,(QChar)'0');
             if (toUpper)
                 hex = hex.toUpper();
-            autoLabels.insert(addr, hex);
+            globalLabels.insert(addr, hex);
         }
 
         if ( ! (segments[currentSegment].localLabels.contains(addr2)
-                || userLabels.contains(addr2))) {
+                || globalLabels.contains(addr2))) {
 
             hex = QStringLiteral("L%1").arg(addr2,4,16,(QChar)'0');
             if (toUpper)
                 hex = hex.toUpper();
-            autoLabels.insert(addr2, hex);
+            globalLabels.insert(addr2, hex);
         }
 
     } else if (can_be_label[(enum addressing_mode)distab[data[i]].mode]) {
@@ -1086,13 +1086,13 @@ void Disassembler6502::createOperandLabels(quint64 address) {
             addr = 2 + start + i + addr - (addr>0x7f ? 0x100 : 0);
 
         if (  segments[currentSegment].localLabels.contains(addr)
-           || userLabels.contains(addr))
+           || globalLabels.contains(addr))
             return;
 
         hex = QStringLiteral("L%1").arg(addr,4,16,(QChar)'0');
         if (toUpper)
             hex = hex.toUpper();
-        autoLabels.insert(addr, hex);
+        globalLabels.insert(addr, hex);
     }
 }
 
@@ -1136,33 +1136,26 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
 
             if (localLabels->contains(operand))
                 hex = localLabels->value(operand);
-            else if (userLabels.contains(operand))
-                hex = userLabels.value(operand);
-            else if (autoLabels.contains(operand2))
-                hex = autoLabels.value(operand);
+            else if (globalLabels.contains(operand))
+                hex = globalLabels.value(operand);
             else
                 hex = QStringLiteral("$%1").arg(operand, 2, 16, (QChar)'0');
 
             if (localLabels->contains(operand2))
                 hex2 = localLabels->value(operand2);
-            else if (userLabels.contains(operand2))
-                hex2 = userLabels.value(operand2);
-            else if (autoLabels.contains(operand2))
-                hex2 = autoLabels.value(operand2);
+            else if (globalLabels.contains(operand2))
+                hex2 = globalLabels.value(operand2);
             else
                 hex2 = QStringLiteral("$%1").arg(operand2, 2, 16, (QChar)'0');
 
 
-        } else if (can_be_label[m] && (   autoLabels.contains(operand)
-                                || userLabels.contains(operand)
-                                || localLabels->contains(operand) )) {
+        } else if (can_be_label[m] && (globalLabels.contains(operand)
+                                    || localLabels->contains(operand) )) {
 
             if (localLabels->contains(operand))
                 hex = localLabels->value(operand);
-            else if (userLabels.contains(operand))
-                hex = userLabels.value(operand);
             else
-                hex = autoLabels.value(operand);
+                hex = globalLabels.value(operand);
 
         } else if (m == MODE_IMM && flags[i+1] & (FLAG_LOW_BYTE|FLAG_HIGH_BYTE)) {
 
@@ -1178,10 +1171,8 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
             quint16 addr = map->value(i+1);
             if (localLabels->contains(addr))
                 hex = pref + QStringLiteral("%1").arg(localLabels->value(addr));
-            else if (userLabels.contains(addr))
-                hex = pref + QStringLiteral("%1").arg(userLabels.value(addr));
-            else if (autoLabels.contains(addr))
-                hex = pref + QStringLiteral("%1").arg(autoLabels.value(addr));
+            else if (globalLabels.contains(addr))
+                hex = pref + QStringLiteral("%1").arg(globalLabels.value(addr));
             else
                 hex = pref + QStringLiteral("$%1").arg(addr, 4, 16, (QChar)'0');
 

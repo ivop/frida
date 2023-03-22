@@ -115,8 +115,7 @@ bool load_project(QWidget *widget) {
         segments.append(s);
     }
 
-    in >> autoLabels;
-    in >> userLabels;
+    in >> globalLabels;
     in >> globalNotes;
     in >> altfont;
 
@@ -187,8 +186,7 @@ void save_project(QWidget *widget) {
         out << s->highbytes;
     }
 
-    out << autoLabels;
-    out << userLabels;
+    out << globalLabels;
     out << globalNotes;
     out << altfont;
 

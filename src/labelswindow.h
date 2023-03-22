@@ -40,11 +40,10 @@ public:
 
 private Q_SLOTS:
     void actionChange_To_Local_Label();
-    void actionChange_To_User_Label();
+    void actionChange_To_Global_Label();
     void actionDelete_Label();
 
-    void onTableAutoLabels_cellChanged(int row, int column);
-    void onTableUserLabels_cellChanged(int row, int column);
+    void onTableGlobalLabels_cellChanged(int row, int column);
     void onTableLocalLabels_cellChanged(int row, int column);
 
     void onDoneButton_clicked();
@@ -56,8 +55,7 @@ private:
     Ui::labelswindow *ui;
 
     static void showLabels(QTableWidget *t, QMap<quint64, QString> *labels);
-    void showAutoLabels(void);
-    void showUserLabels(void);
+    void showGlobalLabels(void);
     void showLocalLabels(void);
 
 };

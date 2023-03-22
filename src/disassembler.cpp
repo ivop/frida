@@ -348,8 +348,7 @@ also_wrong2:
             n = 1;
 
 do_directive:
-            if (   autoLabels.contains(start+i)
-                || userLabels.contains(start+i)
+            if (globalLabels.contains(start+i)
                 || s->localLabels.contains(start+i)) {
                 perline = 0; // always start new directive at label locations
             }
@@ -357,9 +356,7 @@ do_directive:
             if (s->flags[i] & FLAG_USE_LABEL) {
                 hex = s->localLabels.value(val);
                 if (hex.isEmpty())
-                    hex = userLabels.value(val);
-                if (hex.isEmpty())
-                    hex = autoLabels.value(val);
+                    hex = globalLabels.value(val);
             }
             if (s->flags[i] & FLAG_HIGH_BYTE || s->flags[i] & FLAG_LOW_BYTE) {
                 quint64 key;
@@ -370,9 +367,7 @@ do_directive:
 
                 hex = s->localLabels.value(key);
                 if (hex.isEmpty())
-                    hex = userLabels.value(key);
-                if (hex.isEmpty())
-                    hex = autoLabels.value(key);
+                    hex = globalLabels.value(key);
                 if (hex.isEmpty())
                     hex = hexPrefix +
                           QStringLiteral("%1").arg(key, 4, 16, (QChar)'0') +
@@ -451,8 +446,7 @@ do_string_directive:
                 instr = instr.toUpper();
 
             // XXX do not start new directive when label contains + or -
-            if (   autoLabels.contains(start+i)
-                || userLabels.contains(start+i)
+            if (globalLabels.contains(start+i)
                 || segments[currentSegment].localLabels.contains(start+i)
                 || perline <= 0
                 || prevtype != type) {

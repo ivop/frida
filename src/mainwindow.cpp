@@ -686,18 +686,14 @@ void MainWindow::showDisassembly(void) {
 
         skip_comment:
 
-        if (   userLabels.contains(dis.address)
-            || autoLabels.contains(dis.address)
+        if (   globalLabels.contains(dis.address)
             || s->localLabels.contains(dis.address)) {
 
             QString label;
-            if (s->localLabels.contains(dis.address)) {
+            if (s->localLabels.contains(dis.address))
                 label = s->localLabels.value(dis.address);
-            } else if (userLabels.contains(dis.address)) {
-                label = userLabels.value(dis.address);
-            } else {
-                label = autoLabels.value(dis.address);
-            }
+            else
+                label = globalLabels.value(dis.address);
 
             // we do not print labels with + or -
 
@@ -915,25 +911,18 @@ void MainWindow::onTableDisassembly_cellChanged(int row, int column) {
         QString txt = s->localLabels.value(address);
 
         if (txt.isEmpty())
-            txt = userLabels.value(address);
-        if (txt.isEmpty())
-            txt = autoLabels.value(address);
+            txt = globalLabels.value(address);
 
         t->item(row,column)->setText(txt);
 
         return;
     }
 
-    if (s->localLabels.contains(address)) {
+    if (s->localLabels.contains(address))
         s->localLabels.insert(address, label);
-    } else if (userLabels.contains(address)) {
-        userLabels.insert(address,label);
-    } else if (autoLabels.contains(address)) {
-        autoLabels.remove(address);
-        userLabels.insert(address, label);
-    } else {
-        userLabels.insert(address, label);
-    }
+    else if (globalLabels.contains(address))
+        globalLabels.insert(address,label);
+
     Disassembler->generateDisassembly();
     showDisassembly();
 }
@@ -1053,24 +1042,11 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
             }
         }
 
-        // if not found, find user label
+        // if not found, find global label
 
         if (iter == s->localLabels.constEnd()) {
-            for (iter  = userLabels.constBegin();
-                 iter != userLabels.constEnd();
-                 iter++) {
-
-                if (iter.value() == operand) {
-                    break;      // found!
-                }
-            }
-        }
-
-        // if not found, find auto label
-
-        if (iter == userLabels.constEnd()) {
-            for (iter  = autoLabels.constBegin();
-                 iter != autoLabels.constEnd();
+            for (iter  = globalLabels.constBegin();
+                 iter != globalLabels.constEnd();
                  iter++) {
 
                 if (iter.value() == operand) {
@@ -1085,7 +1061,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         // if no label is found, check for hexPrefixed or hexSuffixed address
 
-        if (iter == autoLabels.constEnd()) {
+        if (iter == globalLabels.constEnd()) {
             if (hexPrefix.size() && operand.left(hexPrefix.size()) == hexPrefix) {
                 operand = operand.mid(hexPrefix.size());
                 addr = operand.toULongLong(0,16);

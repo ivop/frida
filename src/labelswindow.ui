@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1082</width>
+    <width>718</width>
     <height>652</height>
    </rect>
   </property>
@@ -55,7 +55,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Import User Labels</string>
+        <string>Import Global Labels</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
@@ -75,7 +75,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Export User Labels</string>
+        <string>Export Global Labels</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
@@ -178,63 +178,17 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLabel" name="labelUserLabels">
+        <widget class="QLabel" name="labelGlobalLabels">
          <property name="text">
-          <string>User Labels</string>
+          <string>Global Labels</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTableWidget" name="tableUserLabels">
+        <widget class="QTableWidget" name="tableGlobalLabels">
          <property name="contextMenuPolicy">
           <enum>Qt::ActionsContextMenu</enum>
          </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked</set>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
-         </property>
-         <property name="sortingEnabled">
-          <bool>true</bool>
-         </property>
-         <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-          <bool>true</bool>
-         </attribute>
-         <attribute name="horizontalHeaderStretchLastSection">
-          <bool>true</bool>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
-         </attribute>
-         <column>
-          <property name="text">
-           <string>Address</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Label</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QLabel" name="labelAutoLabels">
-         <property name="text">
-          <string>Auto Labels</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTableWidget" name="tableAutoLabels">
          <property name="editTriggers">
           <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked</set>
          </property>
@@ -281,12 +235,15 @@
     <string>L</string>
    </property>
   </action>
-  <action name="actionChange_To_User_Label">
+  <action name="actionChange_To_Global_Label">
    <property name="text">
-    <string>Change To User Label</string>
+    <string>Change To Global Label</string>
+   </property>
+   <property name="toolTip">
+    <string>Change To Global Label</string>
    </property>
    <property name="shortcut">
-    <string>U</string>
+    <string>G</string>
    </property>
   </action>
   <action name="actionDelete_Label">
@@ -319,10 +276,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionChange_To_User_Label</sender>
+   <sender>actionChange_To_Global_Label</sender>
    <signal>triggered()</signal>
    <receiver>labelswindow</receiver>
-   <slot>actionChange_To_User_Label()</slot>
+   <slot>actionChange_To_Global_Label()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -353,7 +310,7 @@
  </connections>
  <slots>
   <slot>actionChange_To_Local_Label()</slot>
-  <slot>actionChange_To_User_Label()</slot>
+  <slot>actionChange_To_Global_Label()</slot>
   <slot>actionDelete_Label()</slot>
  </slots>
 </ui>

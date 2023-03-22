@@ -180,8 +180,8 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
     if (!la8b.Load(file))
         return false;
 
-    userLabels.insert(init, QStringLiteral("init"));
-    userLabels.insert(play, QStringLiteral("play"));
+    globalLabels.insert(init, QStringLiteral("init"));
+    globalLabels.insert(play, QStringLiteral("play"));
 
     return true;
 }
@@ -287,8 +287,8 @@ bool LoaderC64PSID::Load(QFile &file) {
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(init, QStringLiteral("init"));
-    userLabels.insert(play, QStringLiteral("play"));
+    globalLabels.insert(init, QStringLiteral("init"));
+    globalLabels.insert(play, QStringLiteral("play"));
 
     return true;
 }
@@ -328,7 +328,7 @@ bool LoaderAtari2600ROM2K4K::Load(QFile &file) {
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(init, QStringLiteral("init"));
+    globalLabels.insert(init, QStringLiteral("init"));
 
     return true;
 }
@@ -382,7 +382,7 @@ bool LoaderOricTap::Load(QFile &file) {
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(start, QStringLiteral("start"));
+    globalLabels.insert(start, QStringLiteral("start"));
 
     return true;
 }
@@ -411,7 +411,7 @@ bool LoaderApple2DOS33::Load(QFile &file) {
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(start, QStringLiteral("start"));
+    globalLabels.insert(start, QStringLiteral("start"));
 
     return true;
 };
@@ -494,7 +494,7 @@ bool LoaderApple2AppleSingle::Load(QFile &file) {
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(start, QStringLiteral("start"));
+    globalLabels.insert(start, QStringLiteral("start"));
 
     return true;
 };
@@ -552,8 +552,8 @@ bool LoaderNESSongFile::Load(QFile &file) {
     genericComment(file, &segment);
     segments.append(segment);
 
-    userLabels.insert(init, QStringLiteral("init"));
-    userLabels.insert(play, QStringLiteral("play"));
+    globalLabels.insert(init, QStringLiteral("init"));
+    globalLabels.insert(play, QStringLiteral("play"));
 
     return true;
 }
@@ -569,6 +569,6 @@ bool LoaderCPMBinary::Load(QFile &file) {
     segments[0].start += 0x0100;
     segments[0].end   += 0x0100;
 
-    userLabels.insert(segments[0].start, QStringLiteral("RUN"));
+    globalLabels.insert(segments[0].start, QStringLiteral("RUN"));
     return true;
 }

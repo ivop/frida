@@ -44,7 +44,7 @@ enum fonts altfont;
 
 // use QMap because they are always sorted according to the documentation
 
-QMap<quint64, QString> autoLabels, userLabels;
+QMap<quint64, QString> globalAutoLabels, globalLabels;
 
 int main(int argc, char *argv[])
 {

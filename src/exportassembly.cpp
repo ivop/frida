@@ -100,55 +100,11 @@ void export_assembly(QWidget *widget) {
 
     QMap<quint64, QString>::const_iterator iter;;
 
-    // output all generated labels that are not overruled by user or local
-    // labels and are not within any of the segments address ranges.
-    // also omit labels that have +/- math inside them
-
-    for(iter = autoLabels.constBegin(); iter != autoLabels.constEnd(); iter++) {
-
-        if (iter.value().contains(QLatin1String("+")) || iter.value().contains(QLatin1String("-")))
-            continue;
-
-        if (userLabels.contains(iter.key()))
-            continue;
-
-        bool found_local = false;
-        for (auto & segment : segments) {
-            if (segment.localLabels.contains(iter.key())) {
-                found_local = true;
-                break;
-            }
-        }
-        if (found_local)
-            continue;
-
-        bool inside_segment = false;
-        for (auto & segment : segments) {
-            quint64 start = segment.start;
-            quint64 end   = segment.end;
-            quint64 key = iter.key();
-            if ((key >= start) && (key <= end)) {
-                inside_segment = true;
-                break;
-            }
-        }
-        if (inside_segment)
-            continue;
-
-        out << iter.value() << '=' << hexPrefix;
-        out << QStringLiteral("%1").arg(iter.key(), 0, 16) << hexSuffix << "\n";
-    }
-
-    out << "\n";
-    write_line(&out);
-
-    out << "\n; USER LABELS\n\n";
-
-    // output all user labels that are not overruled by local labels and are
+    // output all glocal labels that are not overruled by local labels and are
     // not within any of the segments address ranges.
     // also omit labels that have +/- math inside them
 
-    for(iter = userLabels.constBegin(); iter != userLabels.constEnd(); iter++) {
+    for(iter = globalLabels.constBegin(); iter != globalLabels.constEnd(); iter++) {
 
         if (iter.value().contains(QLatin1String("+")) || iter.value().contains(QLatin1String("-")))
             continue;
@@ -246,18 +202,14 @@ void export_assembly(QWidget *widget) {
                 out << "; " << com << "\n";
             }
 
-            if (   userLabels.contains(dis.address)
-                || autoLabels.contains(dis.address)
+            if (   globalLabels.contains(dis.address)
                 || s->localLabels.contains(dis.address)) {
 
                 QString label;
-                if (s->localLabels.contains(dis.address)) {
+                if (s->localLabels.contains(dis.address))
                     label = s->localLabels.value(dis.address);
-                } else if (userLabels.contains(dis.address)) {
-                    label = userLabels.value(dis.address);
-                } else {
-                    label = autoLabels.value(dis.address);
-                }
+                else
+                    label = globalLabels.value(dis.address);
 
                 // we do not print labels with + or -
 
