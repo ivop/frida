@@ -391,8 +391,9 @@ int Disassembler8080::getInstructionSizeAt(quint64 address) {
 }
 
 void Disassembler8080::createOperandLabels(quint64 address) {
-    QMap<quint64,QString> *localLabels = &segments[currentSegment].localLabels;
-    quint8 *data = segments[currentSegment].data;
+    struct segment *s = &segments[currentSegment];
+    QMap<quint64,QString> *localLabels = &s->localLabels;
+    quint8 *data = s->data;
     quint16 opcode;
     quint16 operand = 0;
     QString temps;
@@ -418,10 +419,10 @@ void Disassembler8080::createOperandLabels(quint64 address) {
 
 void Disassembler8080::disassembleInstructionAt(quint64 address,
                                             struct disassembly &dis, int &n) {
-    QMap<quint64,QString> *localLabels = &segments[currentSegment].localLabels;
-//    quint8 *flags = segments[currentSegment].flags;
-    quint8 *data = segments[currentSegment].data;
-    quint64 start = segments[currentSegment].start;
+    struct segment *s = &segments[currentSegment];
+    QMap<quint64,QString> *localLabels = &s->localLabels;
+    quint8 *data = s->data;
+    quint64 start = s->start;
     quint16 opcode;
     quint16 operand = 0;
     QString temps;
@@ -464,10 +465,11 @@ void Disassembler8080::disassembleInstructionAt(quint64 address,
 }
 
 void Disassembler8080::trace(quint64 address) {
-    quint8 *data = segments[currentSegment].data;
-    quint8 *datatypes = segments[currentSegment].datatypes;
-    quint64 start = segments[currentSegment].start;
-    quint64 end = segments[currentSegment].end;
+    struct segment *s = &segments[currentSegment];
+    quint8 *data = s->data;
+    quint8 *datatypes = s->datatypes;
+    quint64 start = s->start;
+    quint64 end = s->end;
     quint64 size = end - start + 1;
     auto *mark = new quint8[size]();  // () --> all zeroed
     QList<quint64> tracelist;
@@ -531,9 +533,10 @@ void Disassembler8080::trace(quint64 address) {
 }
 
 QString Disassembler8080::getDescriptionAt(quint64 address) {
-    quint64 start = segments[currentSegment].start;
-    quint8 *data = segments[currentSegment].data;
-    quint8 *datatypes = segments[currentSegment].datatypes;
+    struct segment *s = &segments[currentSegment];
+    quint64 start = s->start;
+    quint8 *data = s->data;
+    quint8 *datatypes = s->datatypes;
 
     quint64 i = address - start;
 

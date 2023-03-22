@@ -1046,10 +1046,11 @@ int Disassembler6502::getInstructionSizeAt(quint64 address) {
 }
 
 void Disassembler6502::createOperandLabels(quint64 address) {
-    quint8 *data = segments[currentSegment].data;
+    struct segment *s = &segments[currentSegment];
+    quint8 *data = s->data;
     quint64 addr = 0;
     quint64 addr2 = 0;
-    quint64 start = segments[currentSegment].start;
+    quint64 start = s->start;
     quint64 i = address;
     int n = isizes[(enum addressing_mode)distab[data[i]].mode];
     QString hex;
@@ -1059,7 +1060,7 @@ void Disassembler6502::createOperandLabels(quint64 address) {
         addr2 = data[i+2];
         addr2 = 3 + start + i + addr2 - (addr2>0x7f ? 0x100 : 0);
 
-        if ( ! (segments[currentSegment].localLabels.contains(addr)
+        if ( ! (s->localLabels.contains(addr)
                 || globalLabels.contains(addr))) {
 
             hex = QStringLiteral("L%1").arg(addr,4,16,(QChar)'0');
@@ -1068,8 +1069,8 @@ void Disassembler6502::createOperandLabels(quint64 address) {
             globalLabels.insert(addr, hex);
         }
 
-        if ( ! (segments[currentSegment].localLabels.contains(addr2)
-                || globalLabels.contains(addr2))) {
+        if ( ! (s->localLabels.contains(addr2)
+               || globalLabels.contains(addr2))) {
 
             hex = QStringLiteral("L%1").arg(addr2,4,16,(QChar)'0');
             if (toUpper)
@@ -1085,7 +1086,7 @@ void Disassembler6502::createOperandLabels(quint64 address) {
         if (distab[data[i]].mode == MODE_REL)
             addr = 2 + start + i + addr - (addr>0x7f ? 0x100 : 0);
 
-        if (  segments[currentSegment].localLabels.contains(addr)
+        if (s->localLabels.contains(addr)
            || globalLabels.contains(addr))
             return;
 
@@ -1098,10 +1099,11 @@ void Disassembler6502::createOperandLabels(quint64 address) {
 
 void Disassembler6502::disassembleInstructionAt(quint64 address,
                                              struct disassembly &dis, int &n) {
-    QMap<quint64,QString> *localLabels = &segments[currentSegment].localLabels;
-    quint8 *flags = segments[currentSegment].flags;
-    quint8 *data = segments[currentSegment].data;
-    quint64 start = segments[currentSegment].start;
+    struct segment *s = &segments[currentSegment];
+    QMap<quint64,QString> *localLabels = &s->localLabels;
+    quint8 *flags = s->flags;
+    quint8 *data = s->data;
+    quint64 start = s->start;
     quint16 opcode;
     quint16 operand = 0;
     quint16 operand2 = 0;
@@ -1162,10 +1164,10 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
             QMap<quint64,quint16> *map;
             char pref;
             if (flags[i+1] & FLAG_LOW_BYTE) {
-                map = &segments[currentSegment].lowbytes;
+                map = &s->lowbytes;
                 pref = '<';
             } else {
-                map = &segments[currentSegment].highbytes;
+                map = &s->highbytes;
                 pref = '>';
             }
             quint16 addr = map->value(i+1);
@@ -1197,10 +1199,11 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
 }
 
 void Disassembler6502::trace(quint64 address) {
-    quint8 *data = segments[currentSegment].data;
-    quint8 *datatypes = segments[currentSegment].datatypes;
-    quint64 start = segments[currentSegment].start;
-    quint64 end = segments[currentSegment].end;
+    struct segment *s = &segments[currentSegment];
+    quint8 *data = s->data;
+    quint8 *datatypes = s->datatypes;
+    quint64 start = s->start;
+    quint64 end = s->end;
     quint64 size = end - start + 1;
     auto *mark = new quint8[size]();  // () --> all zeroed
     QList<quint64> tracelist;
@@ -1281,9 +1284,10 @@ void Disassembler6502::trace(quint64 address) {
 }
 
 QString Disassembler6502::getDescriptionAt(quint64 address) {
-    quint64 start = segments[currentSegment].start;
-    quint8 *data = segments[currentSegment].data;
-    quint8 *datatypes = segments[currentSegment].datatypes;
+    struct segment *s = &segments[currentSegment];
+    quint64 start = s->start;
+    quint8 *data = s->data;
+    quint8 *datatypes = s->datatypes;
     QString instr;
     QString descr;
     QString action;
