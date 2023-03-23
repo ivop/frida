@@ -1045,7 +1045,7 @@ int Disassembler6502::getInstructionSizeAt(quint64 address) {
     return isizes[(enum addressing_mode)distab[data[address]].mode];
 }
 
-void Disassembler6502::createOperandLabels(quint64 address) {
+void Disassembler6502::createOperandLabels(quint64 address, bool generateLocalLabels) {
     struct segment *s = &segments[currentSegment];
     quint8 *data = s->data;
     quint64 addr = 0;
@@ -1066,7 +1066,11 @@ void Disassembler6502::createOperandLabels(quint64 address) {
             hex = QStringLiteral("L%1").arg(addr,4,16,(QChar)'0');
             if (toUpper)
                 hex = hex.toUpper();
-            globalLabels.insert(addr, hex);
+
+            if (generateLocalLabels)
+                s->localLabels.insert(addr, hex);
+            else
+                globalLabels.insert(addr, hex);
         }
 
         if ( ! (s->localLabels.contains(addr2)
@@ -1075,7 +1079,11 @@ void Disassembler6502::createOperandLabels(quint64 address) {
             hex = QStringLiteral("L%1").arg(addr2,4,16,(QChar)'0');
             if (toUpper)
                 hex = hex.toUpper();
-            globalLabels.insert(addr2, hex);
+
+            if (generateLocalLabels)
+                s->localLabels.insert(addr, hex);
+            else
+                globalLabels.insert(addr2, hex);
         }
 
     } else if (can_be_label[(enum addressing_mode)distab[data[i]].mode]) {
@@ -1093,7 +1101,11 @@ void Disassembler6502::createOperandLabels(quint64 address) {
         hex = QStringLiteral("L%1").arg(addr,4,16,(QChar)'0');
         if (toUpper)
             hex = hex.toUpper();
-        globalLabels.insert(addr, hex);
+
+        if (generateLocalLabels)
+            s->localLabels.insert(addr, hex);
+        else
+            globalLabels.insert(addr, hex);
     }
 }
 

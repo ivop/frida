@@ -113,7 +113,7 @@ static inline quint8 cbm_screen_to_ascii(quint8 v) {
 //   it checks the consistency of the datatypes specified and might fix
 //   them if they don't compute (ascii which is non-printable, etc...)
 
-void Disassembler::generateDisassembly(void) {
+void Disassembler::generateDisassembly(bool generateLocalLabels) {
     struct segment *s = &segments[currentSegment];
     quint64 start = s->start;
     quint64 end = s->end;
@@ -198,7 +198,7 @@ also_wrong2:
 
 
             // while we're at it, generate labels in the same loop?
-            createOperandLabels(i);
+            createOperandLabels(i, generateLocalLabels);
             i += n-1;
             break;
 

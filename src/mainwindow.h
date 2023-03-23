@@ -85,6 +85,8 @@ private Q_SLOTS:
     void onSaveButton_clicked();
     void onExportAsmButton_clicked();
 
+    void onCheckLocalLabels_toggled();
+
     void onTableSegments_itemSelectionChanged();
     void onTableSegments_cellChanged(int row, int column);
     void onTableDisassembly_cellChanged(int row, int column);

@@ -390,7 +390,7 @@ int Disassembler8080::getInstructionSizeAt(quint64 address) {
     return isizes[(enum addressing_mode)distab[data[address]].mode];
 }
 
-void Disassembler8080::createOperandLabels(quint64 address) {
+void Disassembler8080::createOperandLabels(quint64 address, bool generateLocalLabels) {
     struct segment *s = &segments[currentSegment];
     QMap<quint64,QString> *localLabels = &s->localLabels;
     quint8 *data = s->data;
@@ -413,7 +413,11 @@ void Disassembler8080::createOperandLabels(quint64 address) {
         temps = QStringLiteral("L%1").arg(operand,4,16,(QChar)'0');
         if (toUpper)
             temps = temps.toUpper();
-        globalLabels.insert(operand, temps);
+
+        if (generateLocalLabels)
+            s->localLabels.insert(operand, temps);
+        else
+            globalLabels.insert(operand, temps);
     }
 }
 

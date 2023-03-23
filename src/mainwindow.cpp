@@ -40,6 +40,8 @@
 #include <QPushButton>
 #include <QScrollBar>
 
+    bool generateLocalLabels = true;
+
 QBrush datatypeBrushes[DT_LAST] = {
     [DT_UNDEFINED_BYTES] = { QColor(255, 255, 255, 255), Qt::SolidPattern }, // white
     [DT_BYTES]           = { QColor(128, 128, 255, 255), Qt::SolidPattern }, // blueish
@@ -113,6 +115,9 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::onExportAsmButton_clicked);
     connect(ui->findButton, &QPushButton::clicked,
             this, &MainWindow::onFindButton_clicked);
+
+    connect(ui->checkLocalLabels, &QCheckBox::toggled,
+            this, &MainWindow::onCheckLocalLabels_toggled);
 
     connect(ui->tableSegments, &QTableWidget::itemSelectionChanged,
             this, &MainWindow::onTableSegments_itemSelectionChanged);
@@ -311,7 +316,7 @@ void MainWindow::onTableSegments_itemSelectionChanged()
 {
     currentSegment = ui->tableSegments->currentRow();
     if (currentSegment < 0) return;
-    Disassembler->generateDisassembly();
+    Disassembler->generateDisassembly(generateLocalLabels);
     showHex();                              // after generate, can change dt's
     showAscii();
     showDisassembly();
@@ -465,7 +470,7 @@ void MainWindow::Set_To_Foo(const QList<QTableWidgetSelectionRange>& Ranges,
         }
     }
     // seems plenty fast to just call the show functions :)
-    Disassembler->generateDisassembly();
+    Disassembler->generateDisassembly(generateLocalLabels);
     showHex();
     showAscii();
     showDisassembly();
@@ -555,7 +560,7 @@ void MainWindow::Set_Flag(const QList<QTableWidgetSelectionRange>& Ranges, quint
             }
         }
     }
-    Disassembler->generateDisassembly();
+    Disassembler->generateDisassembly(generateLocalLabels);
     showHex();
     showAscii();
     showDisassembly();
@@ -615,7 +620,7 @@ void MainWindow::Set_Flag_Low_or_High_Byte(bool bLow) {
 
     }
 
-    Disassembler->generateDisassembly();
+    Disassembler->generateDisassembly(generateLocalLabels);
     showHex();
     showAscii();
     showDisassembly();
@@ -705,6 +710,7 @@ void MainWindow::showDisassembly(void) {
 
                 t->setSpan(row,0,1,3);
                 t->setItem(row, 0, new QTableWidgetItem(label));
+                t->item(row,0)->setForeground(Qt::darkCyan);
             }
         }
 
@@ -804,7 +810,7 @@ void MainWindow::actionTrace(void) {
     pos += segments[currentSegment].start;
 
     Disassembler->trace(pos);
-    Disassembler->generateDisassembly();
+    Disassembler->generateDisassembly(generateLocalLabels);
     showHex();
     showAscii();
     showDisassembly();
@@ -843,7 +849,7 @@ void MainWindow::actionComment() {
 void MainWindow::onLabelsButton_clicked() {
     labelswindow lw;
     lw.exec();
-    Disassembler->generateDisassembly();
+    Disassembler->generateDisassembly(generateLocalLabels);
     showHex();
     showAscii();
     showDisassembly();
@@ -876,12 +882,16 @@ void MainWindow::onSaveButton_clicked() {
 
 
 void MainWindow::onExportAsmButton_clicked() {
-    export_assembly(this);
+    export_assembly(this, generateLocalLabels);
 }
 void MainWindow::actionAdd_Label(void) {
     addLabelWindow alw;
     alw.exec();
     showDisassembly();
+}
+
+void MainWindow::onCheckLocalLabels_toggled() {
+    generateLocalLabels = ui->checkLocalLabels->isChecked();
 }
 
 // ----------------------------------------------------------------------------
@@ -923,7 +933,7 @@ void MainWindow::onTableDisassembly_cellChanged(int row, int column) {
     else if (globalLabels.contains(address))
         globalLabels.insert(address,label);
 
-    Disassembler->generateDisassembly();
+    Disassembler->generateDisassembly(generateLocalLabels);
     showDisassembly();
 }
 

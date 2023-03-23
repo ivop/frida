@@ -25,6 +25,6 @@
 
 #include <QWidget>
 
-extern void export_assembly(QWidget *widget);
+extern void export_assembly(QWidget *widget, bool generateLocalLabels);
 
 #endif // EXPORTASSEMBLY_H

@@ -60,7 +60,7 @@ static void write_line(QTextStream *out) {
 
 // ---------------------------------------------------------------------------
 
-void export_assembly(QWidget *widget) {
+void export_assembly(QWidget *widget, bool generateLocalLabels) {
     auto *asw = new exportAssemblyWindow();
 
     asw->exec();
@@ -148,7 +148,7 @@ void export_assembly(QWidget *widget) {
         struct segment *s = &segments[i];
 
         currentSegment = i;
-        Disassembler->generateDisassembly();
+        Disassembler->generateDisassembly(generateLocalLabels);
 
         out << "\n; SEGMENT: " << i+1 << "\n\n";
         out << "; Name    : " << s->name << "\n";
