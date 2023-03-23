@@ -105,12 +105,34 @@ bool LoaderAtari8bitBinary::Load(QFile& file) {
             return false;
         }
 
-        if (start == 0x02e0 && end == 0x02e1)
+        quint16 run = 0xffff;
+        quint16 init = 0xffff;
+
+        if (start == 0x02e0 && end == 0x02e1) {
             segment.name = QStringLiteral("Run Address");
-        if (start == 0x02e2 && end == 0x02e3)
+            run = LE16(segment.data);
+            segment.datatypes[0] = segment.datatypes[1] = DT_WORDLE;
+            segment.flags[0] = FLAG_USE_LABEL;
+        }
+        if (start == 0x02e2 && end == 0x02e3) {
             segment.name = QStringLiteral("Init Address");
-        if (start == 0x02e0 && end == 0x02e3)
+            init = LE16(segment.data);
+            segment.datatypes[0] = segment.datatypes[1] = DT_WORDLE;
+            segment.flags[0] = FLAG_USE_LABEL;
+        }
+        if (start == 0x02e0 && end == 0x02e3) {
             segment.name = QStringLiteral("Run/Init Addresses");
+            run = LE16(segment.data);
+            init = LE16(segment.data+2);
+            segment.datatypes[0] = segment.datatypes[1] =
+            segment.datatypes[2] = segment.datatypes[3] = DT_WORDLE;
+            segment.flags[0] = segment.flags[2] = FLAG_USE_LABEL;
+        }
+
+        if (run != 0xffff)
+            globalLabels.insert(run, "run");
+        if (init != 0xffff)
+            globalLabels.insert(init, "init");
 
         genericComment(file, &segment);
         segments.append(segment);
