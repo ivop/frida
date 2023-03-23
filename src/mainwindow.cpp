@@ -716,7 +716,10 @@ void MainWindow::showDisassembly(void) {
 
                 t->setSpan(row,0,1,3);
                 t->setItem(row, 0, new QTableWidgetItem(label));
-                t->item(row,0)->setForeground(Qt::darkCyan);
+                if (s->localLabels.contains(dis.address))
+                    t->item(row,0)->setForeground(Qt::darkCyan);
+                else
+                    t->item(row,0)->setForeground(Qt::darkMagenta);
             }
         }
 
