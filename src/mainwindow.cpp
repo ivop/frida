@@ -121,6 +121,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::onCheckLocalLabels_toggled);
     connect(ui->checkDark, &QCheckBox::toggled,
             this, &MainWindow::onCheckDark_toggled);
+    connect(ui->checkFullscreen, &QCheckBox::toggled,
+            this, &MainWindow::onCheckFullscreen_toggled);
 
     connect(ui->tableSegments, &QTableWidget::itemSelectionChanged,
             this, &MainWindow::onTableSegments_itemSelectionChanged);
@@ -129,9 +131,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->comboFonts, QOverload<int>::of(&QComboBox::activated),
             this, &MainWindow::onComboFonts_activated);
-
-    connect(ui->radioButtonFullscreen, &QRadioButton::toggled,
-            this, &MainWindow::onRadioButtonFullscreen_toggled);
 
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &MainWindow::onComboBox_currentIndexChanged);
@@ -283,6 +282,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->instructionDescription->setReadOnly(true);
 
     darkMode = ui->checkDark->isChecked();
+    fullscreen = ui->checkFullscreen->isChecked();
 }
 
 MainWindow::~MainWindow()
@@ -870,10 +870,6 @@ void MainWindow::onExitButton_clicked() {
     close();
 }
 
-void MainWindow::onRadioButtonFullscreen_toggled(bool checked) {
-    checked ? this->showFullScreen() : this->showMaximized();
-}
-
 void MainWindow::onComboBox_currentIndexChanged(int index) {
     QFont f = this->font();
     f.setPointSize(10+index);
@@ -912,6 +908,15 @@ void MainWindow::onCheckDark_toggled() {
     else
         QApplication::setPalette(light_palette);
 }
+
+void MainWindow::onCheckFullscreen_toggled() {
+    fullscreen = ui->checkFullscreen->isChecked();
+    if (fullscreen)
+        this->showFullScreen();
+    else
+        this->showMaximized();
+}
+
 // ----------------------------------------------------------------------------
 // TABLE DISASSEMBLY
 

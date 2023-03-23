@@ -45,7 +45,7 @@ public:
 
     void closeEvent (QCloseEvent *event);
 
-    bool darkMode;
+    bool darkMode, fullscreen;
 
 public Q_SLOTS:
     void actionTrace(void);
@@ -89,13 +89,13 @@ private Q_SLOTS:
 
     void onCheckLocalLabels_toggled();
     void onCheckDark_toggled();
+    void onCheckFullscreen_toggled();
 
     void onTableSegments_itemSelectionChanged();
     void onTableSegments_cellChanged(int row, int column);
     void onTableDisassembly_cellChanged(int row, int column);
 
     void onComboFonts_activated(int index);
-    void onRadioButtonFullscreen_toggled(bool checked);
     void onComboBox_currentIndexChanged(int index);
     void onTableDisassembly_doubleClicked(const QModelIndex &index);
 

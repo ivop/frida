@@ -30,7 +30,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
-       <widget class="QRadioButton" name="radioButtonFullscreen">
+       <widget class="QCheckBox" name="checkFullscreen">
         <property name="text">
          <string>Fullscreen</string>
         </property>

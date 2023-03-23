@@ -91,12 +91,9 @@ int main(int argc, char *argv[])
     light_palette.setColor(QPalette::PlaceholderText, Qt::gray);
 
     StartDialog startdialog;
-    MainWindow mainwindow;
 
-    if (mainwindow.darkMode)
-        QApplication::setPalette(dark_palette);
-    else
-        QApplication::setPalette(light_palette);
+    // use QSettings later
+    QApplication::setPalette(light_palette);
 
     startdialog.exec();
 
@@ -121,6 +118,8 @@ int main(int argc, char *argv[])
 
     Disassembler->cputype = cputype;        // be able to detect variants
 
+    MainWindow mainwindow;
     mainwindow.showMaximized();
+
     return a.exec();
 }
