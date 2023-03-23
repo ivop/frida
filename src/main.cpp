@@ -44,11 +44,8 @@ QString globalNotes;
 
 enum fonts altfont;
 
-QSettings settings;
+QSettings settings(QStringLiteral("frida"), QStringLiteral("frida"));
 QPalette dark_palette, light_palette;
-
-
-// use QMap because they are always sorted according to the documentation
 
 QMap<quint64, QString> globalAutoLabels, globalLabels;
 
