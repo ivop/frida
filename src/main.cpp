@@ -90,12 +90,17 @@ int main(int argc, char *argv[])
     light_palette.setColor(QPalette::HighlightedText, Qt::white);
     light_palette.setColor(QPalette::PlaceholderText, Qt::gray);
 
-    a.setPalette(dark_palette);
+    StartDialog startdialog;
+    MainWindow mainwindow;
 
-    StartDialog f;
-    f.exec();
+    if (mainwindow.darkMode)
+        QApplication::setPalette(dark_palette);
+    else
+        QApplication::setPalette(light_palette);
 
-    if (!f.create_new_project && !f.load_existing_project)
+    startdialog.exec();
+
+    if (!startdialog.create_new_project && !startdialog.load_existing_project)
         return 0;
 
     // Select Disassembler as set in start dialog or loaded from project
@@ -116,7 +121,6 @@ int main(int argc, char *argv[])
 
     Disassembler->cputype = cputype;        // be able to detect variants
 
-    MainWindow m;
-    m.showMaximized();
+    mainwindow.showMaximized();
     return a.exec();
 }

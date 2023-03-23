@@ -176,9 +176,6 @@
         <property name="text">
          <string>Dark</string>
         </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
        </widget>
       </item>
       <item>

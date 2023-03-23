@@ -45,6 +45,8 @@ public:
 
     void closeEvent (QCloseEvent *event);
 
+    bool darkMode;
+
 public Q_SLOTS:
     void actionTrace(void);
     void actionSet_To_Undefined(void);

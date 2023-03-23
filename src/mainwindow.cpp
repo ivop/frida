@@ -281,6 +281,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableSegments->selectRow(0); // triggers all show functions
 
     ui->instructionDescription->setReadOnly(true);
+
+    darkMode = ui->checkDark->isChecked();
 }
 
 MainWindow::~MainWindow()
@@ -904,7 +906,8 @@ void MainWindow::onCheckLocalLabels_toggled() {
 }
 
 void MainWindow::onCheckDark_toggled() {
-    if (ui->checkDark->isChecked())
+    darkMode = ui->checkDark->isChecked();
+    if (darkMode)
         QApplication::setPalette(dark_palette);
     else
         QApplication::setPalette(light_palette);
