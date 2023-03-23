@@ -902,9 +902,9 @@ void MainWindow::onCheckLocalLabels_toggled() {
 
 void MainWindow::onCheckDark_toggled() {
     if (ui->checkDark->isChecked())
-        this->setPalette(dark_palette);
+        QApplication::setPalette(dark_palette);
     else
-        this->setPalette(light_palette);
+        QApplication::setPalette(light_palette);
 }
 // ----------------------------------------------------------------------------
 // TABLE DISASSEMBLY
