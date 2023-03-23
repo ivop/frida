@@ -33,6 +33,7 @@
 #include <QFontDatabase>
 #include <QHash>
 #include <QMessageBox>
+#include <QSettings>
 #include <QStyleFactory>
 #include <QTextStream>
 
@@ -43,6 +44,7 @@ QString globalNotes;
 
 enum fonts altfont;
 
+QSettings settings;
 QPalette dark_palette, light_palette;
 
 
@@ -90,11 +92,19 @@ int main(int argc, char *argv[])
     light_palette.setColor(QPalette::HighlightedText, Qt::white);
     light_palette.setColor(QPalette::PlaceholderText, Qt::gray);
 
+
+    if (!settings.contains(QStringLiteral("Mode")))
+        settings.setValue(QStringLiteral("Mode"), "light");
+    if (!settings.contains(QStringLiteral("Fullscreen")))
+        settings.setValue(QStringLiteral("Fullscreen"), "off");
+    settings.sync();
+
+    if (settings.value(QStringLiteral("Mode")) == "dark")
+        QApplication::setPalette(dark_palette);
+    else
+        QApplication::setPalette(light_palette);
+
     StartDialog startdialog;
-
-    // use QSettings later
-    QApplication::setPalette(light_palette);
-
     startdialog.exec();
 
     if (!startdialog.create_new_project && !startdialog.load_existing_project)
@@ -119,7 +129,7 @@ int main(int argc, char *argv[])
     Disassembler->cputype = cputype;        // be able to detect variants
 
     MainWindow mainwindow;
-    mainwindow.showMaximized();
+    mainwindow.show();
 
     return a.exec();
 }

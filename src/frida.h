@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QMap>
+#include <QSettings>
 #include "disassembler.h"
 
 // --------------------------------------------------------------------------
@@ -149,6 +150,7 @@ extern int currentSegment;
 extern QMap<quint64, QString> globalLabels;
 extern quint32 cputype;
 extern QString globalNotes;
+extern QSettings settings;
 
 // --------------------------------------------------------------------------
 

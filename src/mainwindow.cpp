@@ -281,8 +281,22 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->instructionDescription->setReadOnly(true);
 
-    darkMode = ui->checkDark->isChecked();
-    fullscreen = ui->checkFullscreen->isChecked();
+    if (settings.value(QStringLiteral("Mode")) == "dark")
+        darkMode = true;
+    else
+        darkMode = false;
+
+    ui->checkDark->setChecked(darkMode);
+
+    if (settings.value(QStringLiteral("Fullscreen")) == "on") {
+        fullscreen = true;
+        this->showFullScreen();
+    } else {
+        fullscreen = false;
+        this->showMaximized();
+    }
+
+    ui->checkFullscreen->setChecked(fullscreen);
 }
 
 MainWindow::~MainWindow()
@@ -903,18 +917,27 @@ void MainWindow::onCheckLocalLabels_toggled() {
 
 void MainWindow::onCheckDark_toggled() {
     darkMode = ui->checkDark->isChecked();
-    if (darkMode)
+    if (darkMode) {
         QApplication::setPalette(dark_palette);
-    else
+        settings.setValue(QStringLiteral("Mode"), "dark");
+    } else {
         QApplication::setPalette(light_palette);
+        settings.setValue(QStringLiteral("Mode"), "light");
+    }
+    settings.sync();
 }
 
 void MainWindow::onCheckFullscreen_toggled() {
     fullscreen = ui->checkFullscreen->isChecked();
-    if (fullscreen)
+    settings.setValue(QStringLiteral("Fullscreen"), "on");
+    if (fullscreen) {
         this->showFullScreen();
-    else
+        settings.setValue(QStringLiteral("Fullscreen"), "on");
+    } else {
         this->showMaximized();
+        settings.setValue(QStringLiteral("Fullscreen"), "off");
+    }
+    settings.sync();
 }
 
 // ----------------------------------------------------------------------------
