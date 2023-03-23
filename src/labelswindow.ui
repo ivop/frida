@@ -39,7 +39,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/icons/label.png</normaloff>:/icons/icons/label.png</iconset>
+         <normaloff>:/icons/label.png</normaloff>:/icons/label.png</iconset>
        </property>
        <property name="shortcut">
         <string>Alt+A</string>
@@ -59,7 +59,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/icons/label.png</normaloff>:/icons/icons/label.png</iconset>
+         <normaloff>:/icons/label.png</normaloff>:/icons/label.png</iconset>
        </property>
        <property name="shortcut">
         <string>Alt+I</string>
@@ -79,7 +79,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/icons/label.png</normaloff>:/icons/icons/label.png</iconset>
+         <normaloff>:/icons/label.png</normaloff>:/icons/label.png</iconset>
        </property>
        <property name="shortcut">
         <string>Alt+E</string>
@@ -99,7 +99,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/icons/exit.png</normaloff>:/icons/icons/exit.png</iconset>
+         <normaloff>:/icons/exit.png</normaloff>:/icons/exit.png</iconset>
        </property>
        <property name="shortcut">
         <string>Esc</string>

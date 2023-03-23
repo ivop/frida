@@ -40,7 +40,8 @@
 #include <QPushButton>
 #include <QScrollBar>
 
-    bool generateLocalLabels = true;
+bool generateLocalLabels = true;
+extern QPalette light_palette, dark_palette;
 
 QBrush datatypeBrushes[DT_LAST] = {
     [DT_UNDEFINED_BYTES] = { QColor(255, 255, 255, 255), Qt::SolidPattern }, // white
@@ -118,6 +119,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->checkLocalLabels, &QCheckBox::toggled,
             this, &MainWindow::onCheckLocalLabels_toggled);
+    connect(ui->checkDark, &QCheckBox::toggled,
+            this, &MainWindow::onCheckDark_toggled);
 
     connect(ui->tableSegments, &QTableWidget::itemSelectionChanged,
             this, &MainWindow::onTableSegments_itemSelectionChanged);
@@ -258,6 +261,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i=0; i<DT_LAST; i++) {
         t->setItem(i>>1,col, new QTableWidgetItem(datatypeNames[i]));
         t->item(i>>1,col)->setBackground(datatypeBrushes[i]);
+        t->item(i>>1,col)->setForeground(Qt::black);
         col ^= 1;
     }
 
@@ -401,6 +405,7 @@ void MainWindow::showHex(void) {
         if (s->flags[i] & (FLAG_USE_LABEL | FLAG_LOW_BYTE | FLAG_HIGH_BYTE))
             brush.setStyle(Qt::Dense3Pattern);
         t->item(i/8, i%8)->setBackground(brush);
+        t->item(i/8, i%8)->setForeground(Qt::black);
 
         if (!(i%8)) {
             hex = QStringLiteral("%1").arg(s->start + i, 2, 16, (QChar)'0');
@@ -443,6 +448,7 @@ void MainWindow::showAscii(void) {
         if (s->flags[i] & (FLAG_USE_LABEL | FLAG_LOW_BYTE | FLAG_HIGH_BYTE))
             brush.setStyle(Qt::Dense3Pattern);
         t->item(i/8, i%8)->setBackground(brush);
+        t->item(i/8, i%8)->setForeground(Qt::black);
 
         if (altfont)
             t->item(i/8, i%8)->setFont(font);
@@ -894,6 +900,12 @@ void MainWindow::onCheckLocalLabels_toggled() {
     generateLocalLabels = ui->checkLocalLabels->isChecked();
 }
 
+void MainWindow::onCheckDark_toggled() {
+    if (ui->checkDark->isChecked())
+        this->setPalette(dark_palette);
+    else
+        this->setPalette(light_palette);
+}
 // ----------------------------------------------------------------------------
 // TABLE DISASSEMBLY
 

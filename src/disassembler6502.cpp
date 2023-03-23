@@ -1341,7 +1341,7 @@ QString Disassembler6502::getDescriptionAt(quint64 address) {
     instr = instr.toUpper();
 
     fulldescr = "<h2 style=\"color: red\">" + instr + "</h2><h4>" + descr + "</h4>" +
-                action + "<br><br><i style=\"color: blue\">flags: " + flags + "</i>";
+                action + "<br><br><i>flags: " + flags + "</i>";
 
     return fulldescr;
 }

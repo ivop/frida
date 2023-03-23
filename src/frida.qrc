@@ -8,8 +8,6 @@
         <file>logo/frida-logo.png</file>
         <file>logo/frida-logo.svg</file>
         <file>logo/frida-logo-test.png</file>
-    </qresource>
-    <qresource prefix="/icons">
         <file>icons/document-save.png</file>
         <file>icons/document-save-as.png</file>
         <file>icons/exit.png</file>

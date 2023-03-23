@@ -91,7 +91,7 @@
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
-          <normaloff>:/icons/icons/label.png</normaloff>:/icons/icons/label.png</iconset>
+          <normaloff>:/icons/label.png</normaloff>:/icons/label.png</iconset>
         </property>
         <property name="shortcut">
          <string>Alt+L</string>
@@ -114,7 +114,7 @@
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
-          <normaloff>:/icons/icons/document-save-as.png</normaloff>:/icons/icons/document-save-as.png</iconset>
+          <normaloff>:/icons/document-save-as.png</normaloff>:/icons/document-save-as.png</iconset>
         </property>
         <property name="shortcut">
          <string>Alt+S</string>
@@ -134,7 +134,7 @@
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
-          <normaloff>:/icons/icons/document-save.png</normaloff>:/icons/icons/document-save.png</iconset>
+          <normaloff>:/icons/document-save.png</normaloff>:/icons/document-save.png</iconset>
         </property>
         <property name="toolButtonStyle">
          <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -151,7 +151,7 @@
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
-          <normaloff>:/icons/icons/exit.png</normaloff>:/icons/icons/exit.png</iconset>
+          <normaloff>:/icons/exit.png</normaloff>:/icons/exit.png</iconset>
         </property>
         <property name="toolButtonStyle">
          <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -170,6 +170,16 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkDark">
+        <property name="text">
+         <string>Dark</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="checkLocalLabels">
@@ -240,7 +250,7 @@
             <set>QAbstractItemView::DoubleClicked</set>
            </property>
            <property name="alternatingRowColors">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::SingleSelection</enum>

@@ -33,6 +33,7 @@
 #include <QFontDatabase>
 #include <QHash>
 #include <QMessageBox>
+#include <QStyleFactory>
 #include <QTextStream>
 
 QVector<struct segment> segments;
@@ -41,6 +42,9 @@ int currentSegment;
 QString globalNotes;
 
 enum fonts altfont;
+
+QPalette dark_palette, light_palette;
+
 
 // use QMap because they are always sorted according to the documentation
 
@@ -57,6 +61,36 @@ int main(int argc, char *argv[])
 
     a.setStyle(QStringLiteral("fusion"));
     a.setFont(font);
+
+    dark_palette.setColor(QPalette::Window, QColor(53, 53, 53));
+    dark_palette.setColor(QPalette::WindowText, Qt::white);
+    dark_palette.setColor(QPalette::Base, QColor(35, 35, 35));
+    dark_palette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+    dark_palette.setColor(QPalette::ToolTipBase, QColor(25, 25, 25));
+    dark_palette.setColor(QPalette::ToolTipText, Qt::white);
+    dark_palette.setColor(QPalette::Text, Qt::white);
+    dark_palette.setColor(QPalette::BrightText, Qt::red);
+    dark_palette.setColor(QPalette::Button, QColor(53, 53, 53));
+    dark_palette.setColor(QPalette::ButtonText, Qt::white);
+    dark_palette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    dark_palette.setColor(QPalette::HighlightedText, Qt::black);
+    dark_palette.setColor(QPalette::PlaceholderText, Qt::gray);
+
+    light_palette.setColor(QPalette::Window, QColor(240, 240, 240));
+    light_palette.setColor(QPalette::WindowText, Qt::black);
+    light_palette.setColor(QPalette::Base, QColor(Qt::white));
+    light_palette.setColor(QPalette::AlternateBase, QColor(248, 248, 248));
+    light_palette.setColor(QPalette::ToolTipBase, QColor(255, 255, 220));
+    light_palette.setColor(QPalette::ToolTipText, Qt::black);
+    light_palette.setColor(QPalette::Text, Qt::black);
+    light_palette.setColor(QPalette::BrightText, Qt::red);
+    light_palette.setColor(QPalette::Button, QColor(240, 240, 240));
+    light_palette.setColor(QPalette::ButtonText, Qt::black);
+    light_palette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    light_palette.setColor(QPalette::HighlightedText, Qt::white);
+    light_palette.setColor(QPalette::PlaceholderText, Qt::gray);
+
+    a.setPalette(dark_palette);
 
     StartDialog f;
     f.exec();
