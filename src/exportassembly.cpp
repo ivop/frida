@@ -98,7 +98,7 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
 
     out << "\n; GENERATED LABELS\n\n";
 
-    QMap<quint64, QString>::const_iterator iter;;
+    QMap<quint64, QString>::const_iterator iter;
 
     // output all glocal labels that are not overruled by local labels and are
     // not within any of the segments address ranges.

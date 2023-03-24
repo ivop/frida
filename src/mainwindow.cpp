@@ -1194,13 +1194,101 @@ void MainWindow::closeEvent (QCloseEvent *event)
 // REFERENCES
 
 void MainWindow::onReferences_returnPressed() {
-    qDebug() << "returnPressed";
+    onFindButton_clicked();
 }
 
 void MainWindow::actionFind(void) {
+    QTableWidget *t = ui->tableDisassembly;
+    int column = t->currentColumn();
+    int row = t->currentRow();
+
     ui->inputReference->setFocus();
+    ui->inputReference->selectAll();
+
+    if (column != 0)
+        return;
+
+    QString text = t->item(row, column)->text();
+
+    if (text.isEmpty() || text == ";")
+        return;
+
+    ui->inputReference->setText(text);
+    ui->inputReference->selectAll();
+}
+
+void MainWindow::addRefEntry(QTableWidget *t, quint64 segment, quint64 address,
+                             const QString &line, const QString &highlight) {
+    int row;
+    QTableWidgetItem *item;
+
+    row = t->rowCount();
+    t->setRowCount(row+1);
+
+    QString hex = QStringLiteral("%1").arg(address, 0, 16);
+    t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
+
+    item = new QTableWidgetItem(QString("%1").arg(segment,0,16));
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    t->setItem(row, 0, item);
+
+    QModelIndex index = t->model()->index(row,1);
+    QLabel *label = new QLabel();
+
+    QString text = line;
+    text = text.replace(highlight, "<span style=\"color: red\">" + highlight + "</span>");
+
+    label->setTextFormat(Qt::RichText);
+    label->setText(text);
+    t->setIndexWidget(index, label);
 }
 
 void MainWindow::onFindButton_clicked(void) {
-    qDebug() << "find clicked";
+    int saveCurrent = currentSegment;
+    QTableWidget *t = ui->tableReferences;
+    QString what = ui->inputReference->text();
+    quint64 address;
+
+    if (what.size() < 3)    // limit search pattern to at least 3 characters
+        return;
+
+    t->setRowCount(0);
+    t->verticalHeader()->setDefaultAlignment(Qt::AlignRight);
+    t->setColumnWidth(0,32);
+
+    // first, check if any of the global labels match and if they are defined
+    // in any segment
+
+    QMap<quint64, QString>::const_iterator iter;
+    for(iter = globalLabels.constBegin(); iter != globalLabels.constEnd(); iter++) {
+        if (iter.value().contains(what)) {
+            address = iter.key();
+            for (int i=0; i<segments.size(); i++) {
+                struct segment *s = &segments[i];
+                if (address >= s->start && address <= s->end) {
+                    QString line = iter.value();
+                    addRefEntry(t, i, address, line, what);
+                }
+            }
+            break;
+        }
+    }
+
+    // second, find in disassembly of each segment
+
+    for (int i=0; i<segments.size(); i++) {
+        struct segment *s = &segments[i];
+
+        currentSegment = i;
+        Disassembler->generateDisassembly(generateLocalLabels);
+
+        for (auto disitem : s->disassembly) {
+            if (disitem.arguments.contains(what)) {
+                QString line = disitem.instruction + QStringLiteral(" ") + disitem.arguments;
+                addRefEntry(t, i, disitem.address, line, what);
+            }
+        }
+    }
+
+    currentSegment = saveCurrent;
 }

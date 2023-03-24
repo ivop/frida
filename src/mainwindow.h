@@ -99,10 +99,12 @@ private Q_SLOTS:
     void onComboBox_currentIndexChanged(int index);
     void onTableDisassembly_doubleClicked(const QModelIndex &index);
 
-    static void onReferences_returnPressed();
-    static void onFindButton_clicked();
+    void onReferences_returnPressed();
+    void onFindButton_clicked();
 
     static void rememberValue(int value);
+    static void addRefEntry(QTableWidget *t, quint64 segment, quint64 address,
+                       const QString &line, const QString &highlight);
 
 private:
     Ui::MainWindow *ui;
