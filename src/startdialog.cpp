@@ -177,6 +177,13 @@ void StartDialog::onButtonNewProject_clicked()
         return;
     }
 
+    // name empty segments
+
+    for (int i = 0; i < segments.size(); i++) {
+        if (segments[i].name.isEmpty())
+            segments[i].name = QString(QStringLiteral("Segment %1")).arg(i);
+    }
+
     // retrieve cputype from table as index is not necessarily the same
     // there can be holes in the enumeration
 
