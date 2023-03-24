@@ -1202,6 +1202,8 @@ void MainWindow::jumpToSegmentAndAddress(quint64 segment, quint64 address) {
         td->clearSelection();   // if segment is the same, clear selected
         td->clearFocus();       // and focus
         td->item(row,0)->setSelected(true);
+        td->setCurrentCell(row,0);
+        td->setFocus();
         break;
     }
 }
