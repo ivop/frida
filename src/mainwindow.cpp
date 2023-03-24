@@ -917,6 +917,7 @@ void MainWindow::onExportAsmButton_clicked() {
 void MainWindow::actionAdd_Label(void) {
     addLabelWindow alw;
     alw.exec();
+    Disassembler->generateDisassembly(generateLocalLabels);
     showDisassembly();
 }
 
@@ -1267,6 +1268,8 @@ void MainWindow::addRefEntry(QTableWidget *t, quint64 segment, quint64 address,
     QLabel *label = new QLabel();
 
     QString text = line;
+    text = text.replace("<", "&lt;");
+    text = text.replace(">", "&gt;");
     text = text.replace(highlight, "<span style=\"color: red\">" + highlight + "</span>");
 
     label->setTextFormat(Qt::RichText);
