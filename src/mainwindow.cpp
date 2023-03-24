@@ -137,6 +137,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->tableDisassembly, &QTableWidget::doubleClicked,
             this, &MainWindow::onTableDisassembly_doubleClicked);
+    connect(ui->tableReferences, &QTableWidget::doubleClicked,
+            this, &MainWindow::onTableReferences_doubleClicked);
 
     connect(ui->tableDisassembly, &QTableWidget::cellChanged,
             this, &MainWindow::onTableDisassembly_cellChanged);
@@ -224,6 +226,10 @@ MainWindow::MainWindow(QWidget *parent) :
                qOverload<int>(&QHeaderView::sectionPressed), 0, 0);
     disconnect(ui->tableASCII->verticalHeader(),
                qOverload<int>(&QHeaderView::sectionClicked), 0, 0);
+    disconnect(ui->tableReferences->verticalHeader(),
+               qOverload<int>(&QHeaderView::sectionPressed), 0, 0);
+    disconnect(ui->tableReferences->verticalHeader(),
+               qOverload<int>(&QHeaderView::sectionClicked), 0, 0);
 
     // connect our sectionClicked function on vertical headers
     connect(ui->tableHexadecimal->verticalHeader(),
@@ -232,6 +238,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->tableASCII->verticalHeader(),
             &QHeaderView::sectionClicked,
             this, &MainWindow::onHexSectionClicked);
+    connect(ui->tableReferences->verticalHeader(),
+            &QHeaderView::sectionClicked,
+            this, &MainWindow::onReferencesSectionClicked);
 
     // set tableDisassembly
 
@@ -1145,27 +1154,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
         // otherwise,
         // jump to segment and scroll disassembly to the right place
 
-        ui->tableSegments->selectRow(i);
-
-        QCoreApplication::processEvents(QEventLoop::AllEvents); // direct triggers
-        QCoreApplication::processEvents(QEventLoop::AllEvents); // indirect triggers
-
-        // search row and center
-
-        QTableWidget *td = ui->tableDisassembly;
-
-        for (int row = 0; row < td->rowCount(); row++) {
-            if (td->verticalHeaderItem(row)->text().toULongLong(0,16) < addr)
-                continue;
-
-            // found row:
-            if (td->item(row,0)->text() == QStringLiteral(";")) row++; // skip comment
-            td->scrollToItem(td->item(row,0), QAbstractItemView::PositionAtCenter);
-            td->clearSelection();   // if segment is the same, clear selected
-            td->clearFocus();       // and focus
-            td->item(row,0)->setSelected(true);
-            break;
-        }
+        jumpToSegmentAndAddress(i, addr);
     }
 
     // labeled lines span three columns, too, but are editable and don't reach
@@ -1190,8 +1179,48 @@ void MainWindow::closeEvent (QCloseEvent *event)
     event->accept();
 }
 
+void MainWindow::jumpToSegmentAndAddress(quint64 segment, quint64 address) {
+
+    // jump to segment and scroll disassembly to the right place
+
+    ui->tableSegments->selectRow(segment);
+
+    QCoreApplication::processEvents(QEventLoop::AllEvents); // direct triggers
+    QCoreApplication::processEvents(QEventLoop::AllEvents); // indirect triggers
+
+    // search row and center
+
+    QTableWidget *td = ui->tableDisassembly;
+
+    for (int row = 0; row < td->rowCount(); row++) {
+        if (td->verticalHeaderItem(row)->text().toULongLong(0,16) < address)
+            continue;
+
+        // found row:
+        if (td->item(row,0)->text() == QStringLiteral(";")) row++; // skip comment
+        td->scrollToItem(td->item(row,0), QAbstractItemView::PositionAtCenter);
+        td->clearSelection();   // if segment is the same, clear selected
+        td->clearFocus();       // and focus
+        td->item(row,0)->setSelected(true);
+        break;
+    }
+}
+
 // ----------------------------------------------------------------------------
 // REFERENCES
+
+void MainWindow::onTableReferences_doubleClicked(const QModelIndex &index) {
+    onReferencesSectionClicked(index.row());
+}
+
+void MainWindow::onReferencesSectionClicked(int row) {
+    QTableWidget *t = ui->tableReferences;
+
+    int segment = t->item(row, 0)->text().toInt(nullptr, 16);
+    quint64 address = t->verticalHeaderItem(row)->text().toULongLong(nullptr, 16);
+
+    jumpToSegmentAndAddress(segment, address);
+}
 
 void MainWindow::onReferences_returnPressed() {
     onFindButton_clicked();
@@ -1282,7 +1311,7 @@ void MainWindow::onFindButton_clicked(void) {
         currentSegment = i;
         Disassembler->generateDisassembly(generateLocalLabels);
 
-        for (auto disitem : s->disassembly) {
+        for (const auto &disitem : qAsConst(s->disassembly)) {
             if (disitem.arguments.contains(what)) {
                 QString line = disitem.instruction + QStringLiteral(" ") + disitem.arguments;
                 addRefEntry(t, i, disitem.address, line, what);

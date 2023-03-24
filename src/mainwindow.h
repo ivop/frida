@@ -81,6 +81,7 @@ private Q_SLOTS:
     static void linkSelections(QTableWidget *from, QTableWidget *to);
     void onHexSectionClicked(int index);
     void onDisassemblySectionClicked(int index);
+    void onReferencesSectionClicked(int index);
 
     void onLabelsButton_clicked();
     void onExitButton_clicked();
@@ -98,6 +99,7 @@ private Q_SLOTS:
     void onComboFonts_activated(int index);
     void onComboBox_currentIndexChanged(int index);
     void onTableDisassembly_doubleClicked(const QModelIndex &index);
+    void onTableReferences_doubleClicked(const QModelIndex &index);
 
     void onReferences_returnPressed();
     void onFindButton_clicked();
@@ -105,6 +107,7 @@ private Q_SLOTS:
     static void rememberValue(int value);
     static void addRefEntry(QTableWidget *t, quint64 segment, quint64 address,
                        const QString &line, const QString &highlight);
+    void jumpToSegmentAndAddress(quint64 segment, quint64 address);
 
 private:
     Ui::MainWindow *ui;
