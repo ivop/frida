@@ -71,6 +71,9 @@
      <property name="text">
       <string>Local Label</string>
      </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
   </layout>
