@@ -1273,6 +1273,8 @@ void MainWindow::addRefEntry(QTableWidget *t, quint64 segment, quint64 address,
 }
 
 void MainWindow::onFindButton_clicked(void) {
+    struct segment *s = &segments[currentSegment];
+    QMap<quint64, QString> *localLabels = &s->localLabels;
     int saveCurrent = currentSegment;
     QTableWidget *t = ui->tableReferences;
     QString what = ui->inputReference->text();
@@ -1303,7 +1305,20 @@ void MainWindow::onFindButton_clicked(void) {
         }
     }
 
-    // second, find in disassembly of each segment
+    //second, find a local label in the current segment
+
+    for(iter = localLabels->constBegin(); iter != localLabels->constEnd(); iter++) {
+        if (iter.value().contains(what)) {
+            address = iter.key();
+            if (address >= s->start && address <= s->end) {
+                QString line = iter.value();
+                addRefEntry(t, currentSegment, address, line, what);
+                break;
+                }
+        }
+    }
+
+    // third, find in disassembly of each segment
 
     for (int i=0; i<segments.size(); i++) {
         struct segment *s = &segments[i];
