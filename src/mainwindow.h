@@ -74,6 +74,7 @@ public Q_SLOTS:
     void actionChange_Start_Address(void);
     void actionAdd_Label(void);
     void actionFind(void);
+    void actionLowAndHighBytePairs(void);
 
 private Q_SLOTS:
     void linkHexASCIISelection(void);

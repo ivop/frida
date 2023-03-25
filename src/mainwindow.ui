@@ -1048,6 +1048,14 @@
     <string>Ctrl+F</string>
    </property>
   </action>
+  <action name="actionLow_And_High_Byte_Pair_s">
+   <property name="text">
+    <string>Low And High Byte Pair(s)</string>
+   </property>
+   <property name="shortcut">
+    <string>?</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -1502,6 +1510,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionLow_And_High_Byte_Pair_s</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionLowAndHighBytePairs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>497</x>
+     <y>353</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>linkHexASCIISelection()</slot>
@@ -1533,5 +1557,6 @@
   <slot>actionSet_Flag_Clear()</slot>
   <slot>actionAdd_Label()</slot>
   <slot>actionFind()</slot>
+  <slot>actionLowAndHighBytePairs()</slot>
  </slots>
 </ui>

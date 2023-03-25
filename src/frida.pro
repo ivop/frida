@@ -21,6 +21,7 @@ SOURCES += \
     exportassembly.cpp \
     exportassemblywindow.cpp \
     jumptowindow.cpp \
+    lowandhighbytepairswindow.cpp \
     main.cpp\
     loadsaveproject.cpp \
     mainwindow.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     exportassembly.h \
     exportassemblywindow.h \
     jumptowindow.h \
+    lowandhighbytepairswindow.h \
     mainwindow.h \
     frida.h \
     loader.h \
@@ -55,6 +57,7 @@ HEADERS += \
 FORMS += \
     exportassemblywindow.ui \
     jumptowindow.ui \
+    lowandhighbytepairswindow.ui \
     mainwindow.ui \
     commentwindow.ui \
     labelswindow.ui \

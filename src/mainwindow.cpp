@@ -29,6 +29,7 @@
 #include "jumptowindow.h"
 #include "labelswindow.h"
 #include "loadsaveproject.h"
+#include "lowandhighbytepairswindow.h"
 #include "lowhighbytewindow.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -202,6 +203,12 @@ MainWindow::MainWindow(QWidget *parent) :
         men->addAction(ui->actionSet_Flag_High_Byte);
         men->addAction(ui->actionSet_Flag_Clear);
         act = new QAction(QStringLiteral("Set Flag"), ui->tableHexadecimal);
+        act->setMenu(men);
+        t->addAction(act);
+
+        men = new QMenu();
+        men->addAction(ui->actionLow_And_High_Byte_Pair_s);
+        act = new QAction(QStringLiteral("Tools"), ui->tableHexadecimal);
         act->setMenu(men);
         t->addAction(act);
 
@@ -1340,4 +1347,96 @@ void MainWindow::onFindButton_clicked(void) {
     }
 
     currentSegment = saveCurrent;
+}
+
+// ----------------------------------------------------------------------------
+// TOOLS
+
+// Flag low and high byte pair(s) and optionally generate labels, too.
+
+void MainWindow::actionLowAndHighBytePairs(void) {
+    struct segment *s = &segments[currentSegment];
+    quint8 *data = s->data;
+    quint8 *flags = s->flags;
+    quint8 *datatypes = s->datatypes;
+    QMap<quint64, quint16> *lowbytes = &s->lowbytes;
+    QMap<quint64, quint16> *highbytes = &s->highbytes;
+
+    QTableWidget *t = ui->tableHexadecimal;
+    QList<QTableWidgetSelectionRange> Ranges = t->selectedRanges();
+    QList<quint64> allSelectedCells;
+
+    if (Ranges.size() == 0)
+        return;
+
+    for (const auto & range : Ranges) {
+        for (int y = range.topRow(); y <= range.bottomRow(); y++) {
+            for (int x = range.leftColumn(); x <= range.rightColumn(); x++) {
+                unsigned int pos = y*8+x;
+                allSelectedCells.append(pos);
+            }
+        }
+    }
+
+    std::sort(allSelectedCells.begin(), allSelectedCells.end());
+
+    if (allSelectedCells.size() & 1) {
+        QMessageBox msg;
+        msg.setText(QStringLiteral("Odd number of cells selected.\n\nPlease select an even number of calls as Low and High Byte pairs."));
+        msg.addButton(QStringLiteral("OK"), QMessageBox::AcceptRole);
+        msg.exec();
+        return;
+    }
+
+    LowAndHighBytePairsWindow lahbpw;
+    if (lahbpw.exec() == QMessageBox::Rejected)
+        return;
+
+    QList<QPair<quint64, quint64>>allPairs;
+    int half = allSelectedCells.size() / 2;
+
+    if (lahbpw.pairsLowLowHighHigh) {
+        for(int i = 0; i < half; i++) {
+            allPairs.append(QPair(allSelectedCells[i], allSelectedCells[half+i]));
+        }
+    } else {
+        for (int i = 0; i < allSelectedCells.size(); i += 2) {
+            allPairs.append(QPair(allSelectedCells[i], allSelectedCells[i+1]));
+        }
+    }
+
+    for (auto pair : allPairs) {
+        quint64 first = pair.first;
+        quint64 second = pair.second;
+
+        if (datatypes[first] == DT_UNDEFINED_BYTES)
+            datatypes[first] = DT_BYTES;
+        if (datatypes[second] == DT_UNDEFINED_BYTES)
+            datatypes[second] = DT_BYTES;
+
+        flags[first] = FLAG_LOW_BYTE;
+        flags[second] = FLAG_HIGH_BYTE;
+
+        quint64 address = data[pair.first] + (data[pair.second] << 8);
+
+        lowbytes->remove(first);
+        highbytes->remove(second);
+        lowbytes->insert(first, address);
+        highbytes->insert(second, address);
+
+        if (lahbpw.generateLabels == lahbpw.LocalLabels) {
+            if (!s->localLabels.contains(address)) {
+                s->localLabels.insert(address, QString("L%1").arg(address,0,16,QChar('0')));
+            }
+        } else if (lahbpw.generateLabels == lahbpw.GlobalLabels) {
+            if (!globalLabels.contains(address)) {
+                globalLabels.insert(address, QString("L%1").arg(address,0,16,QChar('0')));
+            }
+        }
+    }
+
+    Disassembler->generateDisassembly(generateLocalLabels);
+    showDisassembly();
+    showHex();
+    showAscii();
 }
