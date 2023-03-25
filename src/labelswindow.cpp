@@ -128,6 +128,8 @@ void labelswindow::onTableGlobalLabels_cellChanged(int row, int column) {
 
     globalLabels.insert(address, label);
     showGlobalLabels();
+    t->setFocus();
+    t->setCurrentCell(row, 1);
 }
 
 void labelswindow::onTableLocalLabels_cellChanged(int row, int column) {
@@ -148,6 +150,8 @@ void labelswindow::onTableLocalLabels_cellChanged(int row, int column) {
 
     s->localLabels.insert(address, label);
     showLocalLabels();
+    t->setFocus();
+    t->setCurrentCell(row, 1);
 }
 
 //-----------------------------------------------------------------------------
@@ -171,6 +175,8 @@ void labelswindow::actionChange_To_Local_Label() {
     segments[currentSegment].localLabels.insert(address, label);
     showGlobalLabels();
     showLocalLabels();
+    t->setFocus();
+    t->setCurrentCell(row, 1);
 }
 
 void labelswindow::actionChange_To_Global_Label() {
@@ -191,6 +197,8 @@ void labelswindow::actionChange_To_Global_Label() {
     globalLabels.insert(address, label);
     showGlobalLabels();
     showLocalLabels();
+    t->setFocus();
+    t->setCurrentCell(row, 1);
 }
 
 //-----------------------------------------------------------------------------
