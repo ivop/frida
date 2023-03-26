@@ -20,12 +20,9 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "disassembler.h"
 #include "frida.h"
 #include "loader.h"
 #include <QDebug>
-#include <QFileInfo>
-#include <QRegularExpression>
 
 #define LE16(x) ((x)[1]<<8 | (x)[0])
 #define BE16(x) ((x)[0]<<8 | (x)[1])
@@ -165,8 +162,6 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
             return false;
         }
     }
-
-    qDebug() << header;
 
     QRegularExpression re;
     QRegularExpressionMatch match;
