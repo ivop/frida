@@ -3,7 +3,7 @@ ptr = $e0
 
     org $4000
 
-    jmp main
+    jmp allblocks
 
 block1
 :32 dta 'block1dataabcdefghijklm'
@@ -34,22 +34,25 @@ highbytes2
 
 ; inside code
 
-main
+allblocks
     lda #<block1
     sta ptr
     lda #>block1
     sta ptr+1
 
+startblock2
     lda #<block2
     sta ptr
     lda #>block2
     sta ptr+1
 
+startblock3
     lda #<block3
     sta ptr
     lda #>block3
     sta ptr+1
 
+startblock4
     lda #<block4
     sta ptr
     lda #>block4
@@ -57,3 +60,19 @@ main
 
     jmp *
 
+:32 nop
+
+jumptable_low
+    .byte <(allblocks-1), <(startblock2-1), <(startblock3-1), <(startblock4-1)
+jumptable_high
+    .byte >(allblocks-1), >(startblock2-1), >(startblock3-1), >(startblock4-1)
+
+:32 nop
+
+    ldx #0
+jumper
+    lda jumptable_high,x
+    pha
+    lda jumptable_low,x
+    pha
+    rts

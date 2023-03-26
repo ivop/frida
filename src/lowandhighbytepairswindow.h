@@ -16,6 +16,7 @@ public:
     ~LowAndHighBytePairsWindow();
 
     bool pairsLowLowHighHigh;
+    bool minusLabels;
 
     enum {
         NoLabels        = 0,
@@ -27,6 +28,7 @@ public:
 
 public Q_SLOTS:
     void accept() override;
+    void onNoLabels_toggled();
 
 private:
     Ui::LowAndHighBytePairsWindow *ui;

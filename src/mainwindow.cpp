@@ -1071,10 +1071,11 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         QString operand = t->item(index.row(), 2)->text();
 
-        // check for #<label and #>label
+        // check for #<(label) and #>(label)
 
-        if ((operand.left(2) == QLatin1String("#<")) || (operand.left(2) == QLatin1String("#>"))) {
-            operand = operand.mid(2);
+        if ((operand.left(3) == QLatin1String("#<(")) || (operand.left(3) == QLatin1String("#>("))) {
+            operand = operand.mid(3);
+            operand = operand.left(operand.size()-1);
         }
 
         // check for line of addresses/labels
@@ -1364,7 +1365,7 @@ void MainWindow::actionLowAndHighBytePairs(void) {
 
     QTableWidget *t = ui->tableHexadecimal;
     QList<QTableWidgetSelectionRange> Ranges = t->selectedRanges();
-    QList<quint64> allSelectedCells;
+    QVector<quint64> allSelectedCells;
 
     if (Ranges.size() == 0)
         return;
@@ -1392,7 +1393,7 @@ void MainWindow::actionLowAndHighBytePairs(void) {
     if (lahbpw.exec() == QMessageBox::Rejected)
         return;
 
-    QList<QPair<quint64, quint64>>allPairs;
+    QVector<QPair<quint64, quint64>>allPairs;
     int half = allSelectedCells.size() / 2;
 
     if (lahbpw.pairsLowLowHighHigh) {
@@ -1404,6 +1405,12 @@ void MainWindow::actionLowAndHighBytePairs(void) {
             allPairs.append(QPair(allSelectedCells[i], allSelectedCells[i+1]));
         }
     }
+
+    bool minusOne = lahbpw.minusLabels;
+
+    auto labels = &s->localLabels;
+    if (lahbpw.generateLabels == lahbpw.GlobalLabels)
+        labels = &globalLabels;
 
     for (auto pair : allPairs) {
         quint64 first = pair.first;
@@ -1424,13 +1431,16 @@ void MainWindow::actionLowAndHighBytePairs(void) {
         lowbytes->insert(first, address);
         highbytes->insert(second, address);
 
-        if (lahbpw.generateLabels == lahbpw.LocalLabels) {
-            if (!s->localLabels.contains(address)) {
-                s->localLabels.insert(address, QString("L%1").arg(address,0,16,QChar('0')));
-            }
-        } else if (lahbpw.generateLabels == lahbpw.GlobalLabels) {
-            if (!globalLabels.contains(address)) {
-                globalLabels.insert(address, QString("L%1").arg(address,0,16,QChar('0')));
+        if (lahbpw.generateLabels != lahbpw.NoLabels) {
+            if (!minusOne) {
+                if (!labels->contains(address)) {
+                    labels->insert(address, QString("L%1").arg(address,0,16,QChar('0')));
+                }
+            } else {
+                if (!labels->contains(address)) {
+                    labels->insert(address, QString("L%1-1").arg(address+1,0,16,QChar('0')));
+                    labels->insert(address+1, QString("L%1").arg(address+1,0,16,QChar('0')));
+                }
             }
         }
     }

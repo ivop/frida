@@ -373,9 +373,9 @@ do_directive:
                           QStringLiteral("%1").arg(key, 4, 16, (QChar)'0') +
                           hexSuffix;
                 if (s->flags[i] & FLAG_HIGH_BYTE)
-                    hex = '>' + hex;
+                    hex = ">(" + hex + ")";
                 else
-                    hex = '<' + hex;
+                    hex = "<(" + hex + ")";
                 if (toUpper)
                     hex = hex.toUpper();
             }

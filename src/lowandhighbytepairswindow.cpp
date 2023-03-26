@@ -6,6 +6,9 @@ LowAndHighBytePairsWindow::LowAndHighBytePairsWindow(QWidget *parent) :
     ui(new Ui::LowAndHighBytePairsWindow)
 {
     ui->setupUi(this);
+
+    connect(ui->radioNoLabels, &QRadioButton::toggled,
+            this, &LowAndHighBytePairsWindow::onNoLabels_toggled);
 }
 
 LowAndHighBytePairsWindow::~LowAndHighBytePairsWindow()
@@ -15,6 +18,7 @@ LowAndHighBytePairsWindow::~LowAndHighBytePairsWindow()
 
 void LowAndHighBytePairsWindow::accept() {
     pairsLowLowHighHigh = ui->radioLowLowHighHigh->isChecked();
+    minusLabels = ui->checkMinusOne->isChecked();
 
     if (ui->radioNoLabels->isChecked())
         generateLabels = NoLabels;
@@ -25,4 +29,11 @@ void LowAndHighBytePairsWindow::accept() {
 
     setResult(QDialog::Accepted);
     hide();
+}
+
+void LowAndHighBytePairsWindow::onNoLabels_toggled() {
+    if (ui->radioNoLabels->isChecked())
+        ui->checkMinusOne->setHidden(true);
+    else
+        ui->checkMinusOne->setHidden(false);
 }

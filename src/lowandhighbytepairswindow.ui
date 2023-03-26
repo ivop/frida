@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>520</width>
-    <height>300</height>
+    <height>327</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,6 +90,16 @@
        <widget class="QRadioButton" name="radioGlobalLabels">
         <property name="text">
          <string>Global labels</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkMinusOne">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>Generate minus one labels for RTS/stack based 6502 jump tables</string>
         </property>
        </widget>
       </item>
