@@ -22,7 +22,7 @@
 
 #include "disassembler.h"
 #include "frida.h"
-#include "loader.h"
+#include "loaders.h"
 #include "loadsaveproject.h"
 #include "startdialog.h"
 #include "ui_startdialog.h"

@@ -21,7 +21,7 @@
 // ---------------------------------------------------------------------------
 
 #include "frida.h"
-#include "loader.h"
+#include "loaders.h"
 #include "loadsaveproject.h"
 #include <QDataStream>
 #include <QDebug>
@@ -39,7 +39,7 @@ static int error;
 QString errorstring;
 
 enum {
-    FRIDA_FILE_FORMAT_1
+    FRIDA_FILE_FORMAT_1 = 0,
 };
 
 //-----------------------------------------------------------------------------

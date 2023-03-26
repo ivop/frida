@@ -21,11 +21,11 @@ SOURCES += \
     exportassembly.cpp \
     exportassemblywindow.cpp \
     jumptowindow.cpp \
+    loaders.cpp \
     lowandhighbytepairswindow.cpp \
     main.cpp\
     loadsaveproject.cpp \
     mainwindow.cpp \
-    loader.cpp \
     filetypes.cpp \
     cputypes.cpp \
     disassembler6502.cpp \
@@ -41,10 +41,10 @@ HEADERS += \
     exportassembly.h \
     exportassemblywindow.h \
     jumptowindow.h \
+    loaders.h \
     lowandhighbytepairswindow.h \
     mainwindow.h \
     frida.h \
-    loader.h \
     disassembler.h \
     commentwindow.h \
     labelswindow.h \
