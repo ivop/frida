@@ -24,11 +24,6 @@
 #include "loaders.h"
 #include <QDebug>
 
-#define LE16(x) ((x)[1]<<8 | (x)[0])
-#define BE16(x) ((x)[0]<<8 | (x)[1])
-#define LE32(x) ((x)[3]<<24 | (x)[2]<<16 | (x)[1]<<8 | (x)[0])
-#define BE32(x) ((x)[0]<<24 | (x)[1]<<16 | (x)[2]<<8 | (x)[3])
-
 // note on zeroed memory:
 // new char[size]   is similar to malloc()
 // new char[size]() is similar to calloc()

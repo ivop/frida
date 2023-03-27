@@ -22,7 +22,10 @@
 
 // Based on: https://github.com/atari800/atari800/blob/master/DOC/cart.txt
 
+#include "frida.h"
 #include "loaderatari8bitcar.h"
+#include "loaders.h"
+#include <QDebug>
 
 #define END { 0, 0, 0, 0, 0 }
 
@@ -415,7 +418,7 @@ END
 struct cartridge_info cartridges[CARTRIDGE_LAST] = {
 
 // 0-9
-{ "None",                                   0, {}                          },
+{ "None",                                   0, 0 },
 { "Standard 8 kB left cartridge",           8, blocks_CARTRIDGE_STD_8      },
 { "Standard 16 kB cartridge",              16, blocks_CARTRIDGE_STD_16     },
 { "OSS two chip 16 kB cartridge (034M)",   16, blocks_CARTRIDGE_OSS_16     },
@@ -471,8 +474,8 @@ struct cartridge_info cartridges[CARTRIDGE_LAST] = {
 { "OSS two chip 16 kB cartridge (043M)",   16, blocks_CARTRIDGE_OSS_16        },
 { "Blizzard 4 kB cartridge",                4, blocks_CARTRIDGE_BLIZZARD_4    },
 { "AST 32 kB cartridge",                   32, blocks_CARTRIDGE_AST_32        },
-{ "Atrax SDX 64 kB cartridge",             64, {} },
-{ "Atrax SDX 128 kB cartridge",           128, {} },
+{ "Atrax SDX 64 kB cartridge",             64, 0 },
+{ "Atrax SDX 128 kB cartridge",           128, 0 },
 
 // 50-59
 { "Turbosoft 64 kB cartridge",             64, blocks_CARTRIDGE_WILL_64       },
@@ -489,13 +492,13 @@ struct cartridge_info cartridges[CARTRIDGE_LAST] = {
 // 60-69
 { "Blizzard 32 kB cartridge",              32, blocks_CARTRIDGE_WILL_32      },
 { "MegaMax 2 MB cartridge",              2048, blocks_CARTRIDGE_MEGAMAX_2048 },
-{ "The!Cart 128 MB cartridge",         131072, {} },
+{ "The!Cart 128 MB cartridge",         131072, 0 },
 { "Flash MegaCart 4 MB cartridge",       4096, blocks_CARTRIDGE_MEGA_4096    },
 { "MegaCart 2 MB cartridge",             2048, blocks_CARTRIDGE_MEGA_2048    },
-{ "The!Cart 32 MB cartridge",           32768, {} },
-{ "The!Cart 64 MB cartridge",           65536, {} },
+{ "The!Cart 32 MB cartridge",           32768, 0 },
+{ "The!Cart 64 MB cartridge",           65536, 0 },
 { "XEGS 64 kB cartridge (banks 8-15)",     64, blocks_CARTRIDGE_XEGS_07_64   },
-{ "Atrax 128 kB cartridge",               128, {} },
+{ "Atrax 128 kB cartridge",               128, 0 },
 { "aDawliah 32 kB cartridge",              32, blocks_CARTRIDGE_WILL_32      },
 
 // 70-75
@@ -508,3 +511,59 @@ struct cartridge_info cartridges[CARTRIDGE_LAST] = {
 };
 
 // ---------------------------------------------------------------------------
+
+bool LoaderAtari8bitCar::Load(QFile& file) {
+    quint8 header[16];
+    quint32 cartype;
+    struct segment s;
+
+    file.read((char *)header, 16);
+
+    if (memcmp(header, "CART", 4) != 0) {
+        this->error_message = QStringLiteral("CART header not found!\n");
+        return false;
+    }
+
+    cartype = BE32(header+4);
+
+    if (cartype == 0 || cartype >= CARTRIDGE_LAST) {
+        this->error_message = QStringLiteral("Unknown mapper type\n");
+        return false;
+    }
+
+    struct cartridge_info *carinfo = &cartridges[cartype];
+    struct block *blocks = carinfo->blocks;
+
+    if (blocks == 0) {
+        this->error_message = QStringLiteral("Type ") + carinfo->description +
+                              QStringLiteral("not supported");
+        return false;
+    }
+
+    int bank = 0;
+
+    for (int i = 0; blocks[i].count; i++) {
+
+        quint16 start_address = blocks[i].start_address;
+        quint16 size = blocks[i].size;
+        quint16 end_address = start_address + size - 1;
+
+        for (int j = 0; j < blocks[i].count; j++) {
+            s = createEmptySegment(start_address, end_address);
+            s.name = QStringLiteral("Bank %1").arg(bank++);
+            file.read((char *) s.data, size);
+
+            quint16 start_vector = LE16(s.data + blocks[i].start_vector - blocks[i].start_address);
+            quint16 init_vector  = LE16(s.data + blocks[i].init_vector  - blocks[i].start_address);
+
+            if (start_vector)
+                s.localLabels.insert(start_vector, "start");
+            if (init_vector)
+                s.localLabels.insert(init_vector, "init");
+
+            segments.append(s);
+        }
+    }
+
+    return true;
+}

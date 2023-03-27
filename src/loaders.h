@@ -25,6 +25,11 @@
 
 #include <QFile>
 
+#define LE16(x) ((x)[1]<<8 | (x)[0])
+#define BE16(x) ((x)[0]<<8 | (x)[1])
+#define LE32(x) ((x)[3]<<24 | (x)[2]<<16 | (x)[1]<<8 | (x)[0])
+#define BE32(x) ((x)[0]<<24 | (x)[1]<<16 | (x)[2]<<8 | (x)[3])
+
 class Loader {
 public:
 	Loader() = default;
@@ -46,6 +51,11 @@ public:
 };
 
 class LoaderAtari8bitSAP : public Loader {
+public:
+    bool Load(QFile& file) override;
+};
+
+class LoaderAtari8bitCar : public Loader {
 public:
     bool Load(QFile& file) override;
 };
