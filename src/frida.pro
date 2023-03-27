@@ -21,6 +21,7 @@ SOURCES += \
     exportassembly.cpp \
     exportassemblywindow.cpp \
     jumptowindow.cpp \
+    loaderatari8bitcar.cpp \
     loaders.cpp \
     lowandhighbytepairswindow.cpp \
     main.cpp\
@@ -41,6 +42,7 @@ HEADERS += \
     exportassembly.h \
     exportassemblywindow.h \
     jumptowindow.h \
+    loaderatari8bitcar.h \
     loaders.h \
     lowandhighbytepairswindow.h \
     mainwindow.h \
