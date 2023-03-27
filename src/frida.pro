@@ -36,6 +36,7 @@ SOURCES += \
     addlabelwindow.cpp \
     changesegmentwindow.cpp \
     lowhighbytewindow.cpp \
+    selectcartridgewindow.cpp \
     startdialog.cpp
 
 HEADERS += \
@@ -54,6 +55,7 @@ HEADERS += \
     changesegmentwindow.h \
     loadsaveproject.h \
     lowhighbytewindow.h \
+    selectcartridgewindow.h \
     startdialog.h
 
 FORMS += \
@@ -66,6 +68,7 @@ FORMS += \
     addlabelwindow.ui \
     changesegmentwindow.ui \
     lowhighbytewindow.ui \
+    selectcartridgewindow.ui \
     startdialog.ui
 
 RESOURCES += \

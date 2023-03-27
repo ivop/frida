@@ -25,6 +25,7 @@
 #include "frida.h"
 #include "loaderatari8bitcar.h"
 #include "loaders.h"
+#include "selectcartridgewindow.h"
 #include <QDebug>
 
 #define END { 0, 0, 0, 0, 0 }
@@ -516,23 +517,53 @@ bool LoaderAtari8bitCar::Load(QFile& file) {
     quint8 header[16];
     quint32 cartype;
     struct segment s;
+    struct cartridge_info *carinfo;
+    struct block *blocks;
 
     file.read((char *)header, 16);
 
     if (memcmp(header, "CART", 4) != 0) {
-        this->error_message = QStringLiteral("CART header not found!\n");
-        return false;
-    }
+        file.seek(0);
+        qint64 filesize = file.size();
 
-    cartype = BE32(header+4);
+        QVector<quint64> candidates;
+
+        for (quint64 a = 1; a < CARTRIDGE_LAST; a++) {
+            if (!cartridges[a].blocks)
+                continue;
+            if (cartridges[a].size_in_kB*1024 == filesize)
+                candidates.append(a);
+        }
+
+        if (candidates.isEmpty()) {
+            this->error_message = "Binary file does not match size of any cartridges.";
+            return false;
+        }
+
+        selectcartridgewindow scw(nullptr, candidates);
+
+        if (scw.exec() == QDialog::Rejected) {
+            this->error_message = "Loading bin file rejected.";
+            return false;
+        }
+
+        cartype = scw.cartridge_type;
+
+        file.seek(0);
+
+    } else {
+
+        cartype = BE32(header+4);
+
+    }
 
     if (cartype == 0 || cartype >= CARTRIDGE_LAST) {
         this->error_message = QStringLiteral("Unknown mapper type\n");
         return false;
     }
 
-    struct cartridge_info *carinfo = &cartridges[cartype];
-    struct block *blocks = carinfo->blocks;
+    carinfo = &cartridges[cartype];
+    blocks = carinfo->blocks;
 
     if (blocks == 0) {
         this->error_message = QStringLiteral("Type ") + carinfo->description +
@@ -551,15 +582,29 @@ bool LoaderAtari8bitCar::Load(QFile& file) {
         for (int j = 0; j < blocks[i].count; j++) {
             s = createEmptySegment(start_address, end_address);
             s.name = QStringLiteral("Bank %1").arg(bank++);
-            file.read((char *) s.data, size);
+            if (file.read((char *) s.data, size) != size) {
+                this->error_message = "Premature end of file reached.";
+                return false;
+            }
 
-            quint16 start_vector = LE16(s.data + blocks[i].start_vector - blocks[i].start_address);
-            quint16 init_vector  = LE16(s.data + blocks[i].init_vector  - blocks[i].start_address);
+            if (blocks[i].start_vector) {
+                quint16 start_offset = blocks[i].start_vector - blocks[i].start_address;
+                quint16 start_vector = LE16(s.data + start_offset);
 
-            if (start_vector)
                 s.localLabels.insert(start_vector, "start");
-            if (init_vector)
+                s.datatypes[start_offset]   =
+                s.datatypes[start_offset+1] = DT_WORDLE;
+                s.flags[start_offset] = FLAG_USE_LABEL;
+            }
+            if (blocks[i].init_vector) {
+                quint16 init_offset  = blocks[i].init_vector  - blocks[i].start_address;
+                quint16 init_vector  = LE16(s.data + init_offset);
+
                 s.localLabels.insert(init_vector, "init");
+                s.datatypes[init_offset]   =
+                s.datatypes[init_offset+1] = DT_WORDLE;
+                s.flags[init_offset] = FLAG_USE_LABEL;
+            }
 
             segments.append(s);
         }

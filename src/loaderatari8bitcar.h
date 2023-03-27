@@ -41,6 +41,8 @@ struct cartridge_info {
     struct block *blocks;
 };
 
+extern struct cartridge_info cartridges[];
+
 enum cartridge_types {
 	CARTRIDGE_NONE           =  0,
 	CARTRIDGE_STD_8          =  1,
