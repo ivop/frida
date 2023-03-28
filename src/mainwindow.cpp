@@ -1399,11 +1399,11 @@ void MainWindow::actionLowAndHighBytePairs(void) {
 
     if (lahbpw.pairsLowLowHighHigh) {
         for(int i = 0; i < half; i++) {
-            allPairs.append(QPair(allSelectedCells[i], allSelectedCells[half+i]));
+            allPairs.append(QPair<quint64,quint64>(allSelectedCells[i], allSelectedCells[half+i]));
         }
     } else {
         for (int i = 0; i < allSelectedCells.size(); i += 2) {
-            allPairs.append(QPair(allSelectedCells[i], allSelectedCells[i+1]));
+            allPairs.append(QPair<quint64,quint64>(allSelectedCells[i], allSelectedCells[i+1]));
         }
     }
 

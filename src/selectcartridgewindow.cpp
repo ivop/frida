@@ -59,7 +59,7 @@ selectcartridgewindow::~selectcartridgewindow()
 
 void selectcartridgewindow::accept() {
     QTableWidget *t = ui->tableCartridges;
-    QList ranges = t->selectedRanges();
+    QList<QTableWidgetSelectionRange> ranges = t->selectedRanges();
 
     int row = ranges.at(0).topRow();
 
