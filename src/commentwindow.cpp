@@ -21,6 +21,7 @@
 // ---------------------------------------------------------------------------
 
 #include "commentwindow.h"
+#include "frida.h"
 #include "ui_commentwindow.h"
 #include <QDebug>
 
@@ -29,6 +30,7 @@ commentwindow::commentwindow(QWidget *parent) :
     ui(new Ui::commentwindow)
 {
     ui->setupUi(this);
+    this->setFont(globalFont);
 }
 
 commentwindow::commentwindow(const QString& s, const QString& c, QWidget *parent) :

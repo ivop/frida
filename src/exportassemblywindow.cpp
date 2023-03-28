@@ -21,6 +21,7 @@
 // ---------------------------------------------------------------------------
 
 #include "exportassemblywindow.h"
+#include "frida.h"
 #include "ui_exportassemblywindow.h"
 #include <QDebug>
 
@@ -29,6 +30,7 @@ exportAssemblyWindow::exportAssemblyWindow(QWidget *parent) :
     ui(new Ui::exportAssemblyWindow)
 {
     ui->setupUi(this);
+    this->setFont(globalFont);
 }
 
 exportAssemblyWindow::~exportAssemblyWindow()

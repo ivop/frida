@@ -20,6 +20,7 @@
 //
 // ---------------------------------------------------------------------------
 
+#include "frida.h"
 #include "loaderatari8bitcar.h"
 #include "selectcartridgewindow.h"
 #include "ui_selectcartridgewindow.h"
@@ -30,6 +31,8 @@ selectcartridgewindow::selectcartridgewindow(QWidget *parent, const QVector<quin
     ui(new Ui::selectcartridgewindow)
 {
     ui->setupUi(this);
+
+    this->setFont(globalFont);
 
     QTableWidget *t = ui->tableCartridges;
     t->setColumnCount(1);

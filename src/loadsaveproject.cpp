@@ -50,11 +50,13 @@ bool load_project(QWidget *widget) {
 
     if (name.isEmpty()) return false;
 
+    QMessageBox msg;
+    msg.setFont(globalFont);
+
     QFile file(name);
 
     file.open(QIODevice::ReadOnly);
     if (!file.isOpen()) {
-        QMessageBox msg;
         msg.setText("Failed to open " + name + "\n" + file.errorString());
         msg.exec();
         return false;
@@ -73,7 +75,6 @@ bool load_project(QWidget *widget) {
     in >> fileformat;
 
     if (fileformat > FRIDA_FILE_FORMAT_1) {
-        QMessageBox msg;
         msg.setText("Unable to load " + file.errorString() +
                     "\nProject is from a newer version of Frida\n");
         msg.exec();
@@ -126,13 +127,11 @@ error_out:          // goto here with error and errorstring set.
     file.close();
 
     if (error != file.NoError) {
-        QMessageBox msg;
         msg.setText("Failed to load " + name + "\n\n" + errorstring);
         msg.exec();
         return false;
     }
 
-    QMessageBox msg;
     msg.setText("Succesfully loaded " + name + "\n");
     msg.exec();
     return true;
@@ -146,11 +145,13 @@ void save_project(QWidget *widget) {
 
     if (name.isEmpty()) return;
 
+    QMessageBox msg;
+    msg.setFont(globalFont);
+
     QFile file(name);
 
     file.open(QIODevice::WriteOnly);
     if (!file.isOpen()) {
-        QMessageBox msg;
         msg.setText("Failed to open " + name + "\n\n" + file.errorString());
         msg.exec();
         return;
@@ -196,11 +197,9 @@ void save_project(QWidget *widget) {
     file.close();
 
     if (error != file.NoError) {
-        QMessageBox msg;
         msg.setText("Failed to save " + name + "\n\n" + errorstring);
         msg.exec();
     } else {
-        QMessageBox msg;
         msg.setText("Succesfully saved " + name + "\n");
         msg.exec();
     }

@@ -105,6 +105,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QTableWidget *t;
     ui->setupUi(this);
 
+    this->setFont(globalFont);
+
     ui->plainTextEditNotes->setPlainText(globalNotes);
 
     connect(ui->labelsButton, &QPushButton::clicked,
@@ -369,6 +371,8 @@ void MainWindow::onTableSegments_itemSelectionChanged()
 void MainWindow::actionDelete_Segment() {
     QTableWidget *t = ui->tableSegments;
     QMessageBox msg;
+    msg.setFont(globalFont);
+
     int cur = currentSegment;
 
     if (!t->hasFocus()) return;
@@ -625,6 +629,7 @@ void MainWindow::Set_Flag_Low_or_High_Byte(bool bLow) {
 
     if (nranges != 1 || !single_cell) {
         QMessageBox msg;
+        msg.setFont(globalFont);
         msg.setText(QStringLiteral("Select a single byte to flag as Low or High Byte     "));
         msg.addButton(QStringLiteral("OK"), QMessageBox::AcceptRole);
         msg.exec();
@@ -1176,6 +1181,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 void MainWindow::closeEvent (QCloseEvent *event)
 {
     QMessageBox msg;
+    msg.setFont(globalFont);
 
     msg.setText(QStringLiteral("Do you really want to exit Frida?"));
     msg.addButton(QStringLiteral("No"), QMessageBox::RejectRole);

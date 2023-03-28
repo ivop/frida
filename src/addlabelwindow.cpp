@@ -31,6 +31,7 @@ addLabelWindow::addLabelWindow(QWidget *parent) :
     ui(new Ui::addLabelWindow)
 {
     ui->setupUi(this);
+    this->setFont(globalFont);
 
     connect(ui->pushButtonCancel, &QPushButton::clicked,
             this, &addLabelWindow::onPushButtonCancel_clicked);
@@ -54,6 +55,8 @@ void addLabelWindow::onPushButtonAdd_clicked() {
     QString label   = ui->lineEditLabel->text();
     bool ok = false;
     quint64 addr = address.toULongLong(&ok,16);
+
+    msg.setFont(globalFont);
 
     if (!ok) {
         msg.setText(QStringLiteral("Invalid address!"));

@@ -88,6 +88,7 @@ enum fonts {
 };
 
 extern enum fonts altfont;
+extern QFont globalFont;
 
 // --------------------------------------------------------------------------
 

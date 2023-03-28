@@ -21,6 +21,7 @@
 // ---------------------------------------------------------------------------
 
 #include "jumptowindow.h"
+#include "frida.h"
 #include "ui_jumptowindow.h"
 #include <QDebug>
 
@@ -29,6 +30,7 @@ jumpToWindow::jumpToWindow(QWidget *parent, QStringList *list) :
     ui(new Ui::jumpToWindow)
 {
     ui->setupUi(this);
+    this->setFont(globalFont);
 
     for (int i=0; i<list->size(); i++) {
         ui->listWidget->addItem(list->at(i));

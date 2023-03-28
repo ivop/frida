@@ -14,7 +14,6 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 QMAKE_CXXFLAGS += -std=c++17
 
 TARGET = frida
-TEMPLATE = app
 
 SOURCES += \
     disassembler8080.cpp \

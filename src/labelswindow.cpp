@@ -35,6 +35,7 @@ labelswindow::labelswindow(QWidget *parent) :
 {
     QTableWidget *t;
     ui->setupUi(this);
+    this->setFont(globalFont);
 
     t = ui->tableGlobalLabels;
     t->addAction(ui->actionChange_To_Local_Label);
@@ -232,6 +233,7 @@ void labelswindow::actionDelete_Label() {
 
 
     QMessageBox msg;
+    msg.setFont(globalFont);
     msg.setText("Do you really want to delete " + label);
     msg.setStandardButtons(QMessageBox::Yes);
     msg.addButton(QMessageBox::No);
@@ -259,21 +261,11 @@ void labelswindow::onExportButton_clicked() {
 
     QFile file(name);
 
-#if 0   // QFileDialog already handles this
-    if (file.exists()) {
-        QMessageBox msg;
-        msg.setText("File " + name + " exists. Overwrite?");
-        msg.setStandardButtons(QMessageBox::Yes);
-        msg.addButton(QMessageBox::No);
-        msg.setDefaultButton(QMessageBox::No);
-        if(msg.exec() != QMessageBox::Yes)
-            return;
-    }
-#endif
+    QMessageBox msg;
+    msg.setFont(globalFont);
 
     file.open(QIODevice::WriteOnly);
     if (!file.isOpen()) {
-        QMessageBox msg;
         msg.setText("Failed to open " + name + "\n" + file.errorString());
         msg.exec();
         return;
@@ -288,7 +280,6 @@ void labelswindow::onExportButton_clicked() {
     }
 
     if (file.error()) {
-        QMessageBox msg;
         msg.setText("Error: " + file.errorString());
         msg.exec();
     }
@@ -304,9 +295,11 @@ void labelswindow::onImportButton_clicked() {
 
     if (name.isEmpty()) return;
 
+    QMessageBox msg;
+    msg.setFont(globalFont);
+
     QFile file(name);
     if (!file.exists()) {
-        QMessageBox msg;
         msg.setText(QStringLiteral("No such file!"));
         msg.exec();
         return;
@@ -314,7 +307,6 @@ void labelswindow::onImportButton_clicked() {
 
     file.open(QIODevice::ReadOnly);
     if (!file.isOpen()) {
-        QMessageBox msg;
         msg.setText("Failed to open " + name + "\n" + file.errorString());
         msg.exec();
         return;

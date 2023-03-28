@@ -41,6 +41,8 @@ StartDialog::StartDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->setFont(globalFont);
+
     connect(ui->buttonBrowseFileDisasm, &QPushButton::clicked,
             this, &StartDialog::onButtonBrowseFileDisasm_clicked);
     connect(ui->buttonLoadExistingProject, &QPushButton::clicked,
@@ -85,14 +87,14 @@ void StartDialog::onButtonLoadExistingProject_clicked()
 
 void StartDialog::onButtonNewProject_clicked()
 {
+    QMessageBox msg;
+    msg.setFont(globalFont);
     if (ui->lineFileDisasm->text().isEmpty()) {
-        QMessageBox msg;
         msg.setText(QStringLiteral("Some fields are left empty!"));
         msg.exec();
         return;
     }
 
-    QMessageBox msg;
 
     FileToDisassemble.clear();
     FileToDisassemble.append(ui->lineFileDisasm->text());

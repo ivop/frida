@@ -21,6 +21,7 @@
 // ---------------------------------------------------------------------------
 
 #include "lowhighbytewindow.h"
+#include "frida.h"
 #include "ui_lowhighbytewindow.h"
 #include <QDebug>
 #include <QMessageBox>
@@ -30,6 +31,7 @@ lowhighbytewindow::lowhighbytewindow(QWidget *parent) :
     ui(new Ui::lowhighbytewindow)
 {
     ui->setupUi(this);
+    this->setFont(globalFont);
 }
 
 lowhighbytewindow::lowhighbytewindow(quint64 location, bool low, quint8 byte,
@@ -68,6 +70,7 @@ void lowhighbytewindow::onButtonBox_accepted()
         accept();
     } else {
         QMessageBox msg;
+        msg.setFont(globalFont);
         if (addr > 0xffff)
             msg.setText(QStringLiteral("Address larger than 16-bit"));
         else
