@@ -98,7 +98,6 @@ private Q_SLOTS:
     void onTableDisassembly_cellChanged(int row, int column);
 
     void onComboFonts_activated(int index);
-    void onComboBox_currentIndexChanged(int index);
     void onTableDisassembly_doubleClicked(const QModelIndex &index);
     void onTableReferences_doubleClicked(const QModelIndex &index);
 

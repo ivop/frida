@@ -135,9 +135,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->comboFonts, QOverload<int>::of(&QComboBox::activated),
             this, &MainWindow::onComboFonts_activated);
 
-    connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &MainWindow::onComboBox_currentIndexChanged);
-
     connect(ui->tableDisassembly, &QTableWidget::doubleClicked,
             this, &MainWindow::onTableDisassembly_doubleClicked);
     connect(ui->tableReferences, &QTableWidget::doubleClicked,
@@ -903,12 +900,6 @@ void MainWindow::onLabelsButton_clicked() {
 
 void MainWindow::onExitButton_clicked() {
     close();
-}
-
-void MainWindow::onComboBox_currentIndexChanged(int index) {
-    QFont f = this->font();
-    f.setPointSize(10+index);
-    this->setFont(f);
 }
 
 void MainWindow::onComboFonts_activated(int index) {

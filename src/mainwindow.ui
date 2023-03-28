@@ -37,38 +37,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox">
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <item>
-         <property name="text">
-          <string>10 pt</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>11 pt</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>12 pt</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>13 pt</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>14 pt</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
        <spacer name="horizontalSpacer_4">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
