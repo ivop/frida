@@ -32,7 +32,6 @@ changesegmentwindow::changesegmentwindow(quint64 oldaddr, quint64 *newaddr,
     ui(new Ui::changesegmentwindow)
 {
     ui->setupUi(this);
-    this->setFont(globalFont);
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted,
         this, &changesegmentwindow::onButtonBox_accepted);
@@ -57,7 +56,6 @@ void changesegmentwindow::onButtonBox_accepted()
         *newaddress = n;
     } else {
         QMessageBox msg;
-        msg.setFont(globalFont);
         msg.setText(QStringLiteral("Invalid address!"));
         msg.setStandardButtons(QMessageBox::Close);
         msg.exec();

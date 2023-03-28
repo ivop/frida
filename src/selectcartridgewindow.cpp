@@ -32,8 +32,6 @@ selectcartridgewindow::selectcartridgewindow(QWidget *parent, const QVector<quin
 {
     ui->setupUi(this);
 
-    this->setFont(globalFont);
-
     QTableWidget *t = ui->tableCartridges;
     t->setColumnCount(1);
 

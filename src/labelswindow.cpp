@@ -35,7 +35,6 @@ labelswindow::labelswindow(QWidget *parent) :
 {
     QTableWidget *t;
     ui->setupUi(this);
-    this->setFont(globalFont);
 
     t = ui->tableGlobalLabels;
     t->addAction(ui->actionChange_To_Local_Label);
@@ -233,7 +232,6 @@ void labelswindow::actionDelete_Label() {
 
 
     QMessageBox msg;
-    msg.setFont(globalFont);
     msg.setText("Do you really want to delete " + label);
     msg.setStandardButtons(QMessageBox::Yes);
     msg.addButton(QMessageBox::No);
@@ -262,7 +260,6 @@ void labelswindow::onExportButton_clicked() {
     QFile file(name);
 
     QMessageBox msg;
-    msg.setFont(globalFont);
 
     file.open(QIODevice::WriteOnly);
     if (!file.isOpen()) {
@@ -296,7 +293,6 @@ void labelswindow::onImportButton_clicked() {
     if (name.isEmpty()) return;
 
     QMessageBox msg;
-    msg.setFont(globalFont);
 
     QFile file(name);
     if (!file.exists()) {

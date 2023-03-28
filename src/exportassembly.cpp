@@ -78,7 +78,6 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
     file.open(QIODevice::WriteOnly);
     if (!file.isOpen()) {
         QMessageBox msg;
-        msg.setFont(globalFont);
         msg.setText("Failed to open " + name + "\n\n" + file.errorString());
         msg.exec();
         return;
@@ -246,7 +245,6 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
     file.close();
 
     QMessageBox msg;
-    msg.setFont(globalFont);
 
     if (error != file.NoError) {
         msg.setText("Failed to export " + name + "\n\n" + errorstring);

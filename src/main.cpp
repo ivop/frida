@@ -46,22 +46,22 @@ enum fonts altfont;
 QSettings settings(QStringLiteral("frida"), QStringLiteral("frida"));
 QPalette dark_palette, light_palette;
 
-QFont globalFont;
-
 QMap<quint64, QString> globalAutoLabels, globalLabels;
 
 int main(int argc, char *argv[])
 {
+    unsetenv("QT_QPA_PLATFORMTHEME");       // STOP messing with MY fonts!
+
     QApplication a(argc, argv);
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/AtariClassic-Regular.ttf"));
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/C64_Pro_Mono-STYLE.ttf"));
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/SpaceMono-Regular.ttf"));
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/DroidSansMono.ttf"));
 
-    globalFont = QFont("Droid Sans Mono", 10, 0);
+    QFont font = QFont("Droid Sans Mono", 10, 0);
 
     a.setStyle(QStringLiteral("fusion"));
-    a.setFont(globalFont);
+    a.setFont(font);
 
     dark_palette.setColor(QPalette::Window, QColor(53, 53, 53));
     dark_palette.setColor(QPalette::WindowText, Qt::white);

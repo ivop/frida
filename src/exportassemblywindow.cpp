@@ -30,7 +30,6 @@ exportAssemblyWindow::exportAssemblyWindow(QWidget *parent) :
     ui(new Ui::exportAssemblyWindow)
 {
     ui->setupUi(this);
-    this->setFont(globalFont);
 }
 
 exportAssemblyWindow::~exportAssemblyWindow()

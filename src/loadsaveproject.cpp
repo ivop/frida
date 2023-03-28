@@ -51,7 +51,6 @@ bool load_project(QWidget *widget) {
     if (name.isEmpty()) return false;
 
     QMessageBox msg;
-    msg.setFont(globalFont);
 
     QFile file(name);
 
@@ -146,7 +145,6 @@ void save_project(QWidget *widget) {
     if (name.isEmpty()) return;
 
     QMessageBox msg;
-    msg.setFont(globalFont);
 
     QFile file(name);
 

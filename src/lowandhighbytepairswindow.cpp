@@ -29,7 +29,6 @@ LowAndHighBytePairsWindow::LowAndHighBytePairsWindow(QWidget *parent) :
     ui(new Ui::LowAndHighBytePairsWindow)
 {
     ui->setupUi(this);
-    this->setFont(globalFont);
 
     connect(ui->radioNoLabels, &QRadioButton::toggled,
             this, &LowAndHighBytePairsWindow::onNoLabels_toggled);

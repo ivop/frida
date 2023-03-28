@@ -161,7 +161,6 @@ void Disassembler::generateDisassembly(bool generateLocalLabels) {
 also_wrong:
                 hex = QStringLiteral("%1").arg(start+i, 4, 16, (QChar)'0');
                 QMessageBox msg;
-                msg.setFont(globalFont);
                 msg.setText(hex + ": type needs " + QStringLiteral("%1").arg(n) +
                                                                 " bytes");
                 msg.exec();
@@ -188,7 +187,6 @@ also_wrong:
 also_wrong2:
                 hex = QStringLiteral("%1").arg(start+i, 4, 16, (QChar)'0');
                 QMessageBox msg;
-                msg.setFont(globalFont);
                 msg.setText(hex + ": full instruction needs " +
                             QStringLiteral("%1").arg(n) + " bytes");
                 msg.exec();
