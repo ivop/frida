@@ -226,17 +226,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // disconnect existing Pressed and Clicked on vertical headers
     disconnect(ui->tableHexadecimal->verticalHeader(),
-               qOverload<int>(&QHeaderView::sectionPressed), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionPressed), 0, 0);
     disconnect(ui->tableHexadecimal->verticalHeader(),
-               qOverload<int>(&QHeaderView::sectionClicked), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionClicked), 0, 0);
     disconnect(ui->tableASCII->verticalHeader(),
-               qOverload<int>(&QHeaderView::sectionPressed), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionPressed), 0, 0);
     disconnect(ui->tableASCII->verticalHeader(),
-               qOverload<int>(&QHeaderView::sectionClicked), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionClicked), 0, 0);
     disconnect(ui->tableReferences->verticalHeader(),
-               qOverload<int>(&QHeaderView::sectionPressed), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionPressed), 0, 0);
     disconnect(ui->tableReferences->verticalHeader(),
-               qOverload<int>(&QHeaderView::sectionClicked), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionClicked), 0, 0);
 
     // connect our sectionClicked function on vertical headers
     connect(ui->tableHexadecimal->verticalHeader(),
@@ -253,15 +253,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     t = ui->tableDisassembly;
     disconnect(ui->tableDisassembly->verticalHeader(),
-               qOverload<int>(&QHeaderView::sectionPressed), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionPressed), 0, 0);
     disconnect(ui->tableDisassembly->verticalHeader(),
-               qOverload<int>(&QHeaderView::sectionClicked), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionClicked), 0, 0);
     connect(ui->tableDisassembly->verticalHeader(),
             &QHeaderView::sectionClicked,
             this, &MainWindow::onDisassemblySectionClicked);
 
     connect(ui->tableDisassembly->verticalScrollBar(),
-            qOverload<int>(&QScrollBar::valueChanged),
+            QOverload<int>::of(&QScrollBar::valueChanged),
             this,
             &MainWindow::rememberValue);
 
