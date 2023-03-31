@@ -16,7 +16,9 @@ QMAKE_CXXFLAGS += -std=c++17
 TARGET = frida
 
 SOURCES += \
+    constantsmanager.cpp \
     disassembler8080.cpp \
+    disassemblerZ80.cpp \
     exportassembly.cpp \
     exportassemblywindow.cpp \
     jumptowindow.cpp \
@@ -39,6 +41,7 @@ SOURCES += \
     startdialog.cpp
 
 HEADERS += \
+    constantsmanager.h \
     exportassembly.h \
     exportassemblywindow.h \
     jumptowindow.h \
@@ -58,6 +61,7 @@ HEADERS += \
     startdialog.h
 
 FORMS += \
+    constantsmanager.ui \
     exportassemblywindow.ui \
     jumptowindow.ui \
     lowandhighbytepairswindow.ui \
