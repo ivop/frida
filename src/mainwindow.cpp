@@ -23,6 +23,7 @@
 #include "addlabelwindow.h"
 #include "changesegmentwindow.h"
 #include "commentwindow.h"
+#include "constantsmanager.h"
 #include "disassembler.h"
 #include "exportassembly.h"
 #include "frida.h"
@@ -107,6 +108,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->plainTextEditNotes->setPlainText(globalNotes);
 
+    connect(ui->constantsButton, &QPushButton::clicked,
+            this, &MainWindow::onConstantsButton_clicked);
     connect(ui->labelsButton, &QPushButton::clicked,
             this, &MainWindow::onLabelsButton_clicked);
     connect(ui->exitButton, &QPushButton::clicked,
@@ -884,6 +887,15 @@ void MainWindow::actionComment() {
 
 // ----------------------------------------------------------------------------
 // BUTTONS
+
+void MainWindow::onConstantsButton_clicked() {
+    constantsManager cm;
+    cm.exec();
+    Disassembler->generateDisassembly(generateLocalLabels);
+    showHex();
+    showAscii();
+    showDisassembly();
+}
 
 void MainWindow::onLabelsButton_clicked() {
     labelswindow lw;

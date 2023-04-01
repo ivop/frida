@@ -15,8 +15,12 @@ public:
     explicit constantsManager(QWidget *parent = nullptr);
     ~constantsManager();
 
+private Q_SLOTS:
+    void onGroups_itemSelectionChanged(void);
+
 private:
     Ui::constantsManager *ui;
+    void showGroups();
 };
 
 #endif // CONSTANTSMANAGER_H

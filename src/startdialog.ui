@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>804</width>
-    <height>519</height>
+    <height>549</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -125,7 +125,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/icons/document-open.png</normaloff>:/icons/icons/document-open.png</iconset>
+         <normaloff>:/icons/document-import.svg</normaloff>:/icons/document-import.svg</iconset>
        </property>
       </widget>
      </item>
@@ -271,7 +271,7 @@
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
-          <normaloff>:/icons/icons/document-new.png</normaloff>:/icons/icons/document-new.png</iconset>
+          <normaloff>:/icons/document-new.svg</normaloff>:/icons/document-new.svg</iconset>
         </property>
        </widget>
       </item>

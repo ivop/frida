@@ -8,11 +8,13 @@
         <file>logo/frida-logo.png</file>
         <file>logo/frida-logo.svg</file>
         <file>logo/frida-logo-test.png</file>
-        <file>icons/document-save.png</file>
-        <file>icons/document-save-as.png</file>
-        <file>icons/exit.png</file>
-        <file>icons/document-new.png</file>
-        <file>icons/document-open.png</file>
-        <file>icons/label.png</file>
+        <file>icons/document-export.svg</file>
+        <file>icons/document-import.svg</file>
+        <file>icons/document-open.svg</file>
+        <file>icons/document-save.svg</file>
+        <file>icons/exit.svg</file>
+        <file>icons/document-close.svg</file>
+        <file>icons/document-edit.svg</file>
+        <file>icons/document-new.svg</file>
     </qresource>
 </RCC>

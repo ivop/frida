@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>996</width>
+    <width>998</width>
     <height>707</height>
    </rect>
   </property>
@@ -50,6 +50,17 @@
        </spacer>
       </item>
       <item>
+       <widget class="QPushButton" name="constantsButton">
+        <property name="text">
+         <string>Manage Constants</string>
+        </property>
+        <property name="icon">
+         <iconset resource="frida.qrc">
+          <normaloff>:/icons/document-edit.svg</normaloff>:/icons/document-edit.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="labelsButton">
         <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
@@ -59,7 +70,7 @@
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
-          <normaloff>:/icons/label.png</normaloff>:/icons/label.png</iconset>
+          <normaloff>:/icons/document-edit.svg</normaloff>:/icons/document-edit.svg</iconset>
         </property>
         <property name="shortcut">
          <string>Alt+L</string>
@@ -82,7 +93,7 @@
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
-          <normaloff>:/icons/document-save-as.png</normaloff>:/icons/document-save-as.png</iconset>
+          <normaloff>:/icons/document-save.svg</normaloff>:/icons/document-save.svg</iconset>
         </property>
         <property name="shortcut">
          <string>Alt+S</string>
@@ -102,7 +113,7 @@
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
-          <normaloff>:/icons/document-save.png</normaloff>:/icons/document-save.png</iconset>
+          <normaloff>:/icons/document-export.svg</normaloff>:/icons/document-export.svg</iconset>
         </property>
         <property name="toolButtonStyle">
          <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -119,7 +130,7 @@
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
-          <normaloff>:/icons/exit.png</normaloff>:/icons/exit.png</iconset>
+          <normaloff>:/icons/exit.svg</normaloff>:/icons/exit.svg</iconset>
         </property>
         <property name="toolButtonStyle">
          <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -232,7 +243,7 @@
             <bool>false</bool>
            </attribute>
            <attribute name="verticalHeaderDefaultSectionSize">
-            <number>20</number>
+            <number>21</number>
            </attribute>
            <row/>
            <row/>
@@ -389,7 +400,7 @@
             <bool>true</bool>
            </attribute>
            <attribute name="verticalHeaderDefaultSectionSize">
-            <number>20</number>
+            <number>21</number>
            </attribute>
            <column>
             <property name="text">
@@ -463,7 +474,7 @@
             <bool>true</bool>
            </attribute>
            <attribute name="verticalHeaderDefaultSectionSize">
-            <number>20</number>
+            <number>21</number>
            </attribute>
            <attribute name="verticalHeaderStretchLastSection">
             <bool>false</bool>
@@ -539,7 +550,7 @@
              <bool>true</bool>
             </attribute>
             <attribute name="verticalHeaderDefaultSectionSize">
-             <number>20</number>
+             <number>21</number>
             </attribute>
             <row>
              <property name="text">
@@ -669,13 +680,13 @@
              <number>8</number>
             </property>
             <attribute name="horizontalHeaderDefaultSectionSize">
-             <number>26</number>
+             <number>28</number>
             </attribute>
             <attribute name="horizontalHeaderHighlightSections">
              <bool>true</bool>
             </attribute>
             <attribute name="verticalHeaderDefaultSectionSize">
-             <number>20</number>
+             <number>21</number>
             </attribute>
             <row>
              <property name="text">
@@ -795,7 +806,7 @@
             <bool>false</bool>
            </attribute>
            <attribute name="verticalHeaderDefaultSectionSize">
-            <number>20</number>
+            <number>21</number>
            </attribute>
            <column/>
            <column/>

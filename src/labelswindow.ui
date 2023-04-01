@@ -39,7 +39,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/label.png</normaloff>:/icons/label.png</iconset>
+         <normaloff>:/icons/document-edit.svg</normaloff>:/icons/document-edit.svg</iconset>
        </property>
        <property name="shortcut">
         <string>Alt+A</string>
@@ -59,7 +59,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/label.png</normaloff>:/icons/label.png</iconset>
+         <normaloff>:/icons/document-import.svg</normaloff>:/icons/document-import.svg</iconset>
        </property>
        <property name="shortcut">
         <string>Alt+I</string>
@@ -79,7 +79,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/label.png</normaloff>:/icons/label.png</iconset>
+         <normaloff>:/icons/document-export.svg</normaloff>:/icons/document-export.svg</iconset>
        </property>
        <property name="shortcut">
         <string>Alt+E</string>
@@ -99,7 +99,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/exit.png</normaloff>:/icons/exit.png</iconset>
+         <normaloff>:/icons/document-close.svg</normaloff>:/icons/document-close.svg</iconset>
        </property>
        <property name="shortcut">
         <string>Esc</string>
@@ -159,7 +159,7 @@
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
+          <number>21</number>
          </attribute>
          <column>
           <property name="text">
@@ -208,7 +208,7 @@
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
+          <number>21</number>
          </attribute>
          <column>
           <property name="text">

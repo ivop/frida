@@ -84,6 +84,7 @@ private Q_SLOTS:
     void onDisassemblySectionClicked(int index);
     void onReferencesSectionClicked(int index);
 
+    void onConstantsButton_clicked();
     void onLabelsButton_clicked();
     void onExitButton_clicked();
     void onSaveButton_clicked();
