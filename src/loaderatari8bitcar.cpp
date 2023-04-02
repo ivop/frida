@@ -536,14 +536,14 @@ bool LoaderAtari8bitCar::Load(QFile& file) {
         }
 
         if (candidates.isEmpty()) {
-            this->error_message = "Binary file does not match size of any cartridges.";
+            this->error_message = QStringLiteral("Binary file does not match size of any cartridges.");
             return false;
         }
 
         selectcartridgewindow scw(nullptr, candidates);
 
         if (scw.exec() == QDialog::Rejected) {
-            this->error_message = "Loading bin file rejected.";
+            this->error_message = QStringLiteral("Loading bin file rejected.");
             return false;
         }
 
@@ -583,7 +583,7 @@ bool LoaderAtari8bitCar::Load(QFile& file) {
             s = createEmptySegment(start_address, end_address);
             s.name = QStringLiteral("Bank %1").arg(bank++);
             if (file.read((char *) s.data, size) != size) {
-                this->error_message = "Premature end of file reached.";
+                this->error_message = QStringLiteral("Premature end of file reached.");
                 return false;
             }
 
@@ -591,7 +591,7 @@ bool LoaderAtari8bitCar::Load(QFile& file) {
                 quint16 start_offset = blocks[i].start_vector - blocks[i].start_address;
                 quint16 start_vector = LE16(s.data + start_offset);
 
-                s.localLabels.insert(start_vector, "start");
+                s.localLabels.insert(start_vector, QStringLiteral("start"));
                 s.datatypes[start_offset]   =
                 s.datatypes[start_offset+1] = DT_WORDLE;
                 s.flags[start_offset] = FLAG_USE_LABEL;
@@ -600,7 +600,7 @@ bool LoaderAtari8bitCar::Load(QFile& file) {
                 quint16 init_offset  = blocks[i].init_vector  - blocks[i].start_address;
                 quint16 init_vector  = LE16(s.data + init_offset);
 
-                s.localLabels.insert(init_vector, "init");
+                s.localLabels.insert(init_vector, QStringLiteral("init"));
                 s.datatypes[init_offset]   =
                 s.datatypes[init_offset+1] = DT_WORDLE;
                 s.flags[init_offset] = FLAG_USE_LABEL;

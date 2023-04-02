@@ -96,7 +96,7 @@ void constantsManager::onGroups_itemSelectionChanged() {
         quint64 val = iter.key();
         QString lbl = iter.value();
 
-        item = new QTableWidgetItem(QString("%1").arg(val, 0, 16, QChar('0')));
+        item = new QTableWidgetItem(QStringLiteral("%1").arg(val, 0, 16, QChar('0')));
         item->setTextAlignment(Qt::AlignTop);
         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         tv->setItem(row,0,item);
@@ -129,7 +129,8 @@ void constantsManager::onGroups_cellChanged(int row, int column) {
 void constantsManager::onValues_cellChanged(int row, int column) {
     QTableWidget *tg = ui->tableGroups;
     QTableWidget *tv = ui->tableValues;
-    QTableWidgetItem *item, *index;
+    QTableWidgetItem *item;
+    QTableWidgetItem *index;
 
     // column is always 1 (second column)
 

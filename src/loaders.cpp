@@ -122,9 +122,9 @@ bool LoaderAtari8bitBinary::Load(QFile& file) {
         }
 
         if (run != 0xffff)
-            globalLabels.insert(run, "run");
+            globalLabels.insert(run, QStringLiteral("run"));
         if (init != 0xffff)
-            globalLabels.insert(init, "init");
+            globalLabels.insert(init, QStringLiteral("init"));
 
         genericComment(file, &segment);
         segments.append(segment);

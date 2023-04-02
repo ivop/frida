@@ -1254,7 +1254,7 @@ void MainWindow::actionFind(void) {
 
     QString text = t->item(row, column)->text();
 
-    if (text.isEmpty() || text == ";")
+    if (text.isEmpty() || text == QLatin1String(";"))
         return;
 
     ui->inputReference->setText(text);
@@ -1272,16 +1272,16 @@ void MainWindow::addRefEntry(QTableWidget *t, quint64 segment, quint64 address,
     QString hex = QStringLiteral("%1").arg(address, 0, 16);
     t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
 
-    item = new QTableWidgetItem(QString("%1").arg(segment,0,16));
+    item = new QTableWidgetItem(QStringLiteral("%1").arg(segment,0,16));
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     t->setItem(row, 0, item);
 
     QModelIndex index = t->model()->index(row,1);
-    QLabel *label = new QLabel();
+    auto *label = new QLabel();
 
     QString text = line;
-    text = text.replace("<", "&lt;");
-    text = text.replace(">", "&gt;");
+    text = text.replace(QLatin1String("<"), QLatin1String("&lt;"));
+    text = text.replace(QLatin1String(">"), QLatin1String("&gt;"));
     text = text.replace(highlight, "<span style=\"color: red\">" + highlight + "</span>");
 
     label->setTextFormat(Qt::RichText);
@@ -1312,7 +1312,7 @@ void MainWindow::onFindButton_clicked(void) {
             for (int i=0; i<segments.size(); i++) {
                 struct segment *s = &segments[i];
                 if (address >= s->start && address <= s->end) {
-                    QString line = iter.value();
+                    const QString& line = iter.value();
                     addRefEntry(t, i, address, line, what);
                 }
             }
@@ -1331,7 +1331,7 @@ void MainWindow::onFindButton_clicked(void) {
             if (iter.value().contains(what)) {
                 address = iter.key();
                 if (address >= s->start && address <= s->end) {
-                    QString line = iter.value();
+                    const QString& line = iter.value();
                     addRefEntry(t, seg, address, line, what);
                     break;
                     }
@@ -1375,7 +1375,7 @@ void MainWindow::actionLowAndHighBytePairs(void) {
     QList<QTableWidgetSelectionRange> Ranges = t->selectedRanges();
     QVector<quint64> allSelectedCells;
 
-    if (Ranges.size() == 0)
+    if (Ranges.empty())
         return;
 
     for (const auto & range : Ranges) {
@@ -1416,7 +1416,7 @@ void MainWindow::actionLowAndHighBytePairs(void) {
 
     bool minusOne = lahbpw.minusLabels;
 
-    auto labels = &s->localLabels;
+    auto *labels = &s->localLabels;
     if (lahbpw.generateLabels == lahbpw.GlobalLabels)
         labels = &globalLabels;
 
@@ -1442,12 +1442,12 @@ void MainWindow::actionLowAndHighBytePairs(void) {
         if (lahbpw.generateLabels != lahbpw.NoLabels) {
             if (!minusOne) {
                 if (!labels->contains(address)) {
-                    labels->insert(address, QString("L%1").arg(address,0,16,QChar('0')));
+                    labels->insert(address, QStringLiteral("L%1").arg(address,0,16,QChar('0')));
                 }
             } else {
                 if (!labels->contains(address)) {
-                    labels->insert(address, QString("L%1-1").arg(address+1,0,16,QChar('0')));
-                    labels->insert(address+1, QString("L%1").arg(address+1,0,16,QChar('0')));
+                    labels->insert(address, QStringLiteral("L%1-1").arg(address+1,0,16,QChar('0')));
+                    labels->insert(address+1, QStringLiteral("L%1").arg(address+1,0,16,QChar('0')));
                 }
             }
         }

@@ -37,8 +37,8 @@ public:
     explicit LowAndHighBytePairsWindow(QWidget *parent = nullptr);
     ~LowAndHighBytePairsWindow();
 
-    bool pairsLowLowHighHigh;
-    bool minusLabels;
+    bool pairsLowLowHighHigh{};
+    bool minusLabels{};
 
     enum {
         NoLabels        = 0,
@@ -46,7 +46,7 @@ public:
         GlobalLabels    = 2
     };
 
-    int generateLabels;
+    int generateLabels{};
 
 public Q_SLOTS:
     void accept() override;

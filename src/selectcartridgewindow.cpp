@@ -39,7 +39,7 @@ selectcartridgewindow::selectcartridgewindow(QWidget *parent, const QVector<quin
         int row = t->rowCount();
         t->setRowCount(row+1);
 
-        QTableWidgetItem *item = new QTableWidgetItem(QString("%1").arg(a));
+        auto *item = new QTableWidgetItem(QStringLiteral("%1").arg(a));
         t->setVerticalHeaderItem(row, item);
 
         item = new QTableWidgetItem(cartridges[a].description);

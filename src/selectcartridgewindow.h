@@ -39,7 +39,7 @@ public:
     explicit selectcartridgewindow(QWidget *parent = nullptr, const QVector<quint64> &candidates = {});
     ~selectcartridgewindow();
 
-    quint64 cartridge_type;
+    quint64 cartridge_type{};
 
 public Q_SLOTS:
     void accept() override;

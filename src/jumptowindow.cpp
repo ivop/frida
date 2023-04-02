@@ -20,8 +20,8 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "jumptowindow.h"
 #include "frida.h"
+#include "jumptowindow.h"
 #include "ui_jumptowindow.h"
 #include <QDebug>
 

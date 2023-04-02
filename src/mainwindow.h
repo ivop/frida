@@ -82,7 +82,7 @@ private Q_SLOTS:
     static void linkSelections(QTableWidget *from, QTableWidget *to);
     void onHexSectionClicked(int index);
     void onDisassemblySectionClicked(int index);
-    void onReferencesSectionClicked(int index);
+    void onReferencesSectionClicked(int row);
 
     void onConstantsButton_clicked();
     void onLabelsButton_clicked();

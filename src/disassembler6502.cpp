@@ -1177,10 +1177,10 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
             QString pref;
             if (flags[i+1] & FLAG_LOW_BYTE) {
                 map = &s->lowbytes;
-                pref = "<(";
+                pref = QStringLiteral("<(");
             } else {
                 map = &s->highbytes;
-                pref = ">(";
+                pref = QStringLiteral(">(");
             }
             quint16 addr = map->value(i+1);
             if (localLabels->contains(addr))
@@ -1190,7 +1190,7 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
             else
                 hex = pref + QStringLiteral("$%1").arg(addr, 4, 16, (QChar)'0');
 
-            hex += ")";
+            hex += QLatin1String(")");
 
         } else {
                 hex   = QStringLiteral("$%1").arg(operand, 2, 16, (QChar)'0');

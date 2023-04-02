@@ -20,8 +20,8 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "lowandhighbytepairswindow.h"
 #include "frida.h"
+#include "lowandhighbytepairswindow.h"
 #include "ui_lowandhighbytepairswindow.h"
 
 LowAndHighBytePairsWindow::LowAndHighBytePairsWindow(QWidget *parent) :
