@@ -16,6 +16,8 @@ QMAKE_CXXFLAGS += -std=c++17
 TARGET = frida
 
 SOURCES += \
+    addconstantsgroupwindow.cpp \
+    addconstanttogroupwindow.cpp \
     constantsmanager.cpp \
     disassembler8080.cpp \
     disassemblerZ80.cpp \
@@ -41,6 +43,8 @@ SOURCES += \
     startdialog.cpp
 
 HEADERS += \
+    addconstantsgroupwindow.h \
+    addconstanttogroupwindow.h \
     constantsmanager.h \
     exportassembly.h \
     exportassemblywindow.h \
@@ -61,6 +65,8 @@ HEADERS += \
     startdialog.h
 
 FORMS += \
+    addconstantsgroupwindow.ui \
+    addconstanttogroupwindow.ui \
     constantsmanager.ui \
     exportassemblywindow.ui \
     jumptowindow.ui \

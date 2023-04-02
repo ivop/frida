@@ -20,38 +20,28 @@
 //
 // ---------------------------------------------------------------------------
 
-#ifndef CONSTANTSMANAGER_H
-#define CONSTANTSMANAGER_H
+#ifndef ADDCONSTANTSGROUPWINDOW_H
+#define ADDCONSTANTSGROUPWINDOW_H
 
 #include <QDialog>
 
 namespace Ui {
-class constantsManager;
+class addConstantsGroupWindow;
 }
 
-class constantsManager : public QDialog
+class addConstantsGroupWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit constantsManager(QWidget *parent = nullptr);
-    ~constantsManager();
+    explicit addConstantsGroupWindow(QWidget *parent = nullptr);
+    ~addConstantsGroupWindow();
 
-private Q_SLOTS:
-    void onGroups_itemSelectionChanged(void);
-
-    void onGroups_cellChanged(int row, int column);
-    void onValues_cellChanged(int row, int column);
-
-    void actionDeleteGroup(void);
-    void actionDeleteValue(void);
-
-    void onAddGroup_clicked(void);
-    void onAddValue_clicked(void);
+public Q_SLOTS:
+    void accept() override;
 
 private:
-    Ui::constantsManager *ui;
-    void showGroups();
+    Ui::addConstantsGroupWindow *ui;
 };
 
-#endif // CONSTANTSMANAGER_H
+#endif // ADDCONSTANTSGROUPWINDOW_H

@@ -35,7 +35,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Add Group</string>
+        <string>Add &amp;Group</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
@@ -49,7 +49,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Add value</string>
+        <string>Add &amp;Value</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
@@ -63,7 +63,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Import Constants</string>
+        <string>&amp;Import Constants</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
@@ -77,7 +77,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Export Constants</string>
+        <string>&amp;Export Constants</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
@@ -91,7 +91,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Done</string>
+        <string>&amp;Done</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">

@@ -1,3 +1,27 @@
+// ---------------------------------------------------------------------------
+//
+// This file is part of:
+//
+// FRIDA - FRee Interactive DisAssembler
+// Copyright (C) 2017,2023 Ivo van Poorten
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; ONLY version 2 of the License.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+// ---------------------------------------------------------------------------
+
+#include "addconstantsgroupwindow.h"
+#include "addconstanttogroupwindow.h"
 #include "constantsmanager.h"
 #include "frida.h"
 #include "ui_constantsmanager.h"
@@ -10,6 +34,11 @@ constantsManager::constantsManager(QWidget *parent) :
     ui(new Ui::constantsManager)
 {
     ui->setupUi(this);
+
+    connect(ui->buttonAddGroup, &QPushButton::clicked,
+            this, &constantsManager::onAddGroup_clicked);
+    connect(ui->buttonAddValue, &QPushButton::clicked,
+            this, &constantsManager::onAddValue_clicked);
 
     connect(ui->buttonDone, &QPushButton::clicked,
             this, &constantsManager::close);
@@ -145,7 +174,7 @@ void constantsManager::onValues_cellChanged(int row, int column) {
     QMap<quint64, QString> *map = constantsGroups[groupID].map;
 
     index = tv->item(row, column-1);
-    quint64 value = index->text().toULongLong();
+    quint64 value = index->text().toULongLong(nullptr, 16);
 
     item = tv->item(row, column);
     QString contents = item->text();
@@ -217,4 +246,45 @@ void constantsManager::actionDeleteValue(void) {
 
     map->remove(value);
     onGroups_itemSelectionChanged();    // reshow constants with one removed
+}
+
+void constantsManager::onAddGroup_clicked(void) {
+    addConstantsGroupWindow acgw;
+    if (acgw.exec() == QDialog::Accepted)
+        showGroups();
+}
+
+void constantsManager::onAddValue_clicked(void) {
+    QMessageBox msg;
+    addConstantToGroupWindow actgw;
+
+    QTableWidget *t = ui->tableGroups;
+    QList<QTableWidgetSelectionRange> ranges = t->selectedRanges();
+
+    if (ranges.isEmpty()) {
+        msg.setText(QStringLiteral("Please select a group first!"));
+        msg.setStandardButtons(QMessageBox::Ok);
+        msg.exec();
+        return;
+    }
+
+    if (actgw.exec() == QDialog::Rejected)
+        return;
+
+    QTableWidgetSelectionRange range = ranges.first();
+    quint64 tgrow = range.topRow();
+
+    quint64 groupID = t->verticalHeaderItem(tgrow)->text().toULongLong();
+    QString groupName = constantsGroups[groupID].name;
+
+    if (actgw.constantValue < 0) {
+        msg.setText(QStringLiteral("Invalid value specified!"));
+        msg.setStandardButtons(QMessageBox::Ok);
+        msg.exec();
+        return;
+    }
+
+    QMap<quint64, QString> *map = constantsGroups[groupID].map;
+    map->insert(actgw.constantValue, actgw.constantName);
+    onGroups_itemSelectionChanged();    // reshow constants with new item
 }

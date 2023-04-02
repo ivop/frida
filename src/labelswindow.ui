@@ -35,7 +35,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Add Label</string>
+        <string>&amp;Add Label</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
@@ -55,7 +55,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Import Global Labels</string>
+        <string>&amp;Import Global Labels</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
@@ -75,7 +75,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Export Global Labels</string>
+        <string>&amp;Export Global Labels</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
@@ -95,14 +95,11 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Done</string>
+        <string>&amp;Done</string>
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
          <normaloff>:/icons/document-close.svg</normaloff>:/icons/document-close.svg</iconset>
-       </property>
-       <property name="shortcut">
-        <string>Esc</string>
        </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextBesideIcon</enum>

@@ -20,38 +20,35 @@
 //
 // ---------------------------------------------------------------------------
 
-#ifndef CONSTANTSMANAGER_H
-#define CONSTANTSMANAGER_H
+#include "addconstantsgroupwindow.h"
+#include "ui_addconstantsgroupwindow.h"
+#include "frida.h"
 
-#include <QDialog>
-
-namespace Ui {
-class constantsManager;
+addConstantsGroupWindow::addConstantsGroupWindow(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::addConstantsGroupWindow)
+{
+    ui->setupUi(this);
 }
 
-class constantsManager : public QDialog
+addConstantsGroupWindow::~addConstantsGroupWindow()
 {
-    Q_OBJECT
+    delete ui;
+}
 
-public:
-    explicit constantsManager(QWidget *parent = nullptr);
-    ~constantsManager();
+void addConstantsGroupWindow::accept() {
+    QLineEdit *le = ui->lineEdit;
 
-private Q_SLOTS:
-    void onGroups_itemSelectionChanged(void);
+    QString groupName = le->text();
 
-    void onGroups_cellChanged(int row, int column);
-    void onValues_cellChanged(int row, int column);
+    struct constantsGroup *group = new struct constantsGroup;
+    group->name = groupName;
+    group->map = new QMap<quint64, QString>;
 
-    void actionDeleteGroup(void);
-    void actionDeleteValue(void);
+    constantsGroups.insert(nextNewGroup, *group);
 
-    void onAddGroup_clicked(void);
-    void onAddValue_clicked(void);
+    nextNewGroup++;
 
-private:
-    Ui::constantsManager *ui;
-    void showGroups();
-};
-
-#endif // CONSTANTSMANAGER_H
+    setResult(QDialog::Accepted);
+    hide();
+}

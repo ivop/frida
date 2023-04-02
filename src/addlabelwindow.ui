@@ -7,14 +7,63 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>126</height>
+    <height>167</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Add Label</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Label</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLineEdit" name="lineEditAddress"/>
+   </item>
+   <item row="4" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="2">
+    <widget class="QPushButton" name="pushButtonAdd">
+     <property name="text">
+      <string>Add</string>
+     </property>
+     <property name="shortcut">
+      <string>Return</string>
+     </property>
+     <property name="default">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLineEdit" name="lineEditLabel"/>
+   </item>
    <item row="3" column="1">
+    <widget class="QCheckBox" name="checkBoxLocalLabel">
+     <property name="text">
+      <string>Local Label</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
     <widget class="QPushButton" name="pushButtonCancel">
      <property name="focusPolicy">
       <enum>Qt::StrongFocus</enum>
@@ -33,48 +82,25 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
-    <widget class="QPushButton" name="pushButtonAdd">
-     <property name="text">
-      <string>Add</string>
-     </property>
-     <property name="shortcut">
-      <string>Return</string>
-     </property>
-     <property name="default">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QLineEdit" name="lineEditAddress"/>
-   </item>
-   <item row="1" column="2">
-    <widget class="QLineEdit" name="lineEditLabel"/>
-   </item>
-   <item row="0" column="0" colspan="2">
+   <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Address (hexadecimal)</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Label</string>
+   <item row="0" column="2">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QCheckBox" name="checkBoxLocalLabel">
-     <property name="text">
-      <string>Local Label</string>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
      </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
+    </spacer>
    </item>
   </layout>
  </widget>

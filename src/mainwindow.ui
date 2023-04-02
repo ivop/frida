@@ -55,7 +55,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>Manage Constants</string>
+         <string>Manage &amp;Constants</string>
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
@@ -69,7 +69,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>Manage Labels</string>
+         <string>Manage &amp;Labels</string>
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
@@ -92,7 +92,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>Save Project</string>
+         <string>&amp;Save Project</string>
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
@@ -115,7 +115,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>Export Assembly</string>
+         <string>&amp;Export Assembly</string>
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
@@ -132,7 +132,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>Exit</string>
+         <string>&amp;Quit</string>
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">

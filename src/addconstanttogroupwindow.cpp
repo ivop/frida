@@ -20,38 +20,34 @@
 //
 // ---------------------------------------------------------------------------
 
-#ifndef CONSTANTSMANAGER_H
-#define CONSTANTSMANAGER_H
+#include "addconstanttogroupwindow.h"
+#include "ui_addconstanttogroupwindow.h"
 
-#include <QDialog>
-
-namespace Ui {
-class constantsManager;
+addConstantToGroupWindow::addConstantToGroupWindow(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::addConstantToGroupWindow)
+{
+    ui->setupUi(this);
 }
 
-class constantsManager : public QDialog
+addConstantToGroupWindow::~addConstantToGroupWindow()
 {
-    Q_OBJECT
+    delete ui;
+}
 
-public:
-    explicit constantsManager(QWidget *parent = nullptr);
-    ~constantsManager();
+void addConstantToGroupWindow::accept() {
+    QLineEdit *le;
 
-private Q_SLOTS:
-    void onGroups_itemSelectionChanged(void);
+    bool ok;
 
-    void onGroups_cellChanged(int row, int column);
-    void onValues_cellChanged(int row, int column);
+    le = ui->lineValue;
+    constantValue = le->text().toULongLong(&ok, 16);
+    if (!ok)
+        constantValue = -1;
 
-    void actionDeleteGroup(void);
-    void actionDeleteValue(void);
+    le = ui->lineName;
+    constantName = le->text();
 
-    void onAddGroup_clicked(void);
-    void onAddValue_clicked(void);
-
-private:
-    Ui::constantsManager *ui;
-    void showGroups();
-};
-
-#endif // CONSTANTSMANAGER_H
+    setResult(QDialog::Accepted);
+    hide();
+}
