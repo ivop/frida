@@ -164,6 +164,7 @@ also_wrong:
                 msg.setText(hex + ": type needs " + QStringLiteral("%1").arg(n) +
                                                                 " bytes");
                 msg.exec();
+                datatypes[i] = DT_UNDEFINED_CODE; // Red error
                 return;
             }
             // check that all bytes are of the same type
@@ -190,6 +191,7 @@ also_wrong2:
                 msg.setText(hex + ": full instruction needs " +
                             QStringLiteral("%1").arg(n) + " bytes");
                 msg.exec();
+                datatypes[i] = DT_UNDEFINED_CODE; // Red error
                 return;
             }
             for (int j=1; j<n; j++) {
