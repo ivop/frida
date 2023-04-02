@@ -156,6 +156,16 @@ extern QSettings settings;
 
 // --------------------------------------------------------------------------
 
+struct constantsGroup {
+    QString name;
+    QMap<quint64, QString> *map;
+};
+
+extern QMap<quint64, struct constantsGroup> constantsGroups;
+extern quint64 nextNewGroup;
+
+// --------------------------------------------------------------------------
+
 #define FLAG_USE_LABEL      0x01
 #define FLAG_LOW_BYTE       0x02
 #define FLAG_HIGH_BYTE      0x04

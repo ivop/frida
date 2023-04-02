@@ -130,5 +130,38 @@ int main(int argc, char *argv[])
     MainWindow mainwindow;
     mainwindow.show();
 
+    // test... {
+
+    quint64 groupID = 0;
+    struct constantsGroup * cg = new struct constantsGroup;
+
+    cg->name = QString("Boolean");
+    cg->map = new QMap<quint64, QString>;
+
+    constantsGroups.insert(groupID, *cg);
+
+    auto map = constantsGroups[groupID].map;
+
+    map->insert(0, "FALSE");
+    map->insert(1, "TRUE");
+
+    cg = new struct constantsGroup;
+
+    cg->name = QString("Primes");
+    cg->map = new QMap<quint64, QString>;
+
+    constantsGroups.insert(groupID+1, *cg);
+
+    map = constantsGroups[groupID+1].map;
+
+    map->insert(13, "thirteen");
+    map->insert(3, "three");
+    map->insert(5, "five");
+    map->insert(11, "eleven");
+    map->insert(7, "seven");
+
+    nextNewGroup = 2;
+    // } test
+
     return QApplication::exec();
 }

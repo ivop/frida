@@ -129,6 +129,9 @@
       <layout class="QVBoxLayout" name="verticalGroups">
        <item>
         <widget class="QTableWidget" name="tableGroups">
+         <property name="contextMenuPolicy">
+          <enum>Qt::ActionsContextMenu</enum>
+         </property>
          <property name="editTriggers">
           <set>QAbstractItemView::DoubleClicked</set>
          </property>
@@ -162,7 +165,10 @@
      <widget class="QWidget" name="layoutWidget2">
       <layout class="QVBoxLayout" name="verticalValues">
        <item>
-        <widget class="QTableWidget" name="tableConstantValues">
+        <widget class="QTableWidget" name="tableValues">
+         <property name="contextMenuPolicy">
+          <enum>Qt::ActionsContextMenu</enum>
+         </property>
          <property name="editTriggers">
           <set>QAbstractItemView::DoubleClicked</set>
          </property>
@@ -198,9 +204,62 @@
     </widget>
    </item>
   </layout>
+  <action name="actionDeleteGroup">
+   <property name="text">
+    <string>Delete Constant Group</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Del</string>
+   </property>
+  </action>
+  <action name="actionDeleteValue">
+   <property name="text">
+    <string>Delete Constant Value</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="frida.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionDeleteGroup</sender>
+   <signal>triggered()</signal>
+   <receiver>constantsManager</receiver>
+   <slot>actionDeleteGroup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>378</x>
+     <y>316</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDeleteValue</sender>
+   <signal>triggered()</signal>
+   <receiver>constantsManager</receiver>
+   <slot>actionDeleteValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>378</x>
+     <y>316</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>actionDeleteGroup()</slot>
+  <slot>actionDeleteValue()</slot>
+ </slots>
 </ui>

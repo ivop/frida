@@ -18,6 +18,12 @@ public:
 private Q_SLOTS:
     void onGroups_itemSelectionChanged(void);
 
+    void onGroups_cellChanged(int row, int column);
+    void onValues_cellChanged(int row, int column);
+
+    void actionDeleteGroup(void);
+    void actionDeleteValue(void);
+
 private:
     Ui::constantsManager *ui;
     void showGroups();
