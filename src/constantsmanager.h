@@ -48,6 +48,8 @@ private Q_SLOTS:
 
     void onAddGroup_clicked(void);
     void onAddValue_clicked(void);
+    void onImport_clicked(void);
+    void onExport_clicked(void);
 
 private:
     Ui::constantsManager *ui;
