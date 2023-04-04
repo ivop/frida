@@ -426,6 +426,7 @@ void Disassembler8080::disassembleInstructionAt(quint64 relpos,
     struct segment *s = &segments[currentSegment];
     QMap<quint64,QString> *localLabels = &s->localLabels;
     quint8 *data = s->data;
+    quint8 *flags = s->flags;
     quint64 start = s->start;
     quint16 opcode;
     quint16 operand = 0;
@@ -442,18 +443,32 @@ void Disassembler8080::disassembleInstructionAt(quint64 relpos,
     if (n == 2) {   // always MODE_D8
         operand = data[i+1];
 
-        temps = QString(hexPrefix + "%1" + hexSuffix).arg(operand, 2, 16, QChar('0'));
-        if (toUpper)
-            temps = temps.toUpper();
+        if (flags[i+1] & FLAG_CONSTANT) {
+            quint64 groupID = s->constants.value(start+i+1);
+            temps = constantsGroups[groupID].map->value(operand);
+        }
+
+        if (temps.isEmpty()) {
+            temps = QString(hexPrefix + "%1" + hexSuffix).arg(operand, 2, 16, QChar('0'));
+            if (toUpper)
+                temps = temps.toUpper();
+        }
     }
 
     if (n == 3) {   // always m == MODE_D16 || m == MODE_ADR || m == MODE_JMP
         operand = data[i+1] + (data[i+2] << 8);
 
-        if (localLabels->contains(operand))
-            temps = localLabels->value(operand);
-        else
-            temps = globalLabels.value(operand);
+        if (flags[i+1] & FLAG_CONSTANT) {
+            quint64 groupID = s->constants.value(start+i+1);
+            temps = constantsGroups[groupID].map->value(operand);
+        }
+
+        if (temps.isEmpty()) {
+            if (localLabels->contains(operand))
+                temps = localLabels->value(operand);
+            else
+                temps = globalLabels.value(operand);
+        }
 
         if (temps.isEmpty()) {
             temps = QString(hexPrefix + "%1" + hexSuffix).arg(operand, 4, 16, QChar('0'));
