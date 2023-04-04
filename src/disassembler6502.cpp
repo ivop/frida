@@ -1040,18 +1040,18 @@ void Disassembler6502::initTables(void) {
     toUpper   = false;
 }
 
-int Disassembler6502::getInstructionSizeAt(quint64 address) {
+int Disassembler6502::getInstructionSizeAt(quint64 relpos) {
     quint8 *data = segments[currentSegment].data;
-    return isizes[(enum addressing_mode)distab[data[address]].mode];
+    return isizes[(enum addressing_mode)distab[data[relpos]].mode];
 }
 
-void Disassembler6502::createOperandLabels(quint64 address, bool generateLocalLabels) {
+void Disassembler6502::createOperandLabels(quint64 relpos, bool generateLocalLabels) {
     struct segment *s = &segments[currentSegment];
     quint8 *data = s->data;
     quint64 addr = 0;
     quint64 addr2 = 0;
     quint64 start = s->start;
-    quint64 i = address;
+    quint64 i = relpos;
     int n = isizes[(enum addressing_mode)distab[data[i]].mode];
     QString hex;
 
@@ -1109,7 +1109,7 @@ void Disassembler6502::createOperandLabels(quint64 address, bool generateLocalLa
     }
 }
 
-void Disassembler6502::disassembleInstructionAt(quint64 address,
+void Disassembler6502::disassembleInstructionAt(quint64 relpos,
                                              struct disassembly &dis, int &n) {
     struct segment *s = &segments[currentSegment];
     QMap<quint64,QString> *localLabels = &s->localLabels;
@@ -1122,7 +1122,7 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
     QString temps;
     QString hex;
     QString hex2;
-    quint64 i = address;
+    quint64 i = relpos;
 
     opcode = data[i];
 
@@ -1192,8 +1192,15 @@ void Disassembler6502::disassembleInstructionAt(quint64 address,
 
             hex += QLatin1String(")");
 
-        } else {
+        } else if (m == MODE_IMM && flags[i+1] &  FLAG_CONSTANT) {
+
+            quint64 groupID = s->constants.value(start+i+1);
+            hex = constantsGroups[groupID].map->value(operand);
+            if (hex.isEmpty())
                 hex   = QStringLiteral("$%1").arg(operand, 2, 16, (QChar)'0');
+
+        } else {
+            hex   = QStringLiteral("$%1").arg(operand, 2, 16, (QChar)'0');
         }
 
         // build final string

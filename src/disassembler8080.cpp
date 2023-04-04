@@ -385,19 +385,19 @@ void Disassembler8080::initTables(void) {
     toUpper = true;
 }
 
-int Disassembler8080::getInstructionSizeAt(quint64 address) {
+int Disassembler8080::getInstructionSizeAt(quint64 relpos) {
     quint8 *data = segments[currentSegment].data;
-    return isizes[(enum addressing_mode)distab[data[address]].mode];
+    return isizes[(enum addressing_mode)distab[data[relpos]].mode];
 }
 
-void Disassembler8080::createOperandLabels(quint64 address, bool generateLocalLabels) {
+void Disassembler8080::createOperandLabels(quint64 relpos, bool generateLocalLabels) {
     struct segment *s = &segments[currentSegment];
     QMap<quint64,QString> *localLabels = &s->localLabels;
     quint8 *data = s->data;
     quint16 opcode;
     quint16 operand = 0;
     QString temps;
-    quint64 i = address;
+    quint64 i = relpos;
 
     opcode = data[i];
 
@@ -421,7 +421,7 @@ void Disassembler8080::createOperandLabels(quint64 address, bool generateLocalLa
     }
 }
 
-void Disassembler8080::disassembleInstructionAt(quint64 address,
+void Disassembler8080::disassembleInstructionAt(quint64 relpos,
                                             struct disassembly &dis, int &n) {
     struct segment *s = &segments[currentSegment];
     QMap<quint64,QString> *localLabels = &s->localLabels;
@@ -430,7 +430,7 @@ void Disassembler8080::disassembleInstructionAt(quint64 address,
     quint16 opcode;
     quint16 operand = 0;
     QString temps;
-    quint64 i = address;
+    quint64 i = relpos;
 
     opcode = data[i];
 
