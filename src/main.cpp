@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
 
     // test... {
 
-    quint64 groupID = 0;
+    quint64 groupID = nextNewGroup;
     struct constantsGroup * cg = new struct constantsGroup;
 
     cg->name = QString("Boolean");
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     map->insert(11, "eleven");
     map->insert(7, "seven");
 
-    nextNewGroup = 2;
+    nextNewGroup += 2;
     // } test
 
     return QApplication::exec();
