@@ -96,6 +96,23 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
     out << "\n\n";
     write_line(&out);
 
+    if (!constantsGroups.isEmpty()) {
+
+        out << "\n; CONSTANTS\n";
+
+        for (auto const &group : constantsGroups) {
+            if (group.map->size() != 0) {
+                out << "\n; " << group.name << "\n\n";
+
+                QMap<quint64, QString>::iterator iter;
+
+                for (iter = group.map->begin(); iter != group.map->end(); iter ++) {
+                    out << iter.value() << " = " << iter.key() << "\n";
+                }
+            }
+        }
+    }
+
     out << "\n; GENERATED LABELS\n\n";
 
     QMap<quint64, QString>::const_iterator iter;
