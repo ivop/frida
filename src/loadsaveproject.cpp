@@ -119,6 +119,21 @@ bool load_project(QWidget *widget) {
     in >> globalNotes;
     in >> altfont;
 
+    quint64 numGroups;
+
+    in >> numGroups;
+
+    for (quint64 i = 0; i<numGroups; i++) {
+        struct constantsGroup *group = new struct constantsGroup;
+        group->map = new QMap<quint64, QString>;
+
+        in >> group->name;
+        in >> *group->map;
+
+        constantsGroups.insert(nextNewGroup, *group);
+        nextNewGroup++;
+    }
+
     error = file.error();
     errorstring = file.errorString();
 
@@ -188,6 +203,18 @@ void save_project(QWidget *widget) {
     out << globalLabels;
     out << globalNotes;
     out << altfont;
+
+    quint64 numGroups = constantsGroups.size();
+
+    out << numGroups;
+
+    QMap<quint64, struct constantsGroup>::iterator iter;
+
+    for (iter = constantsGroups.begin(); iter != constantsGroups.end(); iter++) {
+        auto const &group = iter.value();
+        out << group.name;
+        out << *group.map;
+    }
 
     error = file.error();
     errorstring = file.errorString();
