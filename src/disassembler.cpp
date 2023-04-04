@@ -355,6 +355,10 @@ do_directive:
                 perline = 0; // always start new directive at label locations
             }
             hex.clear();
+            if (s->flags[i] & FLAG_CONSTANT) {
+                quint64 groupID = s->constants.value(start+i);
+                hex = constantsGroups[groupID].map->value(val);
+            }
             if (s->flags[i] & FLAG_USE_LABEL) {
                 hex = s->localLabels.value(val);
                 if (hex.isEmpty())

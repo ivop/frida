@@ -68,6 +68,7 @@ public Q_SLOTS:
     void actionSet_Flag_Labelled(void);
     void actionSet_Flag_Low_Byte(void);
     void actionSet_Flag_High_Byte(void);
+    void actionSet_Flag_Constant_Value(void);
     void actionSet_Flag_Clear(void);
     void actionComment(void);
     void actionDelete_Segment(void);

@@ -44,6 +44,7 @@ struct segment Loader::createEmptySegment(quint64 start, quint64 end) {
          QMap<quint64, QString>(),
          QMap<quint64, quint16>(),
          QMap<quint64, quint16>(),
+         QMap<quint64, quint64>(),
          QList<struct disassembly>(),
          0
      };

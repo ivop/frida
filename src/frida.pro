@@ -40,6 +40,7 @@ SOURCES += \
     changesegmentwindow.cpp \
     lowhighbytewindow.cpp \
     selectcartridgewindow.cpp \
+    selectconstantsgoupwindow.cpp \
     startdialog.cpp
 
 HEADERS += \
@@ -62,6 +63,7 @@ HEADERS += \
     loadsaveproject.h \
     lowhighbytewindow.h \
     selectcartridgewindow.h \
+    selectconstantsgoupwindow.h \
     startdialog.h
 
 FORMS += \
@@ -78,6 +80,7 @@ FORMS += \
     changesegmentwindow.ui \
     lowhighbytewindow.ui \
     selectcartridgewindow.ui \
+    selectconstantsgoupwindow.ui \
     startdialog.ui
 
 RESOURCES += \

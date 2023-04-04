@@ -1041,6 +1041,14 @@
     <string>?</string>
    </property>
   </action>
+  <action name="actionSet_Flag_Constant_Value">
+   <property name="text">
+    <string>Set Flag Constant Value</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -1511,6 +1519,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSet_Flag_Constant_Value</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionSet_Flag_Constant_Value()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>498</x>
+     <y>353</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>linkHexASCIISelection()</slot>
@@ -1543,5 +1567,6 @@
   <slot>actionAdd_Label()</slot>
   <slot>actionFind()</slot>
   <slot>actionLowAndHighBytePairs()</slot>
+  <slot>actionSet_Flag_Constant_Value()</slot>
  </slots>
 </ui>

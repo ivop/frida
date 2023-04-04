@@ -33,6 +33,7 @@
 #include "lowandhighbytepairswindow.h"
 #include "lowhighbytewindow.h"
 #include "mainwindow.h"
+#include "selectconstantsgoupwindow.h"
 #include "ui_mainwindow.h"
 #include <QBrush>
 #include <QComboBox>
@@ -201,6 +202,7 @@ MainWindow::MainWindow(QWidget *parent) :
         men->addAction(ui->actionSet_Flag_Labelled);
         men->addAction(ui->actionSet_Flag_Low_Byte);
         men->addAction(ui->actionSet_Flag_High_Byte);
+        men->addAction(ui->actionSet_Flag_Constant_Value);
         men->addAction(ui->actionSet_Flag_Clear);
         act = new QAction(QStringLiteral("Set Flag"), ui->tableHexadecimal);
         act->setMenu(men);
@@ -620,8 +622,8 @@ void MainWindow::Set_Flag_Low_or_High_Byte(bool bLow) {
 
     if (!nranges) return;
 
-    int ypos_equal = ranges.at(0).bottomRow() == ranges.at(0).topRow();
-    int xpos_equal = ranges.at(0).leftColumn() == ranges.at(0).rightColumn();
+    bool ypos_equal = ranges.at(0).bottomRow() == ranges.at(0).topRow();
+    bool xpos_equal = ranges.at(0).leftColumn() == ranges.at(0).rightColumn();
     bool single_cell = xpos_equal && ypos_equal;
 
     if (nranges != 1 || !single_cell) {
@@ -675,6 +677,43 @@ void MainWindow::actionSet_Flag_High_Byte(void) {
 
 void MainWindow::actionSet_Flag_Clear(void) {
     Set_Flag(ui->tableHexadecimal->selectedRanges(), 0);
+}
+
+void MainWindow::actionSet_Flag_Constant_Value(void) {
+    selectConstantsGoupWindow scgw;
+    QList<QTableWidgetSelectionRange> ranges =
+                                    ui->tableHexadecimal->selectedRanges();
+
+    int nranges = ranges.size();
+
+    if (!nranges)
+        return;
+
+    if (scgw.exec() != QDialog::Accepted)
+        return;
+
+    quint64 groupID = scgw.groupID;
+
+    struct segment *s = &segments[currentSegment];
+
+    for (const auto &range : ranges) {
+        for (int x = range.leftColumn(); x <= range.rightColumn(); x++) {
+            for (int y = range.topRow(); y <= range.bottomRow(); y++) {
+
+                int relpos = y*8 + x;
+                quint64 address = s->start + relpos;
+
+                s->flags[relpos] = FLAG_CONSTANT;
+                s->constants.insert(address, groupID);
+
+            }
+        }
+    }
+
+    Disassembler->generateDisassembly(generateLocalLabels);
+    showHex();
+    showAscii();
+    showDisassembly();
 }
 
 // --------------------------------------------------------------------------

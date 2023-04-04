@@ -55,7 +55,8 @@ extern const QVector<struct cputype> cputypes;
 
 // --------------------------------------------------------------------------
 
-// leave space for other file types
+// leave space for other file types, don't change values after v1.0 is released
+
 enum filetypeid {
     FT_RAW_FILE             = 0x00,
     FT_ATARI8BIT_BINARY     = 0x10,
@@ -134,8 +135,8 @@ struct segment {
     quint64 start, end;
     QString name;
     quint8 *data;
-    quint8 *datatypes;
-    quint8 *flags;
+    quint8 *datatypes;                  // same size as data[]
+    quint8 *flags;                      // single flags only(!) see below
     QMap<quint64, QString> comments;
     QMap<quint64, QString> localLabels;
 
@@ -143,15 +144,21 @@ struct segment {
     QMap<quint64, quint16> lowbytes;
     QMap<quint64, quint16> highbytes;
 
+// maps addresses to constantsGroups
+    QMap<quint64, quint64> constants;
+
+// everything below is not saved as part of the project
     QList<struct disassembly> disassembly;
     int scrollbarValue;
 };
 
 extern QVector<struct segment> segments;      // currently in main.cpp
 extern int currentSegment;
+
 extern QMap<quint64, QString> globalLabels;
 extern quint32 cputype;
 extern QString globalNotes;
+
 extern QSettings settings;
 
 // --------------------------------------------------------------------------
@@ -166,8 +173,12 @@ extern quint64 nextNewGroup;
 
 // --------------------------------------------------------------------------
 
+// Even though these look like bitmasks, they are not. Only one of them can
+// be active at a time.
+
 #define FLAG_USE_LABEL      0x01
 #define FLAG_LOW_BYTE       0x02
 #define FLAG_HIGH_BYTE      0x04
+#define FLAG_CONSTANT       0x08
 
 #endif // FRIDA_H
