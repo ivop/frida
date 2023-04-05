@@ -100,8 +100,8 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
 
         out << "\n; CONSTANTS\n";
 
-        for (auto const &group : constantsGroups) {
-            if (group.map->size() != 0) {
+        for (const auto &group : qAsConst(constantsGroups)) {
+            if (!group.map->isEmpty()) {
                 out << "\n; " << group.name << "\n\n";
 
                 QMap<quint64, QString>::iterator iter;

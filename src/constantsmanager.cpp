@@ -369,7 +369,7 @@ void constantsManager::onImport_clicked(void) {
             break;
         groupName = groupName.left(groupName.size() - 1);
 
-        struct constantsGroup *group = new struct constantsGroup;
+        auto *group = new struct constantsGroup;
 
         group->name = groupName;
         group->map = new QMap<quint64, QString>;
@@ -441,7 +441,7 @@ void constantsManager::onExport_clicked(void) {
 
     QTextStream out(&file);
 
-    for (auto &group : qAsConst(constantsGroups)) {
+    for (const auto &group : qAsConst(constantsGroups)) {
         out << "[" << group.name << "]" << Qt::endl;
 
         QMap<quint64, QString>::iterator iter;

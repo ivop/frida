@@ -21,8 +21,8 @@
 // ---------------------------------------------------------------------------
 
 #include "addconstantsgroupwindow.h"
-#include "ui_addconstantsgroupwindow.h"
 #include "frida.h"
+#include "ui_addconstantsgroupwindow.h"
 
 addConstantsGroupWindow::addConstantsGroupWindow(QWidget *parent) :
     QDialog(parent),
@@ -41,7 +41,7 @@ void addConstantsGroupWindow::accept() {
 
     QString groupName = le->text();
 
-    struct constantsGroup *group = new struct constantsGroup;
+    auto *group = new struct constantsGroup;
     group->name = groupName;
     group->map = new QMap<quint64, QString>;
 

@@ -124,7 +124,7 @@ bool load_project(QWidget *widget) {
     in >> numGroups;
 
     for (quint64 i = 0; i<numGroups; i++) {
-        struct constantsGroup *group = new struct constantsGroup;
+        auto *group = new struct constantsGroup;
         group->map = new QMap<quint64, QString>;
 
         in >> group->name;
