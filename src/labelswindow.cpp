@@ -263,7 +263,7 @@ void labelswindow::onExportButton_clicked() {
 
     file.open(QIODevice::WriteOnly);
     if (!file.isOpen()) {
-        msg.setText("Failed to open " + name + "\n" + file.errorString());
+        msg.setText(QStringLiteral("Failed to open ") + name + QStringLiteral("\n") + file.errorString());
         msg.exec();
         return;
     }
@@ -277,8 +277,10 @@ void labelswindow::onExportButton_clicked() {
     }
 
     if (file.error()) {
-        msg.setText("Error: " + file.errorString());
+        msg.setText(QStringLiteral("Error: ") + file.errorString());
         msg.exec();
+    } else if (out.status() != QTextStream::Ok) {
+        msg.setText(QStringLiteral("Error writing file to disk!"));
     }
 
     file.close();
@@ -303,7 +305,7 @@ void labelswindow::onImportButton_clicked() {
 
     file.open(QIODevice::ReadOnly);
     if (!file.isOpen()) {
-        msg.setText("Failed to open " + name + "\n" + file.errorString());
+        msg.setText(QStringLiteral("Failed to open ") + name + QStringLiteral("\n") + file.errorString());
         msg.exec();
         return;
     }
@@ -316,6 +318,11 @@ void labelswindow::onImportButton_clicked() {
     while (!in.atEnd()) {
         in >> addr >> label;
         if (in.atEnd()) break;
+        if (in.status() != QTextStream::Ok) {
+            msg.setText(QStringLiteral("Error reading file ") + name);
+            msg.exec();
+            break;
+        }
         if (!label.isEmpty())
             globalLabels.insert(addr, label);
     }
