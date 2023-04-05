@@ -274,16 +274,20 @@ void labelswindow::onExportButton_clicked() {
     for (quint64 key : keys) {
         out << Qt::hex << Qt::showbase << key << " "
             << globalLabels.value(key) << Qt::endl;
+        if (out.status() != QTextStream::Ok)
+            break;
     }
 
     if (file.error()) {
         msg.setText(QStringLiteral("Error: ") + file.errorString());
-        msg.exec();
     } else if (out.status() != QTextStream::Ok) {
         msg.setText(QStringLiteral("Error writing file to disk!"));
+    } else {
+        msg.setText(QStringLiteral("Labels exported successfully!"));
     }
 
     file.close();
+    msg.exec();
 }
 
 //-----------------------------------------------------------------------------
@@ -315,17 +319,19 @@ void labelswindow::onImportButton_clicked() {
     quint64 addr;
     QString label;
 
+    msg.setText(QStringLiteral("Labels imported successfully!"));
+
     while (!in.atEnd()) {
         in >> addr >> label;
         if (in.atEnd()) break;
         if (in.status() != QTextStream::Ok) {
             msg.setText(QStringLiteral("Error reading file ") + name);
-            msg.exec();
             break;
         }
         if (!label.isEmpty())
             globalLabels.insert(addr, label);
     }
     file.close();
+    msg.exec();
     showGlobalLabels();
 }
