@@ -350,24 +350,27 @@ void constantsManager::onImport_clicked(void) {
 
     QString groupName;
 
-    QChar c;
-
     // "parser" instead of serialization so input can easily be prepared
     // in a normal text editor like vi(m).
 
     while (true) {
         in.skipWhiteSpace();
-        in >> c;
-        if (c != QChar('[')) {
-            goto errout;
-        }
 
-        in >> groupName;
-        if (groupName == QStringLiteral("]"))
+        groupName = in.readLine();
+
+        if (in.status() != QTextStream::Ok)
+            goto errout;
+
+        if (groupName.at(0) != QChar('['))
+            goto errout;
+
+        if (groupName == QStringLiteral("[]"))
             break;
         if (groupName.isEmpty())
             break;
-        groupName = groupName.left(groupName.size() - 1);
+
+        groupName = groupName.replace(QStringLiteral("["), QStringLiteral(""));
+        groupName = groupName.replace(QStringLiteral("]"), QStringLiteral(""));
 
         auto *group = new struct constantsGroup;
 
