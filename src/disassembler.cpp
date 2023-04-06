@@ -21,10 +21,6 @@
 // ---------------------------------------------------------------------------
 
 #include "disassembler.h"
-#include "frida.h"
-#include <QDebug>
-#include <QMessageBox>
-#include <lowhighbytewindow.h>
 
 class Disassembler *Disassembler;
 

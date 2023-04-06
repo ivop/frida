@@ -25,8 +25,6 @@
 #ifndef LOADERATARI8BITCAR_H
 #define LOADERATARI8BITCAR_H
 
-#include <QString>
-
 struct block {
     quint16 count;
     quint16 start_address;

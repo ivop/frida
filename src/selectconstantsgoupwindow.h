@@ -23,8 +23,6 @@
 #ifndef SELECTCONSTANTSGOUPWINDOW_H
 #define SELECTCONSTANTSGOUPWINDOW_H
 
-#include <QDialog>
-
 namespace Ui {
 class selectConstantsGoupWindow;
 }

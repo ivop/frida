@@ -23,8 +23,6 @@
 #ifndef COMMENTWINDOW_H
 #define COMMENTWINDOW_H
 
-#include <QDialog>
-
 namespace Ui {
 class commentwindow;
 }

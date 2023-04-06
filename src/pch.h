@@ -18,8 +18,10 @@
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QScrollBar>
+#include <QSettings>
 #include <QString>
 #include <QTableWidget>
 #include <QTableWidgetSelectionRange>
 #include <QTextStream>
 #include <QWidget>
+#include "frida.h"

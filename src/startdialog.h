@@ -23,8 +23,6 @@
 #ifndef STARTDIALOG_H
 #define STARTDIALOG_H
 
-#include <QDialog>
-
 namespace Ui {
 class StartDialog;
 }

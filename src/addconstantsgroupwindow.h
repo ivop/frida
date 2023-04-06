@@ -23,8 +23,6 @@
 #ifndef ADDCONSTANTSGROUPWINDOW_H
 #define ADDCONSTANTSGROUPWINDOW_H
 
-#include <QDialog>
-
 namespace Ui {
 class addConstantsGroupWindow;
 }

@@ -22,17 +22,6 @@
 
 #include "exportassembly.h"
 #include "exportassemblywindow.h"
-#include "frida.h"
-#include <QDataStream>
-#include <QDateTime>
-#include <QDebug>
-#include <QFile>
-#include <QFileDialog>
-#include <QMap>
-#include <QMessageBox>
-#include <QString>
-#include <QTextStream>
-#include <QWidget>
 
 static int error;
 extern QString errorstring;

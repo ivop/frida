@@ -24,8 +24,6 @@
 #define SELECTCARTRIDGEWINDOW_H
 
 #include "loaderatari8bitcar.h"
-#include <QDialog>
-#include <QVector>
 
 namespace Ui {
 class selectcartridgewindow;

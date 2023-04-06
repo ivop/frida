@@ -21,10 +21,7 @@
 // ---------------------------------------------------------------------------
 
 #include "changesegmentwindow.h"
-#include "frida.h"
 #include "ui_changesegmentwindow.h"
-#include <QDebug>
-#include <QMessageBox>
 
 changesegmentwindow::changesegmentwindow(quint64 oldaddr, quint64 *newaddr,
                                          QWidget *parent) :

@@ -23,8 +23,6 @@
 #ifndef DISASSEMBLER_H
 #define DISASSEMBLER_H
 
-#include <QDebug>
-
 extern class Disassembler *Disassembler;
 
 class Disassembler {

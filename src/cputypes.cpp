@@ -20,9 +20,6 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "frida.h"
-#include <QApplication>
-
 const QVector<struct cputype> cputypes = {
 { "NMOS 6502",                          CT_NMOS6502 },
 { "NMOS 6502 w/ undefined opcodes",     CT_NMOS6502UNDEF },

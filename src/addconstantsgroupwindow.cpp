@@ -21,7 +21,6 @@
 // ---------------------------------------------------------------------------
 
 #include "addconstantsgroupwindow.h"
-#include "frida.h"
 #include "ui_addconstantsgroupwindow.h"
 
 addConstantsGroupWindow::addConstantsGroupWindow(QWidget *parent) :

@@ -25,6 +25,8 @@
 
 // ---------------------------------------------------------------------------
 
+#include "disassembler.h"
+
 struct distabitem {
     const char * const inst;
     const char * const oper;

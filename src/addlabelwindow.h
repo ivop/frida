@@ -23,8 +23,6 @@
 #ifndef ADDLABELWINDOW_H
 #define ADDLABELWINDOW_H
 
-#include <QDialog>
-
 namespace Ui {
 class addLabelWindow;
 }

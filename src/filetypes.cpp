@@ -20,9 +20,6 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "frida.h"
-#include <QApplication>
-
 QVector<struct filetype> filetypes = {
 { "Raw",                                            FT_RAW_FILE },
 { "Atari 8-bit Binary (.XEX)",                      FT_ATARI8BIT_BINARY },

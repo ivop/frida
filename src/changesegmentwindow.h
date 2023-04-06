@@ -23,8 +23,6 @@
 #ifndef CHANGESEGMENTWINDOW_H
 #define CHANGESEGMENTWINDOW_H
 
-#include <QDialog>
-
 namespace Ui {
 class changesegmentwindow;
 }

@@ -21,13 +21,8 @@
 // ---------------------------------------------------------------------------
 
 #include "addlabelwindow.h"
-#include "frida.h"
 #include "labelswindow.h"
 #include "ui_labelswindow.h"
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QPushButton>
-#include <QTextStream>
 
 labelswindow::labelswindow(QWidget *parent) :
     QDialog(parent),

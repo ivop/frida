@@ -21,8 +21,6 @@
 // ---------------------------------------------------------------------------
 
 #include "disassembler.h"
-#include "frida.h"
-#include <QDebug>
 
 enum addressing_mode {
     MODE_IMPL = 0,      // single byte instructions, except for RST

@@ -21,9 +21,7 @@
 // ---------------------------------------------------------------------------
 
 #include "commentwindow.h"
-#include "frida.h"
 #include "ui_commentwindow.h"
-#include <QDebug>
 
 commentwindow::commentwindow(QWidget *parent) :
     QDialog(parent),

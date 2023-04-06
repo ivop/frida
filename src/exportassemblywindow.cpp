@@ -21,9 +21,7 @@
 // ---------------------------------------------------------------------------
 
 #include "exportassemblywindow.h"
-#include "frida.h"
 #include "ui_exportassemblywindow.h"
-#include <QDebug>
 
 exportAssemblyWindow::exportAssemblyWindow(QWidget *parent) :
     QDialog(parent),

@@ -21,20 +21,9 @@
 // ---------------------------------------------------------------------------
 
 #include "disassembler.h"
-#include "frida.h"
 #include "mainwindow.h"
 #include "startdialog.h"
 #include "ui_mainwindow.h"
-#include <QApplication>
-#include <QDebug>
-#include <QDesktopWidget>
-#include <QDialog>
-#include <QFile>
-#include <QFontDatabase>
-#include <QHash>
-#include <QSettings>
-#include <QStyleFactory>
-#include <QTextStream>
 
 QVector<struct segment> segments;
 int currentSegment;

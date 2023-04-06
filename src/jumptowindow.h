@@ -23,8 +23,6 @@
 #ifndef JUMPTOWINDOW_H
 #define JUMPTOWINDOW_H
 
-#include <QDialog>
-
 namespace Ui {
 class jumpToWindow;
 }

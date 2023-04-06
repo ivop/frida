@@ -21,14 +21,10 @@
 // ---------------------------------------------------------------------------
 
 #include "disassembler.h"
-#include "frida.h"
 #include "loaders.h"
 #include "loadsaveproject.h"
 #include "startdialog.h"
 #include "ui_startdialog.h"
-#include <QDebug>
-#include <QFileDialog>
-#include <QMessageBox>
 
 QString FileToDisassemble;
 

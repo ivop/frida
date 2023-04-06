@@ -26,7 +26,6 @@
 #include "constantsmanager.h"
 #include "disassembler.h"
 #include "exportassembly.h"
-#include "frida.h"
 #include "jumptowindow.h"
 #include "labelswindow.h"
 #include "loadsaveproject.h"
@@ -35,13 +34,6 @@
 #include "mainwindow.h"
 #include "selectconstantsgoupwindow.h"
 #include "ui_mainwindow.h"
-#include <QBrush>
-#include <QComboBox>
-#include <QDebug>
-#include <QMenu>
-#include <QMessageBox>
-#include <QPushButton>
-#include <QScrollBar>
 
 bool generateLocalLabels = true;
 extern QPalette light_palette, dark_palette;

@@ -23,7 +23,6 @@
 #include "addconstantsgroupwindow.h"
 #include "addconstanttogroupwindow.h"
 #include "constantsmanager.h"
-#include "frida.h"
 #include "ui_constantsmanager.h"
 
 // Later, add BOTH constantsGroups and nextNewGroup to saved project!

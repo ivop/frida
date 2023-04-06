@@ -20,11 +20,8 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "frida.h"
 #include "lowhighbytewindow.h"
 #include "ui_lowhighbytewindow.h"
-#include <QDebug>
-#include <QMessageBox>
 
 lowhighbytewindow::lowhighbytewindow(QWidget *parent) :
     QDialog(parent),

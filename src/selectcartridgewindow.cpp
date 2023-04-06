@@ -20,11 +20,9 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "frida.h"
 #include "loaderatari8bitcar.h"
 #include "selectcartridgewindow.h"
 #include "ui_selectcartridgewindow.h"
-#include <QDebug>
 
 selectcartridgewindow::selectcartridgewindow(QWidget *parent, const QVector<quint64> &candidates) :
     QDialog(parent),

@@ -23,9 +23,6 @@
 #ifndef LABELSWINDOW_H
 #define LABELSWINDOW_H
 
-#include <QDialog>
-#include <QTableWidget>
-
 namespace Ui {
 class labelswindow;
 }

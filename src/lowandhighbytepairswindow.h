@@ -23,8 +23,6 @@
 #ifndef LOWANDHIGHBYTEPAIRSWINDOW_H
 #define LOWANDHIGHBYTEPAIRSWINDOW_H
 
-#include <QDialog>
-
 namespace Ui {
 class LowAndHighBytePairsWindow;
 }

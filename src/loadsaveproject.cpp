@@ -20,17 +20,8 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "frida.h"
 #include "loaders.h"
 #include "loadsaveproject.h"
-#include <QDataStream>
-#include <QDebug>
-#include <QFile>
-#include <QFileDialog>
-#include <QMap>
-#include <QMessageBox>
-#include <QString>
-#include <QTextStream>
 
 static const char *magic = "FRIDA";
 static char checkmagic[5];

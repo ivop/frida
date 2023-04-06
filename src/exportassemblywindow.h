@@ -23,8 +23,6 @@
 #ifndef EXPORTASSEMBLYWINDOW_H
 #define EXPORTASSEMBLYWINDOW_H
 
-#include <QDialog>
-
 namespace Ui {
 class exportAssemblyWindow;
 }

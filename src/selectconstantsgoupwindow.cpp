@@ -20,7 +20,6 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "frida.h"
 #include "selectconstantsgoupwindow.h"
 #include "ui_selectconstantsgoupwindow.h"
 

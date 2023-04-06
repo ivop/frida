@@ -23,8 +23,6 @@
 #ifndef CONSTANTSMANAGER_H
 #define CONSTANTSMANAGER_H
 
-#include <QDialog>
-
 namespace Ui {
 class constantsManager;
 }

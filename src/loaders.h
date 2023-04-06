@@ -23,8 +23,6 @@
 #ifndef LOADERS_H
 #define LOADERS_H
 
-#include <QFile>
-
 #define LE16(x) ((x)[1]<<8 | (x)[0])
 #define BE16(x) ((x)[0]<<8 | (x)[1])
 #define LE32(x) ((x)[3]<<24 | (x)[2]<<16 | (x)[1]<<8 | (x)[0])

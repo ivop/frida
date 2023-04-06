@@ -20,9 +20,7 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "frida.h"
 #include "loaders.h"
-#include <QDebug>
 
 // note on zeroed memory:
 // new char[size]   is similar to malloc()

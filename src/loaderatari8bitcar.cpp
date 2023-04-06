@@ -22,11 +22,9 @@
 
 // Based on: https://github.com/atari800/atari800/blob/master/DOC/cart.txt
 
-#include "frida.h"
 #include "loaderatari8bitcar.h"
 #include "loaders.h"
 #include "selectcartridgewindow.h"
-#include <QDebug>
 
 #define END { 0, 0, 0, 0, 0 }
 

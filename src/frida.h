@@ -23,10 +23,6 @@
 #ifndef FRIDA_H
 #define FRIDA_H
 
-#include <QApplication>
-#include <QFile>
-#include <QMap>
-#include <QSettings>
 #include "disassembler.h"
 
 // --------------------------------------------------------------------------

@@ -20,10 +20,8 @@
 //
 // ---------------------------------------------------------------------------
 
-#include "frida.h"
 #include "jumptowindow.h"
 #include "ui_jumptowindow.h"
-#include <QDebug>
 
 jumpToWindow::jumpToWindow(QWidget *parent, QStringList *list) :
     QDialog(parent),
