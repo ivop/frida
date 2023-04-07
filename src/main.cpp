@@ -49,7 +49,9 @@ int main(int argc, char *argv[])
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/SpaceMono-Regular.ttf"));
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/DroidSansMono.ttf"));
 
-    QFont font = QFont("Droid Sans Mono", 10, 0);
+    int pointSize = a.font().pointSize();
+
+    QFont font = QFont("Droid Sans Mono", pointSize + 1, 0);
 
     a.setStyle(QStringLiteral("fusion"));
     a.setFont(font);
