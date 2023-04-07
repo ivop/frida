@@ -39,7 +39,9 @@ QMap<quint64, QString> globalAutoLabels, globalLabels;
 
 int main(int argc, char *argv[])
 {
+#if defined(Q_OS_UNIX)
     unsetenv("QT_QPA_PLATFORMTHEME");       // STOP messing with MY fonts!
+#endif
 
     QApplication a(argc, argv);
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/AtariClassic-Regular.ttf"));
