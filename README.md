@@ -20,7 +20,7 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 * Atari 8-bit Binary (.XEX)  
 * Atari 8-bit Slight Atari Player (.SAP)  
 * Atari 8-bit Cartridge (.CAR)  
-* Commodore C64 Binary (.PRG)  
+* Commodore PET/VIC-20/C16/C64/C128 Binary (.PRG)  
 * Commodore C64 PSID/RSID (.SID)  
 * Atari 2600 2K/4K ROM (.A26)  
 * Oric Tape File (.TAP)  
