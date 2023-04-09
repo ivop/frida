@@ -28,6 +28,7 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 * Apple ][ ProDOS AppleSingle  
 * Nintendo NES Song File (.NSF)  
 * CP/M Binary at 0100H (.COM)  
+* BBC Micro, Electron, Master UEF Tape (.UEF)  
 
 ##### Build instructions:
 git clone https://github.com/ivop/frida  
