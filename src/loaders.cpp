@@ -35,15 +35,11 @@ void Loader::genericComment(QFile& file, struct segment *segment) {
         QStringLiteral("\n"));
 }
 
-// NOTE: if a newly added field requires an array of size 'size', the following
-// loaders need to be updated accordingly:
-// - BBC UEF
-
 struct segment Loader::createEmptySegment(quint64 start, quint64 end) {
     quint64 size = end - start + 1;
      struct segment segment = {
          start, end, QString(""),
-         new quint8[size](), new quint8[size](), new quint8[size](),    // SEE NOTE
+         new quint8[size](), new quint8[size](), new quint8[size](),
          QMap<quint64, QString>(),
          QMap<quint64, QString>(),
          QMap<quint64, quint16>(),
@@ -596,6 +592,7 @@ bool LoaderCPMBinary::Load(QFile &file) {
 bool LoaderBBCUEFTape::Load(QFile &file) {
     QByteArray compressed;
     QByteArray uncompressed;
+    QByteArray temporary;
     bool segmentInProgress = false;
     struct segment segment;
 
@@ -605,7 +602,7 @@ bool LoaderBBCUEFTape::Load(QFile &file) {
         return false;
     }
 
-    quint8 *raw = (quint8 *)compressed.data();
+    auto *raw = (quint8 *)compressed.data();
 
     if (raw[0] != 0x1f && raw[1] != 0x8b) {
         uncompressed = compressed;
@@ -690,7 +687,7 @@ skip_decompression:
         if (chunkLen == 0)
             break;              // seen uef files with appended zeroes
 
-        if (chunkID >= 0x0000 && chunkID < 0x0100) {
+        if (chunkID < 0x0100) {
             raw += chunkLen;    // skip inlays, manuas, etc...
             continue;
         }
@@ -785,45 +782,30 @@ skip_decompression:
         raw += 2;
 
         if (segmentInProgress) {
-            struct segment *s = &segment;
-
-            s->end += block_length;
-
-            quint16 size = s->end - s->start + 1;
-
-            auto *resized = new quint8[size];
-
-            memcpy(resized, s->data, size);
-
-            delete[] s->data;
-            delete[] s->datatypes;
-            delete[] s->flags;
-
-            s->datatypes = new quint8[size]();  // need to be of same size
-            s->flags     = new quint8[size]();  // this code is brittle and will break if future new entries in struct segment need this
-
-            s->data = resized;
-
-            memcpy(s->data + size - block_length, raw, block_length);
+            temporary.append((char *)raw, block_length);
 
             if ((block_flag & 0x80) == 0x80) {
+
+                segment = createEmptySegment(load_address, load_address+temporary.size()-1);
+
+                struct segment *s = &segment;
+
+                memcpy(s->data, temporary.data(), temporary.size());
+
+                s->name = QString(name);
                 s->localLabels.insert(exec_address, QStringLiteral("exec_address"));
                 s->localLabels.insert(load_address, QStringLiteral("load_address"));
+
                 genericComment(file, &segment);
                 segments.append(segment);
+
                 segmentInProgress = false;
             }
 
         } else {
-
-            segment = createEmptySegment(load_address, load_address + block_length - 1);
-
-            struct segment *s = &segment;
-
-            s->name = QString(name);
-
-            memcpy(s->data, raw, block_length);
-
+            temporary.clear();
+            temporary.resize(block_length);
+            memcpy(temporary.data(), raw, block_length);
             segmentInProgress = true;
         }
 
