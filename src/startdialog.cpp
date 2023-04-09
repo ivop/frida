@@ -149,6 +149,9 @@ void StartDialog::onButtonNewProject_clicked()
     case FT_CPM_BINARY:
         Loader = new LoaderCPMBinary();
         break;
+    case FT_BBC_UEF_TAPE:
+        Loader = new LoaderBBCUEFTape();
+        break;
     default:
         msg.setText(QStringLiteral("Unknown filetype! (this shouldn't happen)"));
         msg.exec();

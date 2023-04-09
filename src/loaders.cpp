@@ -21,6 +21,8 @@
 // ---------------------------------------------------------------------------
 
 #include "loaders.h"
+#include <string.h>
+#include "zlib.h"
 
 // note on zeroed memory:
 // new char[size]   is similar to malloc()
@@ -583,3 +585,254 @@ bool LoaderCPMBinary::Load(QFile &file) {
     globalLabels.insert(segments[0].start, QStringLiteral("RUN"));
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// BBC MICRO, ELECTRON AND MASTER
+
+bool LoaderBBCUEFTape::Load(QFile &file) {
+    QByteArray compressed;
+    QByteArray uncompressed;
+    bool segmentInProgress = false;
+    struct segment segment;
+
+    compressed.resize(file.size());
+    if (file.read(compressed.data(), file.size()) != file.size()) {
+        this->error_message = QStringLiteral("Read error!\n");
+        return false;
+    }
+
+    quint8 *raw = (quint8 *)compressed.data();
+
+    if (raw[0] != 0x1f && raw[1] != 0x8b) {
+        uncompressed = compressed;
+        goto skip_decompression;        // avoid useless indentation
+    }
+
+    // Decompress gzipped file
+
+    static const int CHUNK_SIZE = 1024;
+    char out[CHUNK_SIZE];
+    int ret;
+    z_stream strm;
+
+    strm.zalloc = Z_NULL;
+    strm.zfree  = Z_NULL;
+    strm.opaque = Z_NULL;
+    strm.avail_in = compressed.size();
+    strm.next_in = (Bytef*)(compressed.data());
+
+    ret = inflateInit2(&strm, 15 + 32);
+    if (ret != Z_OK) {
+        this->error_message = QStringLiteral("Unable to decompress gzip'd UEF file\n");
+        return false;
+    }
+
+    do {
+        strm.avail_out = CHUNK_SIZE;
+        strm.next_out = (Bytef*)(out);
+
+        ret = inflate(&strm, Z_NO_FLUSH);
+
+        switch (ret) {
+        case Z_NEED_DICT:
+            ret = Z_DATA_ERROR;
+            [[fallthrough]];
+        case Z_DATA_ERROR:
+            [[fallthrough]];
+        case Z_MEM_ERROR:
+            this->error_message = QStringLiteral("Unable to decompress gzip'd UEF file\n");
+            inflateEnd(&strm);
+            return false;
+        default:
+            ;
+        }
+
+        uncompressed.append(out, CHUNK_SIZE - strm.avail_out);
+
+    } while (strm.avail_out == 0);
+
+    inflateEnd(&strm);
+
+skip_decompression:
+    raw = (quint8 *) uncompressed.data();
+    quint8 *endraw = raw + uncompressed.size() - 1;
+
+    qDebug() << "filesize: " << file.size();
+    qDebug() << "size: " << uncompressed.size();
+
+    // 12 bytes: zero terminated string (10 bytes), version minor, verion major
+
+    if (raw + 12 > endraw) {
+ premature_eof:
+        this->error_message = QStringLiteral("Premature end-of-file\n");
+        return false;
+    }
+
+    if (strncmp((char *) raw, "UEF File!", 9) != 0) {
+        this->error_message = QStringLiteral("Not a (compressed) UEF file!\n");
+        return false;
+    }
+
+    raw += 12;
+
+    while(raw <= endraw) {
+        if (raw + 6 > endraw) goto premature_eof;
+
+        quint16 chunkID = LE16(raw);
+        raw += 2;
+        quint32 chunkLen = LE32(raw);
+        raw += 4;
+
+        if (chunkLen == 0)
+            break;              // seen uef files with appended zeroes
+
+        if (chunkID >= 0x0000 && chunkID < 0x0100) {
+            raw += chunkLen;    // skip inlays, manuas, etc...
+            continue;
+        }
+
+        if (chunkID >= 0x0200 && chunkID < 0x0300) {
+            this->error_message = QStringLiteral("UEF File contains disk chunks\n");
+            return false;
+        }
+
+        if (chunkID >= 0x0300 && chunkID < 0x0400) {
+            this->error_message = QStringLiteral("UEF File contains ROM chunks\n");
+            return false;
+        }
+
+        if (chunkID >= 0x0400 && chunkID < 0x0500) {
+            this->error_message = QStringLiteral("UEF File contains snapshot chunks\n");
+            return false;
+        }
+
+        if (chunkID >= 0x0500 && chunkID < 0xff00) {
+            this->error_message = QStringLiteral("UEF File is corrupted\n");
+            return false;
+        }
+
+        if (chunkID >= 0xff00 && chunkID <= 0xffff) {
+            raw += chunkLen;    // skip emulator specific chunks
+            continue;
+        }
+
+        if (chunkID != 0x0100) {
+            if (chunkID == 0x0101) {
+                this->error_message = QStringLiteral("Multiplexed data blocks not supported\n");
+                return false;
+            }
+            if (chunkID == 0x0102) {
+                this->error_message = QStringLiteral("Explicit tape data blocks not supported\n");
+                return false;
+            }
+            if (chunkID == 0x0104) {
+                this->error_message = QStringLiteral("Defined tape format data blocks not supported\n");
+                return false;
+            }
+
+            raw += chunkLen;    // skip gaps and tones and stuff
+            continue;
+        }
+
+        if (chunkLen == 1) {
+            raw += chunkLen;    // skip single byte chunk
+            continue;
+        }
+
+        quint8 synch = raw[0];
+        raw++;
+
+        if (synch != 0x2a) {
+            this->error_message = QStringLiteral("$2A Synchronization missing\n");
+            return false;
+        }
+
+        char name[13];  // max. 12 characters + nil
+        int i;
+
+        for (i = 0; i<13; i++) {
+            quint8 c = raw[i];
+            if (c >= 0x7f || (c >= 1 && c <= 0x1f)) c = '_';
+            name[i] = c;
+            if (c == 0)
+                break;
+        }
+
+        if (i == 13) {
+            this->error_message = QStringLiteral("Chunk name too long");
+            return false;
+        }
+
+        raw += i + 1;
+
+        quint32 load_address = LE32(raw);
+        raw += 4;
+        quint32 exec_address = LE32(raw);
+        raw += 4;
+//        quint16 block_number = LE16(raw);
+        raw += 2;
+        quint16 block_length = LE16(raw);
+        raw += 2;
+        quint8  block_flag   = raw[0];
+        raw += 1;
+//        quint32 next_address = LE32(raw);
+        raw += 4;
+//        quint16 crc_header   = LE16(raw);
+        raw += 2;
+
+        if (segmentInProgress) {
+            struct segment *s = &segment;
+
+            s->end += block_length;
+
+            quint16 size = s->end - s->start + 1;
+
+            auto *resized = new quint8[size];
+
+            memcpy(resized, s->data, size);
+
+            delete[] s->data;
+            delete[] s->datatypes;
+            delete[] s->flags;
+
+            s->datatypes = new quint8[size]();  // need to be of same size
+            s->flags     = new quint8[size]();  // this code is brittle and will break if future new entries in struct segment need this
+
+            s->data = resized;
+
+            memcpy(s->data + size - block_length, raw, block_length);
+
+            if ((block_flag & 0x80) == 0x80) {
+                s->localLabels.insert(exec_address, QStringLiteral("exec_address"));
+                s->localLabels.insert(load_address, QStringLiteral("load_address"));
+                segments.append(segment);
+                segmentInProgress = false;
+            }
+
+        } else {
+
+            segment = createEmptySegment(load_address, load_address + block_length - 1);
+
+            struct segment *s = &segment;
+
+            s->name = QString(name);
+
+            memcpy(s->data, raw, block_length);
+
+            segmentInProgress = true;
+        }
+
+        raw += block_length;
+
+        if (block_length) {
+//            quint16 crc_block = LE16(raw);
+            raw += 2;
+        }
+
+        // should sync with next chunk here
+    }
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------

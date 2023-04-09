@@ -98,4 +98,9 @@ public:
     bool Load(QFile &file) override;
 };
 
+class LoaderBBCUEFTape : public Loader {
+public:
+    bool Load(QFile &file) override;
+};
+
 #endif // LOADERS_H

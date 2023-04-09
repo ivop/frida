@@ -66,6 +66,7 @@ enum filetypeid {
     FT_APPLE2_APPLESINGLE   = 0x51,
     FT_NES_SONG_FILE        = 0x60,
     FT_CPM_BINARY           = 0x70,
+    FT_BBC_UEF_TAPE         = 0x80,
 };
 
 struct filetype {
