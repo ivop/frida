@@ -35,11 +35,15 @@ void Loader::genericComment(QFile& file, struct segment *segment) {
         QStringLiteral("\n"));
 }
 
+// NOTE: if a newly added field requires an array of size 'size', the following
+// loaders need to be updated accordingly:
+// - BBC UEF
+
 struct segment Loader::createEmptySegment(quint64 start, quint64 end) {
     quint64 size = end - start + 1;
      struct segment segment = {
-         start, end, "",
-         new quint8[size](), new quint8[size](), new quint8[size](),
+         start, end, QString(""),
+         new quint8[size](), new quint8[size](), new quint8[size](),    // SEE NOTE
          QMap<quint64, QString>(),
          QMap<quint64, QString>(),
          QMap<quint64, quint16>(),
@@ -765,9 +769,9 @@ skip_decompression:
 
         raw += i + 1;
 
-        quint32 load_address = LE32(raw);
+        quint32 load_address = LE32(raw) & 0xffff;
         raw += 4;
-        quint32 exec_address = LE32(raw);
+        quint32 exec_address = LE32(raw) & 0xffff;
         raw += 4;
 //        quint16 block_number = LE16(raw);
         raw += 2;
@@ -805,6 +809,7 @@ skip_decompression:
             if ((block_flag & 0x80) == 0x80) {
                 s->localLabels.insert(exec_address, QStringLiteral("exec_address"));
                 s->localLabels.insert(load_address, QStringLiteral("load_address"));
+                genericComment(file, &segment);
                 segments.append(segment);
                 segmentInProgress = false;
             }
