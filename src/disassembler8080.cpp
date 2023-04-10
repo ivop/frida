@@ -461,7 +461,7 @@ void Disassembler8080::disassembleInstructionAt(quint64 relpos,
             temps = constantsGroups[groupID].map->value(operand);
         }
 
-        if (temps.isEmpty()) {
+        if (temps.isEmpty() && (m != MODE_D16 || flags[i+1] == FLAG_USE_LABEL)) {
             if (localLabels->contains(operand))
                 temps = localLabels->value(operand);
             else
