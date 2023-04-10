@@ -34,4 +34,5 @@ QVector<struct filetype> filetypes = {
 { "Nintendo NES Song File (.NSF)",                  FT_NES_SONG_FILE },
 { "CP/M Binary at 0100H (.COM)",                    FT_CPM_BINARY },
 { "BBC Micro, Electron, Master UEF Tape (.UEF)",    FT_BBC_UEF_TAPE },
+{ "ZX Spectrum Tape File (.TAP)",                   FT_ZX_SPECTRUM_TAP },
 };

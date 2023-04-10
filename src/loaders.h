@@ -103,4 +103,9 @@ public:
     bool Load(QFile &file) override;
 };
 
+class LoaderZXSpectrumTape : public Loader {
+public:
+    bool Load(QFile &file) override;
+};
+
 #endif // LOADERS_H

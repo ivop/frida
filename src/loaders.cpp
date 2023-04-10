@@ -823,3 +823,121 @@ skip_decompression:
 }
 
 // ----------------------------------------------------------------------------
+// ZX SPECTRUM
+
+static const char * const typenames[4] = {
+    "Basic Program: ",
+    "Number Array: ",
+    "Character Array: ",
+    "Binary Code: "
+};
+
+bool LoaderZXSpectrumTape::Load(QFile &file) {
+    quint8 c;
+    quint8 d;
+    quint8 flag;
+    quint16 block_length;
+    quint8 typeval;
+    quint8 filename[11];
+    quint16 data_block_length;
+    quint16 parameter1;
+    quint16 parameter2;
+    bool headerProcessed = false;
+    bool weHaveSegments = false;
+
+    while (true) {
+        file.getChar((char *) &c);
+        file.getChar((char *) &d);
+
+        if (file.atEnd())
+            break;
+
+        block_length = c + (d<<8);
+
+        if (block_length == 0) {
+            if (weHaveSegments)
+                return true;        // Klax Tape File has zero padding at the end?
+
+            this->error_message = QStringLiteral("Zero block length encountered, aborting");
+            return false;
+        }
+
+        file.getChar((char *) &flag);   // FLAG
+
+        if (flag == 0) {                // HEADER BLOCK
+
+            file.getChar((char *) &typeval);
+            if (typeval > 3) {
+                this->error_message = QStringLiteral("Invalid block type encountered!\n");
+                return false;
+            }
+
+            file.read((char *) filename, 10);
+            filename[10] = 0;
+
+            for (int i = 0; i<10; i++) {
+                if (filename[i] < 32 || filename[i] >= 0x7f )
+                    filename[i] = '_';
+            }
+
+            file.getChar((char *) &c);
+            file.getChar((char *) &d);
+            data_block_length = c + (d<<8);
+
+            file.getChar((char *) &c);
+            file.getChar((char *) &d);
+            parameter1 = c + (d<<8);
+
+            file.getChar((char *) &c);
+            file.getChar((char *) &d);
+            parameter2 = c + (d<<8);
+
+            file.getChar((char *) &c);      // CRC
+
+            headerProcessed = true;
+
+        } else if (flag == 0xff) {      // DATA BLOCK
+
+            quint16 load_address = 0;
+
+            if (headerProcessed) {
+                if (typeval == 0)   load_address = 0x5ccb;      // 23755, PROG
+                if (typeval == 3)   load_address = parameter1;
+            }
+
+            struct segment segment = createEmptySegment(load_address, load_address + block_length - 2 - 1); // -2 for flag and crc, -1 because it includes the last byte
+
+            // use block_len, do not trust data_block_length
+            // there might even be no header before (e.g. Boulder Dash)
+
+            file.read((char *) segment.data, block_length-2);
+
+            if (headerProcessed) {
+                segment.name = QString(typenames[typeval]) + QString((char *) filename).trimmed();
+            } else {
+                segment.name = QStringLiteral("Unknown");
+            }
+
+            genericComment(file, &segment);
+            segments.append(segment);
+
+            file.getChar((char *) &c);       // CRC
+
+            headerProcessed = false;
+            weHaveSegments = true;
+
+        } else {
+            this->error_message = QStringLiteral("Unknown block encountered!\n");
+            return false;
+        }
+
+        if (file.error() != file.NoError) {
+            this->error_message = QStringLiteral("Read error!\n");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------

@@ -152,6 +152,9 @@ void StartDialog::onButtonNewProject_clicked()
     case FT_BBC_UEF_TAPE:
         Loader = new LoaderBBCUEFTape();
         break;
+    case FT_ZX_SPECTRUM_TAP:
+        Loader = new LoaderZXSpectrumTape();
+        break;
     default:
         msg.setText(QStringLiteral("Unknown filetype! (this shouldn't happen)"));
         msg.exec();
