@@ -350,6 +350,9 @@ do_directive:
                 || s->localLabels.contains(start+i)) {
                 perline = 0; // always start new directive at label locations
             }
+            if (s->comments.contains(start+i)) {
+                perline = 0;    // new directive at comment
+            }
             hex.clear();
             if (s->flags[i] & FLAG_CONSTANT) {
                 quint64 groupID = s->constants.value(start+i);
@@ -451,7 +454,8 @@ do_string_directive:
             if (globalLabels.contains(start+i)
                 || segments[currentSegment].localLabels.contains(start+i)
                 || perline <= 0
-                || prevtype != type) {
+                || prevtype != type
+                || s->comments.contains(start+i)) {
                 // start new directive at label location
                 dis = { start + i, instr, QString("\"\""), n, false, 256, 0, 0 };
                 perline = 40;
