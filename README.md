@@ -9,6 +9,7 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 * Windows 10, and above  
 * macOS Catalina 10.15.7, and above  
 * FreeBSD 13.2  
+* OpenBSD 7.2  
 
 ##### Supported CPUs:
 * NMOS 6502  
@@ -44,6 +45,6 @@ make -j8
 * Use latest Qt5 5.15.x.   
 * Linux builds with both clang and g++.  
 * Windows builds with MinGW-g++, MS compiler is not supported.  
-* macOS builds with clang.  
+* macOS builds with clang that comes with XCode.  
 * FreeBSD builds with clang. gcc9 and gcc10 give an ICE (internal compiler error), gcc11 and gcc12 have broken PCH support.  
-
+* OpenBSD builds with eg++.  
