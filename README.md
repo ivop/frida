@@ -33,12 +33,14 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 * BBC Micro, Electron, Master UEF Tape (.UEF)  
 
 ##### Build instructions:
+```
 git clone https://github.com/ivop/frida  
 cd frida  
 mkdir build  
 cd build  
 qmake ../src/frida.pro  
 make -j8  
+```
 
 ###### Notes:  
 
