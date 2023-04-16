@@ -8,6 +8,7 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 * Linux, debian 11.6 bullseye (stable), and equivalents  
 * Windows 10, and above  
 * macOS Catalina 10.15.7, and above  
+* FreeBSD 13.2  
 
 ##### Supported CPUs:
 * NMOS 6502  
@@ -37,3 +38,12 @@ mkdir build
 cd build  
 qmake ../src/frida.pro  
 make -j8  
+
+###### Notes:  
+
+* Use latest Qt5  
+* Linux builds with both clang and g++.  
+* Windows builds with mingw-g++, MS compiler is not supported.  
+* macOS builds with clang.  
+* FreeBSD builds with clang. gcc9 and gcc10 give an ICE, gcc11 and gcc12 have broken PCH support.  
+
