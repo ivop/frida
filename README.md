@@ -5,7 +5,7 @@ Copyright (C) 2017,2023 by Ivo van Poorten
 Created with QtCreator 4.14.1 and Qt 5.15.2  
 
 ##### Runs on:
-* Linux, debian 11.6 bullseye (stable), and equivalents  
+* Linux, Debian 11.6 Bullseye (stable), Ubuntu 22.04 LTS Jammy Jellyfish, Linux Mint 21.1 Vera, and many others  
 * Windows 10, and later  
 * macOS Catalina 10.15.7, and later  
 * FreeBSD 13.2  
