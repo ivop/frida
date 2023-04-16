@@ -1,3 +1,5 @@
+#ifndef PCH_H
+#define PCH_H
 #include <QApplication>
 #include <QBrush>
 #include <QComboBox>
@@ -25,3 +27,4 @@
 #include <QTextStream>
 #include <QWidget>
 #include "frida.h"
+#endif
