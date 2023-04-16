@@ -45,8 +45,8 @@ make -j8
 ###### Notes:  
 
 * Use latest Qt5 5.15.x.   
-* Linux builds with both clang and g++.  
+* Linux builds with both clang++ and g++.  
 * Windows builds with MinGW-g++, MS compiler is not supported.  
-* macOS builds with clang that comes with XCode.  
-* FreeBSD builds with clang. gcc9 and gcc10 give an ICE (internal compiler error), gcc11 and gcc12 have broken PCH support.  
+* macOS builds with clang++ that comes with XCode.  
+* FreeBSD builds with clang++. gcc9 and gcc10 give an ICE (internal compiler error), gcc11 and gcc12 have broken PCH support.  
 * OpenBSD builds with eg++.  
