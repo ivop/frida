@@ -12,6 +12,7 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 * OpenBSD 7.2  
 * NetBSD 9.3  
 * OpenIndiana 2022.10 (SunOS/Solaris)  
+* Haiku R1/beta4  
 
 ##### Supported CPUs:
 * NMOS 6502  
@@ -50,7 +51,8 @@ make -j8
 * Linux builds with both clang++ and g++.  
 * Windows builds with MinGW-g++, MS compiler is not supported.  
 * macOS builds with clang++ that comes with XCode.  
-* FreeBSD builds with clang++. gcc9 and gcc10 give an ICE (internal compiler error), gcc11 and gcc12 have broken PCH support.  
+* FreeBSD builds with clang++. frida-nopch.pro builds with gcc.  
 * OpenBSD builds with eg++ and clang++.  
-* NetBSD builds with clang++. gcc12 has broken PCH support because of NetBSD reasons.  
-* OpenIndiana builds with g++. clang's type_traits is broken.  
+* NetBSD builds with clang++. frida-nopch.pro builds with gcc.  
+* OpenIndiana builds with g++. clang's type_traits is broken on OpenIndiana.  
+* Haiku builds frida-nopch.pro with g++. clang's type_traits is broken on Haiku.  
