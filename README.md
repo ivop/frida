@@ -11,6 +11,7 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 * FreeBSD 13.2  
 * OpenBSD 7.2  
 * NetBSD 9.3  
+* OpenIndiana 2022.10 (SunOS/Solaris)  
 
 ##### Supported CPUs:
 * NMOS 6502  
@@ -52,3 +53,4 @@ make -j8
 * FreeBSD builds with clang++. gcc9 and gcc10 give an ICE (internal compiler error), gcc11 and gcc12 have broken PCH support.  
 * OpenBSD builds with eg++ and clang++.  
 * NetBSD builds with clang++. gcc12 has broken PCH support because of NetBSD reasons.  
+* OpenIndiana builds with g++. clang's type_traits is broken.  
