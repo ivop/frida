@@ -712,7 +712,7 @@ skip_decompression:
             return false;
         }
 
-        if (chunkID >= 0xff00 && chunkID <= 0xffff) {
+        if (chunkID >= 0xff00) {
             raw += chunkLen;    // skip emulator specific chunks
             continue;
         }
@@ -839,9 +839,9 @@ bool LoaderZXSpectrumTape::Load(QFile &file) {
     quint16 block_length;
     quint8 typeval;
     quint8 filename[11];
-    quint16 data_block_length;
-    quint16 parameter1;
-    quint16 parameter2;
+    quint16 data_block_length __attribute__((unused));
+    quint16 parameter1 = 0;
+    quint16 parameter2 __attribute__((unused));
     bool headerProcessed = false;
     bool weHaveSegments = false;
 
