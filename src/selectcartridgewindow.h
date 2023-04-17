@@ -1,4 +1,3 @@
-#include "pch.h"
 // ---------------------------------------------------------------------------
 //
 // This file is part of:
@@ -24,6 +23,7 @@
 #ifndef SELECTCARTRIDGEWINDOW_H
 #define SELECTCARTRIDGEWINDOW_H
 
+#include "pch.h"
 #include "loaderatari8bitcar.h"
 
 namespace Ui {

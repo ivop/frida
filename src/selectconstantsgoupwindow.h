@@ -1,4 +1,3 @@
-#include "pch.h"
 // ---------------------------------------------------------------------------
 //
 // This file is part of:
@@ -23,6 +22,8 @@
 
 #ifndef SELECTCONSTANTSGOUPWINDOW_H
 #define SELECTCONSTANTSGOUPWINDOW_H
+
+#include "pch.h"
 
 namespace Ui {
 class selectConstantsGoupWindow;

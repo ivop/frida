@@ -1,4 +1,3 @@
-#include "pch.h"
 // ---------------------------------------------------------------------------
 //
 // This file is part of:
@@ -23,6 +22,8 @@
 
 #ifndef LOADSAVEPROJECT_H
 #define LOADSAVEPROJECT_H
+
+#include "pch.h"
 
 extern bool load_project(QWidget *widget);
 extern void save_project(QWidget *widget);

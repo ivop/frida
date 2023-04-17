@@ -1,4 +1,3 @@
-#include "pch.h"
 // ---------------------------------------------------------------------------
 //
 // This file is part of:
@@ -25,6 +24,8 @@
 
 #ifndef LOADERATARI8BITCAR_H
 #define LOADERATARI8BITCAR_H
+
+#include "pch.h"
 
 struct block {
     quint16 count;

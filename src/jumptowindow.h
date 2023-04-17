@@ -1,4 +1,3 @@
-#include "pch.h"
 // ---------------------------------------------------------------------------
 //
 // This file is part of:
@@ -23,6 +22,8 @@
 
 #ifndef JUMPTOWINDOW_H
 #define JUMPTOWINDOW_H
+
+#include "pch.h"
 
 namespace Ui {
 class jumpToWindow;

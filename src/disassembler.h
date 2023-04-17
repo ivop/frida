@@ -1,4 +1,3 @@
-#include "pch.h"
 // ---------------------------------------------------------------------------
 //
 // This file is part of:
@@ -23,6 +22,8 @@
 
 #ifndef DISASSEMBLER_H
 #define DISASSEMBLER_H
+
+#include "pch.h"
 
 extern class Disassembler *Disassembler;
 

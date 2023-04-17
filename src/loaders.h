@@ -1,4 +1,3 @@
-#include "pch.h"
 // ---------------------------------------------------------------------------
 //
 // This file is part of:
@@ -23,6 +22,8 @@
 
 #ifndef LOADERS_H
 #define LOADERS_H
+
+#include "pch.h"
 
 #define LE16(x) ((x)[1]<<8 | (x)[0])
 #define BE16(x) ((x)[0]<<8 | (x)[1])

@@ -1,4 +1,3 @@
-#include "pch.h"
 // ---------------------------------------------------------------------------
 //
 // This file is part of:
@@ -23,6 +22,8 @@
 
 #ifndef EXPORTASSEMBLY_H
 #define EXPORTASSEMBLY_H
+
+#include "pch.h"
 
 extern void export_assembly(QWidget *widget, bool generateLocalLabels);
 

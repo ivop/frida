@@ -1,4 +1,3 @@
-#include "pch.h"
 // ---------------------------------------------------------------------------
 //
 // This file is part of:
@@ -23,6 +22,8 @@
 
 #ifndef LOWHIGHBYTEWINDOW_H
 #define LOWHIGHBYTEWINDOW_H
+
+#include "pch.h"
 
 namespace Ui {
 class lowhighbytewindow;
