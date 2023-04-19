@@ -2,7 +2,8 @@
 
 ## FRee Interactive DisAssembler  
 Copyright (C) 2017,2023 by Ivo van Poorten  
-Created with QtCreator 4.14.1 and Qt 5.15.2  
+Created with QtCreator and Qt 5.15.2  
+Also builds with Qt 6.x  
 
 ##### Runs on:
 * Linux, Debian 11.6 Bullseye (stable), Ubuntu 22.04 LTS Jammy Jellyfish, Linux Mint 21.1 Vera, and many others  
