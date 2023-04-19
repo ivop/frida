@@ -153,7 +153,7 @@ MainWindow::MainWindow(QWidget *parent) :
         t = i;
 
         t->horizontalHeader()->setSectionsClickable(false);
-        t->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+        t->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
         t->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
         t->setRowCount(0);
 
