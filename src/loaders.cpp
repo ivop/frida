@@ -151,7 +151,7 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
 
     file.getChar((char *) &c);
     while (c != 0xff) {
-        header += c;
+        header += (QChar) c;
         file.getChar((char *) &c);
         if (file.atEnd()) {
             this->error_message = QStringLiteral("Premature end of file!\n");
@@ -185,7 +185,7 @@ bool LoaderAtari8bitSAP::Load(QFile& file) {
         this->error_message = QStringLiteral("No PLAYER address found\n");
         return false;
     }
-    type = match.captured(1).toInt(nullptr, 16);
+    type = (QChar) match.captured(1).toInt(nullptr, 16);
 
     file.ungetChar(c);
 

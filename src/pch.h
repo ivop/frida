@@ -6,7 +6,6 @@
 #include <QDataStream>
 #include <QDateTime>
 #include <QDebug>
-#include <QDesktopWidget>
 #include <QDialog>
 #include <QFile>
 #include <QFileDialog>
