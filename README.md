@@ -6,13 +6,14 @@ Created with QtCreator 4.14.1 and Qt 5.15.2
 
 ##### Runs on:
 * Linux, Debian 11.6 Bullseye (stable), Ubuntu 22.04 LTS Jammy Jellyfish, Linux Mint 21.1 Vera, and many others  
-* Windows 10, and later  
-* macOS Catalina 10.15.7, and later  
+* Windows 10, or later  
+* macOS Catalina 10.15.7, or later  
 * FreeBSD 13.2  
 * OpenBSD 7.2  
 * NetBSD 9.3  
 * OpenIndiana 2022.10 (SunOS/Solaris)  
 * Haiku R1/beta4  
+* Android 5 (API level 21), or later  
 
 ##### Supported CPUs:
 * NMOS 6502  
@@ -56,3 +57,5 @@ make -j8
 * NetBSD builds with clang++. frida-nopch.pro builds with gcc.  
 * OpenIndiana builds with g++. clang's type_traits is broken on OpenIndiana.  
 * Haiku builds frida-nopch.pro with g++. clang's type_traits is broken on Haiku.  
+* Android builds with clang++ that comes with the NDK. You need a big screen tablet, a bluetooth or USB mouse and keyboard.
+And memorize all keyboard shortcuts as right-click is hardwired in the Android kernel to the back button. Both armeabi-v7a and arm64-v8a work. Sort of.
