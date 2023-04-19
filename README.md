@@ -49,7 +49,7 @@ make -j8
 
 ###### Notes:  
 
-* Use latest Qt5 5.15.x.   
+* Use latest Qt5 5.15.x or Qt6.  
 * Linux builds with both clang++ and g++.  
 * Windows builds with MinGW-g++, MS compiler is not supported.  
 * macOS builds with clang++ that comes with XCode.  
