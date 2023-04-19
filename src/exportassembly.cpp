@@ -32,12 +32,12 @@ static int asm_format;
 // Output formats
 
 static void mads_assembler(QString *instr) {
-    instr->replace(QLatin1String(".wordle"), QLatin1String(".word"));
-    instr->replace(QLatin1String(".atascii"), QLatin1String(".byte"));
-    instr->replace(QLatin1String(".anticscreen"), QLatin1String(".sb"));
-    instr->replace(QLatin1String(".invatascii"), QLatin1String(".byte +128"));
-    instr->replace(QLatin1String(".invanticscreen"), QLatin1String(".sb +128"));
-    instr->replace(QLatin1String(".org"), QLatin1String("org"));
+    instr->replace(QStringLiteral(".wordle"), QStringLiteral(".word"));
+    instr->replace(QStringLiteral(".atascii"), QStringLiteral(".byte"));
+    instr->replace(QStringLiteral(".anticscreen"), QStringLiteral(".sb"));
+    instr->replace(QStringLiteral(".invatascii"), QStringLiteral(".byte +128"));
+    instr->replace(QStringLiteral(".invanticscreen"), QStringLiteral(".sb +128"));
+    instr->replace(QStringLiteral(".org"), QStringLiteral("org"));
 }
 
 // ---------------------------------------------------------------------------
@@ -112,7 +112,7 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
 
     for(iter = globalLabels.constBegin(); iter != globalLabels.constEnd(); iter++) {
 
-        if (iter.value().contains(QLatin1String("+")) || iter.value().contains(QLatin1String("-")))
+        if (iter.value().contains(QStringLiteral("+")) || iter.value().contains(QStringLiteral("-")))
             continue;
 
         bool found_local = false;
@@ -169,7 +169,7 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
         for(iter  = s->localLabels.constBegin();
             iter != s->localLabels.constEnd(); iter++) {
 
-            if (iter.value().contains(QLatin1String("+")) || iter.value().contains(QLatin1String("-")))
+            if (iter.value().contains(QStringLiteral("+")) || iter.value().contains(QStringLiteral("-")))
                 continue;
 
             bool inside_segment = false;
@@ -204,7 +204,7 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
 
             if (comments->contains(dis.address)) {
                 com = comments->value(dis.address);
-                com.replace(QLatin1String("\n"), QLatin1String("\n; "));
+                com.replace(QStringLiteral("\n"), QStringLiteral("\n; "));
                 out << "; " << com << "\n";
             }
 

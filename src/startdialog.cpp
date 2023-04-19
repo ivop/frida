@@ -166,7 +166,7 @@ void StartDialog::onButtonNewProject_clicked()
     if (!Loader->Load(file)) {
         QString text = QString("Failed to load " + FileToDisassemble + "\n\n");
         if (Loader->error_message.isEmpty()) {
-            text += QLatin1String("File type mismatch or corrupted file!\n");
+            text += QStringLiteral("File type mismatch or corrupted file!\n");
         } else {
             text += Loader->error_message;
         }

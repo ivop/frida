@@ -793,7 +793,7 @@ void MainWindow::showDisassembly(void) {
         QString hex = QStringLiteral("%1").arg(dis.address, 0, 16, (QChar)'0');
         t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
 
-        item = new QTableWidgetItem(QLatin1String(""));
+        item = new QTableWidgetItem(QStringLiteral(""));
         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         t->setItem(row, 0, item);
 
@@ -812,7 +812,7 @@ void MainWindow::showDisassembly(void) {
             row = t->rowCount();
             t->setRowCount(row+1);
             t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
-            item = new QTableWidgetItem(QLatin1String(""));
+            item = new QTableWidgetItem(QStringLiteral(""));
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
             t->setSpan(row,0,1,3);
             t->setItem(row, 0, item);
@@ -1073,7 +1073,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
     QString first = t->item(index.row(), 0)->text();
 
-    if (first == QLatin1String(";")) {
+    if (first == QStringLiteral(";")) {
         actionComment();
         return;
     }
@@ -1108,7 +1108,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         // check for #<(label) and #>(label)
 
-        if ((operand.left(3) == QLatin1String("#<(")) || (operand.left(3) == QLatin1String("#>("))) {
+        if ((operand.left(3) == QStringLiteral("#<(")) || (operand.left(3) == QStringLiteral("#>("))) {
             operand = operand.mid(3);
             operand = operand.left(operand.size()-1);
         }
@@ -1117,13 +1117,13 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         QStringList operand_list;
 
-        if (operand.contains(QLatin1String(","))) {
+        if (operand.contains(QStringLiteral(","))) {
             operand_list = operand.split(QStringLiteral(","));
 
-            operand_list.replaceInStrings(QStringLiteral("("), QLatin1String("")); // (label)
-            operand_list.replaceInStrings(QStringLiteral(")"), QLatin1String(""));
-            operand_list.replaceInStrings(QStringLiteral("<"), QLatin1String("")); // <label in .byte
-            operand_list.replaceInStrings(QStringLiteral(">"), QLatin1String(""));
+            operand_list.replaceInStrings(QStringLiteral("("), QStringLiteral("")); // (label)
+            operand_list.replaceInStrings(QStringLiteral(")"), QStringLiteral(""));
+            operand_list.replaceInStrings(QStringLiteral("<"), QStringLiteral("")); // <label in .byte
+            operand_list.replaceInStrings(QStringLiteral(">"), QStringLiteral(""));
 
             for (int i = 0; i < operand_list.size(); i++) {
                 operand_list.replace(i, operand_list.at(i).trimmed());
@@ -1285,7 +1285,7 @@ void MainWindow::actionFind(void) {
 
     QString text = t->item(row, column)->text();
 
-    if (text.isEmpty() || text == QLatin1String(";"))
+    if (text.isEmpty() || text == QStringLiteral(";"))
         return;
 
     ui->inputReference->setText(text);
@@ -1311,8 +1311,8 @@ void MainWindow::addRefEntry(QTableWidget *t, quint64 segment, quint64 address,
     auto *label = new QLabel();
 
     QString text = line;
-    text = text.replace(QLatin1String("<"), QLatin1String("&lt;"));
-    text = text.replace(QLatin1String(">"), QLatin1String("&gt;"));
+    text = text.replace(QStringLiteral("<"), QStringLiteral("&lt;"));
+    text = text.replace(QStringLiteral(">"), QStringLiteral("&gt;"));
     text = text.replace(highlight, "<span style=\"color: red\">" + highlight + "</span>");
 
     label->setTextFormat(Qt::RichText);

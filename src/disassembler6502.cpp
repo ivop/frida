@@ -1034,7 +1034,7 @@ void Disassembler6502::initTables(void) {
     }
 
     hexPrefix = QStringLiteral("$");
-    hexSuffix = QLatin1String("");
+    hexSuffix = QStringLiteral("");
     toUpper   = false;
 }
 
@@ -1188,7 +1188,7 @@ void Disassembler6502::disassembleInstructionAt(quint64 relpos,
             else
                 hex = pref + QStringLiteral("$%1").arg(addr, 4, 16, (QChar)'0');
 
-            hex += QLatin1String(")");
+            hex += QStringLiteral(")");
 
         } else if (m == MODE_IMM && flags[i+1] &  FLAG_CONSTANT) {
 
@@ -1318,7 +1318,7 @@ QString Disassembler6502::getDescriptionAt(quint64 address) {
     i = address - start;
 
     if (datatypes[i] != DT_CODE)
-        return QLatin1String("");
+        return QStringLiteral("");
 
     quint8 opcode = data[i];
 //    quint8 m = distab[opcode].mode;
@@ -1338,12 +1338,12 @@ QString Disassembler6502::getDescriptionAt(quint64 address) {
     }
 
     if (descr.isEmpty())
-        return QLatin1String("");
+        return QStringLiteral("");
 
-    action = action.replace(QLatin1String(", "), QLatin1String("<br>"));
-    action = action.replace(QLatin1String("M7"), QLatin1String("M<sub>7</sub>"));
-    action = action.replace(QLatin1String("M6"), QLatin1String("M<sub>6</sub>"));
-    action = action.replace(QLatin1String("M0"), QLatin1String("M<sub>0</sub>"));
+    action = action.replace(QStringLiteral(", "), QStringLiteral("<br>"));
+    action = action.replace(QStringLiteral("M7"), QStringLiteral("M<sub>7</sub>"));
+    action = action.replace(QStringLiteral("M6"), QStringLiteral("M<sub>6</sub>"));
+    action = action.replace(QStringLiteral("M0"), QStringLiteral("M<sub>0</sub>"));
 
     instr = instr.toUpper();
 

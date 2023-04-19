@@ -378,7 +378,7 @@ static struct distabitem *distab;
 
 void Disassembler8080::initTables(void) {
     distab = distab8080;
-    hexPrefix = QLatin1String("");
+    hexPrefix = QStringLiteral("");
     hexSuffix = QStringLiteral("H");
     toUpper = true;
 }
@@ -558,21 +558,21 @@ QString Disassembler8080::getDescriptionAt(quint64 address) {
     quint64 i = address - start;
 
     if (datatypes[i] != DT_CODE)
-        return QLatin1String("");
+        return QStringLiteral("");
 
     quint8 opcode = data[i];
     quint8 m = distab[opcode].mode;
 
     QString descr = distab[opcode].descr;
-    descr = descr.replace(QLatin1String(";"), QLatin1String("<br>"));
-    descr = descr.replace(QLatin1String("["), QLatin1String("<br><br><i>flags: "));
-    descr = descr.replace(QLatin1String("]"), QLatin1String("</i><br>"));
-    descr = descr.replace(QLatin1String("<->"), QLatin1String("&lt;-&gt;"));
-    descr = descr.replace(QLatin1String("<-"), QLatin1String("&lt;-"));           // &larr; looks ugly
-    descr = descr.replace(QLatin1String("->"), QLatin1String("-&gt;"));           // &rarr; looks ugly
-    descr = descr.replace(QLatin1String("d8"), QLatin1String("<i>d8</i>"));
-    descr = descr.replace(QLatin1String("d16"), QLatin1String("<i>d16</i>"));
-    descr = descr.replace(QLatin1String("adr"), QLatin1String("<i>adr</i>"));
+    descr = descr.replace(QStringLiteral(";"), QStringLiteral("<br>"));
+    descr = descr.replace(QStringLiteral("["), QStringLiteral("<br><br><i>flags: "));
+    descr = descr.replace(QStringLiteral("]"), QStringLiteral("</i><br>"));
+    descr = descr.replace(QStringLiteral("<->"), QStringLiteral("&lt;-&gt;"));
+    descr = descr.replace(QStringLiteral("<-"), QStringLiteral("&lt;-"));           // &larr; looks ugly
+    descr = descr.replace(QStringLiteral("->"), QStringLiteral("-&gt;"));           // &rarr; looks ugly
+    descr = descr.replace(QStringLiteral("d8"), QStringLiteral("<i>d8</i>"));
+    descr = descr.replace(QStringLiteral("d16"), QStringLiteral("<i>d16</i>"));
+    descr = descr.replace(QStringLiteral("adr"), QStringLiteral("<i>adr</i>"));
 
     descr = "<h3>" + QString(distab[opcode].inst) + " <i>" +
             operand_description[m] + "</i></h3>" + descr;
