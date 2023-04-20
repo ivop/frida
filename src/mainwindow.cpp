@@ -793,7 +793,7 @@ void MainWindow::showDisassembly(void) {
         QString hex = QStringLiteral("%1").arg(dis.address, 0, 16, (QChar)'0');
         t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
 
-        item = new QTableWidgetItem(QStringLiteral(""));
+        item = new QTableWidgetItem(QLatin1String(""));
         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         t->setItem(row, 0, item);
 
@@ -812,7 +812,7 @@ void MainWindow::showDisassembly(void) {
             row = t->rowCount();
             t->setRowCount(row+1);
             t->setVerticalHeaderItem(row, new QTableWidgetItem(hex));
-            item = new QTableWidgetItem(QStringLiteral(""));
+            item = new QTableWidgetItem(QLatin1String(""));
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
             t->setSpan(row,0,1,3);
             t->setItem(row, 0, item);
@@ -1120,10 +1120,10 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
         if (operand.contains(QStringLiteral(","))) {
             operand_list = operand.split(QStringLiteral(","));
 
-            operand_list.replaceInStrings(QStringLiteral("("), QStringLiteral("")); // (label)
-            operand_list.replaceInStrings(QStringLiteral(")"), QStringLiteral(""));
-            operand_list.replaceInStrings(QStringLiteral("<"), QStringLiteral("")); // <label in .byte
-            operand_list.replaceInStrings(QStringLiteral(">"), QStringLiteral(""));
+            operand_list.replaceInStrings(QStringLiteral("("), QLatin1String("")); // (label)
+            operand_list.replaceInStrings(QStringLiteral(")"), QLatin1String(""));
+            operand_list.replaceInStrings(QStringLiteral("<"), QLatin1String("")); // <label in .byte
+            operand_list.replaceInStrings(QStringLiteral(">"), QLatin1String(""));
 
             for (int i = 0; i < operand_list.size(); i++) {
                 operand_list.replace(i, operand_list.at(i).trimmed());

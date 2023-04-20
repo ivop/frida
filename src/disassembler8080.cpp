@@ -378,7 +378,7 @@ static struct distabitem *distab;
 
 void Disassembler8080::initTables(void) {
     distab = distab8080;
-    hexPrefix = QStringLiteral("");
+    hexPrefix = QLatin1String("");
     hexSuffix = QStringLiteral("H");
     toUpper = true;
 }
@@ -558,7 +558,7 @@ QString Disassembler8080::getDescriptionAt(quint64 address) {
     quint64 i = address - start;
 
     if (datatypes[i] != DT_CODE)
-        return QStringLiteral("");
+        return QLatin1String("");
 
     quint8 opcode = data[i];
     quint8 m = distab[opcode].mode;

@@ -1034,7 +1034,7 @@ void Disassembler6502::initTables(void) {
     }
 
     hexPrefix = QStringLiteral("$");
-    hexSuffix = QStringLiteral("");
+    hexSuffix = QLatin1String("");
     toUpper   = false;
 }
 
@@ -1318,7 +1318,7 @@ QString Disassembler6502::getDescriptionAt(quint64 address) {
     i = address - start;
 
     if (datatypes[i] != DT_CODE)
-        return QStringLiteral("");
+        return QLatin1String("");
 
     quint8 opcode = data[i];
 //    quint8 m = distab[opcode].mode;
@@ -1338,7 +1338,7 @@ QString Disassembler6502::getDescriptionAt(quint64 address) {
     }
 
     if (descr.isEmpty())
-        return QStringLiteral("");
+        return QLatin1String("");
 
     action = action.replace(QStringLiteral(", "), QStringLiteral("<br>"));
     action = action.replace(QStringLiteral("M7"), QStringLiteral("M<sub>7</sub>"));

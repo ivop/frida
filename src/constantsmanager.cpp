@@ -368,8 +368,8 @@ void constantsManager::onImport_clicked(void) {
         if (groupName.isEmpty())
             break;
 
-        groupName = groupName.replace(QStringLiteral("["), QStringLiteral(""));
-        groupName = groupName.replace(QStringLiteral("]"), QStringLiteral(""));
+        groupName = groupName.replace(QStringLiteral("["), QLatin1String(""));
+        groupName = groupName.replace(QStringLiteral("]"), QLatin1String(""));
 
         auto *group = new struct constantsGroup;
 

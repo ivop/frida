@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
     int pointSize = a.font().pointSize();
 
-    QFont font = QFont("Droid Sans Mono", pointSize + 1, 0);
+    QFont font = QFont(QStringLiteral("Droid Sans Mono"), pointSize + 1, 0);
 
     a.setStyle(QStringLiteral("fusion"));
     a.setFont(font);

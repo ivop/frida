@@ -21,8 +21,8 @@
 // ---------------------------------------------------------------------------
 
 #include "loaders.h"
-#include <string.h>
 #include "zlib.h"
+#include <cstring>
 
 // note on zeroed memory:
 // new char[size]   is similar to malloc()
@@ -642,6 +642,7 @@ bool LoaderBBCUEFTape::Load(QFile &file) {
             [[fallthrough]];
         case Z_MEM_ERROR:
             this->error_message = QStringLiteral("Unable to decompress gzip'd UEF file\n");
+            this->error_message += QString("zlib error: %1\n").arg(ret);
             inflateEnd(&strm);
             return false;
         default:
