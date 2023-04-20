@@ -291,10 +291,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->instructionDescription->setReadOnly(true);
 
-    if (settings.value(QStringLiteral("Mode")) == "dark")
-        darkMode = true;
-    else
-        darkMode = false;
+    darkMode = (settings.value(QStringLiteral("Mode")) == "dark");
 
     ui->checkDark->setChecked(darkMode);
 

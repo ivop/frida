@@ -49,12 +49,12 @@ int main(int argc, char *argv[])
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/SpaceMono-Regular.ttf"));
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/DroidSansMono.ttf"));
 
-    int pointSize = a.font().pointSize();
+    int pointSize = QApplication::font().pointSize();
 
     QFont font = QFont(QStringLiteral("Droid Sans Mono"), pointSize + 1, 0);
 
-    a.setStyle(QStringLiteral("fusion"));
-    a.setFont(font);
+    QApplication::setStyle(QStringLiteral("fusion"));
+    QApplication::setFont(font);
 
     dark_palette.setColor(QPalette::Window, QColor(53, 53, 53));
     dark_palette.setColor(QPalette::WindowText, Qt::white);

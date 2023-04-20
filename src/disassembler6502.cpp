@@ -172,7 +172,7 @@ static struct instr_descr instruction_descriptions[] = {
 { "txa", "Transfer Index X To Accumulator", "X → A", "NZ" },
 { "txs", "Transfer Index X To Stack Pointer", "X → S", "" },
 { "tya", "Transfer Index Y To Accumulator", "Y → A", "NZ" },
-{ 0, 0, 0, 0 },
+{ nullptr, nullptr, nullptr, nullptr },
 };
 
 struct distabitem {
