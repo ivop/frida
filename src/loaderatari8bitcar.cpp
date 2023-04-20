@@ -417,7 +417,7 @@ END
 struct cartridge_info cartridges[CARTRIDGE_LAST] = {
 
 // 0-9
-{ "None",                                   0, 0 },
+{ "None",                                   0, nullptr },
 { "Standard 8 kB left cartridge",           8, blocks_CARTRIDGE_STD_8      },
 { "Standard 16 kB cartridge",              16, blocks_CARTRIDGE_STD_16     },
 { "OSS two chip 16 kB cartridge (034M)",   16, blocks_CARTRIDGE_OSS_16     },
@@ -473,8 +473,8 @@ struct cartridge_info cartridges[CARTRIDGE_LAST] = {
 { "OSS two chip 16 kB cartridge (043M)",   16, blocks_CARTRIDGE_OSS_16        },
 { "Blizzard 4 kB cartridge",                4, blocks_CARTRIDGE_BLIZZARD_4    },
 { "AST 32 kB cartridge",                   32, blocks_CARTRIDGE_AST_32        },
-{ "Atrax SDX 64 kB cartridge",             64, 0 },
-{ "Atrax SDX 128 kB cartridge",           128, 0 },
+{ "Atrax SDX 64 kB cartridge",             64, nullptr },
+{ "Atrax SDX 128 kB cartridge",           128, nullptr },
 
 // 50-59
 { "Turbosoft 64 kB cartridge",             64, blocks_CARTRIDGE_WILL_64       },
@@ -491,13 +491,13 @@ struct cartridge_info cartridges[CARTRIDGE_LAST] = {
 // 60-69
 { "Blizzard 32 kB cartridge",              32, blocks_CARTRIDGE_WILL_32      },
 { "MegaMax 2 MB cartridge",              2048, blocks_CARTRIDGE_MEGAMAX_2048 },
-{ "The!Cart 128 MB cartridge",         131072, 0 },
+{ "The!Cart 128 MB cartridge",         131072, nullptr },
 { "Flash MegaCart 4 MB cartridge",       4096, blocks_CARTRIDGE_MEGA_4096    },
 { "MegaCart 2 MB cartridge",             2048, blocks_CARTRIDGE_MEGA_2048    },
-{ "The!Cart 32 MB cartridge",           32768, 0 },
-{ "The!Cart 64 MB cartridge",           65536, 0 },
+{ "The!Cart 32 MB cartridge",           32768, nullptr },
+{ "The!Cart 64 MB cartridge",           65536, nullptr },
 { "XEGS 64 kB cartridge (banks 8-15)",     64, blocks_CARTRIDGE_XEGS_07_64   },
-{ "Atrax 128 kB cartridge",               128, 0 },
+{ "Atrax 128 kB cartridge",               128, nullptr },
 { "aDawliah 32 kB cartridge",              32, blocks_CARTRIDGE_WILL_32      },
 
 // 70-75
@@ -563,7 +563,7 @@ bool LoaderAtari8bitCar::Load(QFile& file) {
     carinfo = &cartridges[cartype];
     blocks = carinfo->blocks;
 
-    if (blocks == 0) {
+    if (blocks == nullptr) {
         this->error_message = QStringLiteral("Type ") + carinfo->description +
                               QStringLiteral("not supported");
         return false;

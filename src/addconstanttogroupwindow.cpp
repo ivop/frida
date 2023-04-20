@@ -36,11 +36,9 @@ addConstantToGroupWindow::~addConstantToGroupWindow()
 }
 
 void addConstantToGroupWindow::accept() {
-    QLineEdit *le;
+    bool ok = false;
 
-    bool ok;
-
-    le = ui->lineValue;
+    QLineEdit *le = ui->lineValue;
     constantValue = le->text().toULongLong(&ok, 16);
     if (!ok)
         constantValue = -1;

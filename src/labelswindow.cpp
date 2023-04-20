@@ -103,7 +103,7 @@ static void get_contents(QTableWidget *t, int row, QString *label,
                                                         quint64 *address) {
     QString addr  = t->item(row, 0)->text();
     *label = t->item(row, 1)->text();
-    *address = addr.toULongLong(0, 16);
+    *address = addr.toULongLong(nullptr, 16);
 }
 
 void labelswindow::onTableGlobalLabels_cellChanged(int row, int column) {

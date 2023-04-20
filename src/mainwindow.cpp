@@ -220,17 +220,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // disconnect existing Pressed and Clicked on vertical headers
     disconnect(ui->tableHexadecimal->verticalHeader(),
-               QOverload<int>::of(&QHeaderView::sectionPressed), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionPressed), nullptr, nullptr);
     disconnect(ui->tableHexadecimal->verticalHeader(),
-               QOverload<int>::of(&QHeaderView::sectionClicked), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionClicked), nullptr, nullptr);
     disconnect(ui->tableASCII->verticalHeader(),
-               QOverload<int>::of(&QHeaderView::sectionPressed), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionPressed), nullptr, nullptr);
     disconnect(ui->tableASCII->verticalHeader(),
-               QOverload<int>::of(&QHeaderView::sectionClicked), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionClicked), nullptr, nullptr);
     disconnect(ui->tableReferences->verticalHeader(),
-               QOverload<int>::of(&QHeaderView::sectionPressed), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionPressed), nullptr, nullptr);
     disconnect(ui->tableReferences->verticalHeader(),
-               QOverload<int>::of(&QHeaderView::sectionClicked), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionClicked), nullptr, nullptr);
 
     // connect our sectionClicked function on vertical headers
     connect(ui->tableHexadecimal->verticalHeader(),
@@ -247,9 +247,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     t = ui->tableDisassembly;
     disconnect(ui->tableDisassembly->verticalHeader(),
-               QOverload<int>::of(&QHeaderView::sectionPressed), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionPressed), nullptr, nullptr);
     disconnect(ui->tableDisassembly->verticalHeader(),
-               QOverload<int>::of(&QHeaderView::sectionClicked), 0, 0);
+               QOverload<int>::of(&QHeaderView::sectionClicked), nullptr, nullptr);
     connect(ui->tableDisassembly->verticalHeader(),
             &QHeaderView::sectionClicked,
             this, &MainWindow::onDisassemblySectionClicked);
@@ -854,7 +854,7 @@ void MainWindow::onHexSectionClicked(int index) {
     int n = td->rowCount();
 
     for (int i=0; i<n; i++) {
-        if (td->verticalHeaderItem(i)->text().toULongLong(0,16) < s.toULongLong(0,16))
+        if (td->verticalHeaderItem(i)->text().toULongLong(nullptr,16) < s.toULongLong(nullptr,16))
             continue;
         td->scrollToItem(td->item(i,0), QAbstractItemView::PositionAtCenter);
         break;
@@ -903,7 +903,7 @@ void MainWindow::actionComment() {
 
     int i = Ranges.at(0).topRow();
     QString s = t->verticalHeaderItem(i)->text();
-    quint64 a = s.toULongLong(0, 16);
+    quint64 a = s.toULongLong(nullptr, 16);
     QString c = segments[currentSegment].comments.value(a);
 
     auto *cw = new commentwindow(s, c);
@@ -1010,7 +1010,7 @@ void MainWindow::onTableDisassembly_cellChanged(int row, int column) {
 
     // editable, so it's a label cell
 
-    quint64 address = t->verticalHeaderItem(row)->text().toULongLong(0,16);
+    quint64 address = t->verticalHeaderItem(row)->text().toULongLong(nullptr,16);
     QString label = t->item(row,column)->text();
 
     if (label.isEmpty()) {
@@ -1042,13 +1042,13 @@ void MainWindow::onDisassemblySectionClicked(int index) {
     int n = th->rowCount();
 
     for (int i=0; i<n; i++) {
-        if (th->verticalHeaderItem(i)->text().toULongLong(0,16) < s.toULongLong(0,16))
+        if (th->verticalHeaderItem(i)->text().toULongLong(nullptr,16) < s.toULongLong(nullptr,16))
             continue;
         th->scrollToItem(th->item(i,0), QAbstractItemView::PositionAtCenter);
         break;
     }
 
-    quint64 a = s.toULongLong(0,16);
+    quint64 a = s.toULongLong(nullptr,16);
     quint64 row;
     quint64 column;
     a -= segments[currentSegment].start;
@@ -1173,10 +1173,10 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
         if (iter == globalLabels.constEnd()) {
             if (hexPrefix.size() && operand.left(hexPrefix.size()) == hexPrefix) {
                 operand = operand.mid(hexPrefix.size());
-                addr = operand.toULongLong(0,16);
+                addr = operand.toULongLong(nullptr,16);
             } else if (hexSuffix.size() && operand.right(hexSuffix.size()) == hexSuffix) {
                 operand = operand.left(operand.size()-hexSuffix.size());
-                addr = operand.toULongLong(0,16);
+                addr = operand.toULongLong(nullptr,16);
             } else {
                 return;     // nothing found to jump to
             }
@@ -1237,7 +1237,7 @@ void MainWindow::jumpToSegmentAndAddress(quint64 segment, quint64 address) {
     QTableWidget *td = ui->tableDisassembly;
 
     for (int row = 0; row < td->rowCount(); row++) {
-        if (td->verticalHeaderItem(row)->text().toULongLong(0,16) < address)
+        if (td->verticalHeaderItem(row)->text().toULongLong(nullptr,16) < address)
             continue;
 
         // found row:
