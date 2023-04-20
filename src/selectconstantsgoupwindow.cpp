@@ -37,7 +37,7 @@ selectConstantsGoupWindow::selectConstantsGoupWindow(QWidget *parent) :
 
     QMap<quint64, struct constantsGroup>::iterator iter;
 
-    for (iter = constantsGroups.begin(); iter != constantsGroups.end(); iter++) {
+    for (iter = constantsGroups.begin(); iter != constantsGroups.end(); ++iter) {
         row = t->rowCount();
         t->setRowCount(row+1);
 

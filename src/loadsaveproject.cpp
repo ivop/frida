@@ -201,7 +201,7 @@ void save_project(QWidget *widget) {
 
     QMap<quint64, struct constantsGroup>::iterator iter;
 
-    for (iter = constantsGroups.begin(); iter != constantsGroups.end(); iter++) {
+    for (iter = constantsGroups.begin(); iter != constantsGroups.end(); ++iter) {
         auto const &group = iter.value();
         out << group.name;
         out << *group.map;

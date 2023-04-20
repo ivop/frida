@@ -93,7 +93,7 @@ void constantsManager::showGroups() {
     QMap<quint64, struct constantsGroup>::iterator iter;
     quint64 row;
 
-    for (iter = constantsGroups.begin(); iter != constantsGroups.end(); iter++) {
+    for (iter = constantsGroups.begin(); iter != constantsGroups.end(); ++iter) {
         row = t->rowCount();
         t->setRowCount(row+1);
 
@@ -137,7 +137,7 @@ void constantsManager::onGroups_itemSelectionChanged() {
 
     QMap<quint64, QString>::iterator iter;
 
-    for (iter = map->begin(); iter != map->end(); iter++) {
+    for (iter = map->begin(); iter != map->end(); ++iter) {
         row = tv->rowCount();
         tv->setRowCount(row+1);
 
@@ -448,7 +448,7 @@ void constantsManager::onExport_clicked(void) {
 
         QMap<quint64, QString>::iterator iter;
 
-        for (iter = group.map->begin(); iter != group.map->end(); iter++) {
+        for (iter = group.map->begin(); iter != group.map->end(); ++iter) {
             out << Qt::hex << Qt::showbase << iter.key() << " "
                 << iter.value() << Qt::endl;
         }

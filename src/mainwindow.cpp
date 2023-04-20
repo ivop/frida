@@ -1141,7 +1141,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
 
         for (iter  = s->localLabels.constBegin();
              iter != s->localLabels.constEnd();
-             iter++) {
+             ++iter) {
 
             if (iter.value() == operand) {
                 break;      // found!
@@ -1153,7 +1153,7 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
         if (iter == s->localLabels.constEnd()) {
             for (iter  = globalLabels.constBegin();
                  iter != globalLabels.constEnd();
-                 iter++) {
+                 ++iter) {
 
                 if (iter.value() == operand) {
                     break;      // found!
@@ -1334,7 +1334,7 @@ void MainWindow::onFindButton_clicked(void) {
     // in any segment
 
     QMap<quint64, QString>::const_iterator iter;
-    for(iter = globalLabels.constBegin(); iter != globalLabels.constEnd(); iter++) {
+    for(iter = globalLabels.constBegin(); iter != globalLabels.constEnd(); ++iter) {
         if (iter.value().contains(what)) {
             address = iter.key();
             for (int i=0; i<segments.size(); i++) {
@@ -1355,7 +1355,7 @@ void MainWindow::onFindButton_clicked(void) {
         struct segment *s = &segments[seg];
         QMap<quint64, QString> *localLabels = &s->localLabels;
 
-        for(iter = localLabels->constBegin(); iter != localLabels->constEnd(); iter++) {
+        for(iter = localLabels->constBegin(); iter != localLabels->constEnd(); ++iter) {
             if (iter.value().contains(what)) {
                 address = iter.key();
                 if (address >= s->start && address <= s->end) {

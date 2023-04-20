@@ -95,7 +95,7 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
 
                 QMap<quint64, QString>::iterator iter;
 
-                for (iter = group.map->begin(); iter != group.map->end(); iter ++) {
+                for (iter = group.map->begin(); iter != group.map->end(); ++iter) {
                     out << iter.value() << " = " << iter.key() << "\n";
                 }
             }
@@ -110,7 +110,7 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
     // not within any of the segments address ranges.
     // also omit labels that have +/- math inside them
 
-    for(iter = globalLabels.constBegin(); iter != globalLabels.constEnd(); iter++) {
+    for(iter = globalLabels.constBegin(); iter != globalLabels.constEnd(); ++iter) {
 
         if (iter.value().contains(QStringLiteral("+")) || iter.value().contains(QStringLiteral("-")))
             continue;
@@ -167,7 +167,7 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
         // output local labels that are not inside a segment or contain +/-
 
         for(iter  = s->localLabels.constBegin();
-            iter != s->localLabels.constEnd(); iter++) {
+            iter != s->localLabels.constEnd(); ++iter) {
 
             if (iter.value().contains(QStringLiteral("+")) || iter.value().contains(QStringLiteral("-")))
                 continue;
