@@ -6,7 +6,11 @@ Created with QtCreator and Qt 5.15.2
 Also builds with Qt 6.x  
 
 ##### Runs on:
-* Linux, Debian 11.6 Bullseye (stable), Ubuntu 22.04 LTS Jammy Jellyfish, Linux Mint 21.1 Vera, and many others  
+* Linux
+    * Debian 11.6 Bullseye (stable)  
+    * Ubuntu 22.04 LTS Jammy Jellyfish  
+    * Linux Mint 21.1 Vera  
+    * ...and many others  
 * Windows 10, or later  
 * macOS Catalina 10.15.7, or later  
 * FreeBSD 13.2  
