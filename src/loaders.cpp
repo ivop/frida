@@ -642,7 +642,7 @@ bool LoaderBBCUEFTape::Load(QFile &file) {
             [[fallthrough]];
         case Z_MEM_ERROR:
             this->error_message = QStringLiteral("Unable to decompress gzip'd UEF file\n");
-            this->error_message += QString("zlib error: %1\n").arg(ret);
+            this->error_message += QStringLiteral("zlib error: %1\n").arg(ret);
             inflateEnd(&strm);
             return false;
         default:
