@@ -20,13 +20,24 @@
 //
 // ---------------------------------------------------------------------------
 
+#include "architecture.h"
+#include "compiler.h"
 #include "disassembler.h"
 #include "loaders.h"
 #include "loadsaveproject.h"
+#include "platform.h"
 #include "startdialog.h"
 #include "ui_startdialog.h"
 
 QString FileToDisassemble;
+
+QString AuthorString;
+QString VersionString;
+QString BuildString;
+
+QString ArchitectureString;
+QString PlatformString;
+QString CompilerString;
 
 quint32 filetype, cputype;
 Loader *Loader;
@@ -55,9 +66,17 @@ StartDialog::StartDialog(QWidget *parent) :
         ui->comboCPUType->addItem(cputype.name);
     }
 
-    ui->labelVersion->setText(QStringLiteral("Version: %1").arg(QStringLiteral(FRIDA_VERSION_STRING)));
-    ui->labelBuild->setText(QStringLiteral("Build date: ") + QStringLiteral(__DATE__) +
-                            QStringLiteral(" ") + QStringLiteral(__TIME__));
+    ArchitectureString = QStringLiteral(ARCHITECTURE);
+    PlatformString = QStringLiteral(PLATFORM);
+    CompilerString = QStringLiteral("%1 %2").arg(COMPILER).arg(COMPILER_VERSION);
+
+    AuthorString = QStringLiteral("Copyright 2017,2023 by Ivo van Poorten");
+    VersionString = QStringLiteral("Version: %1").arg(QStringLiteral(FRIDA_VERSION_STRING));
+    BuildString = QStringLiteral("Build: %1, %2, %3, %4, %5").arg(PlatformString, ArchitectureString, CompilerString, __DATE__, __TIME__);
+
+    ui->labelAuthor->setText(AuthorString);
+    ui->labelVersion->setText(VersionString);
+    ui->labelBuild->setText(BuildString);
 }
 
 StartDialog::~StartDialog()

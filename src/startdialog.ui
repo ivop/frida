@@ -75,7 +75,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Copyright © 2017,2023 by Ivo van Poorten</string>
+      <string>copyright/author</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
