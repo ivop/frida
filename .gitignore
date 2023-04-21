@@ -7,4 +7,4 @@ moc_*
 ui_*
 qrc_*
 *.pro.user
-build
+build*
