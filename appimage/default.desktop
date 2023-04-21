@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Frida
+Exec=AppRun %F
+Icon=default
+Terminal=false
+Categories=Development;
