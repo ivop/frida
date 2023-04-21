@@ -47,7 +47,7 @@ git clone https://github.com/ivop/frida
 cd frida  
 mkdir build  
 cd build  
-qmake ../src/frida.pro  
+qmake ../src/frida.pro CONFIG+=release  
 make -j8  
 ```
 
