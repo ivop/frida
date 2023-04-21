@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Frida
+Comment=Free Interactive Disassembler
 Exec=AppRun %F
 Icon=default
 Terminal=false

@@ -1,4 +1,3 @@
-Build AppImage with:
 
 linuxdeployqt-continuous-x86_64.AppImage \
     frida                       \
