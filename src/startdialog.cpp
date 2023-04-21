@@ -70,7 +70,7 @@ StartDialog::StartDialog(QWidget *parent) :
     PlatformString = QStringLiteral(PLATFORM);
     CompilerString = QStringLiteral("%1 %2").arg(COMPILER).arg(COMPILER_VERSION);
 
-    AuthorString = QStringLiteral("Copyright 2017,2023 by Ivo van Poorten");
+    AuthorString = QStringLiteral("Copyright © 2017,2023 by Ivo van Poorten");
     VersionString = QStringLiteral("Version: %1").arg(QStringLiteral(FRIDA_VERSION_STRING));
     BuildString = QStringLiteral("Build: %1, %2, %3, %4, %5").arg(PlatformString, ArchitectureString, CompilerString, __DATE__, __TIME__);
 
