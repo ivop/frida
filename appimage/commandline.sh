@@ -14,10 +14,6 @@
 #
 # We need yum -y install patchelf, too.
 #
-# To be able to run the i686 AppImage of appimagetool we need:
-#
-# yum -y install glic.i686 zlib.i686 fuse-libs.i686 libgcc.i686
-#
 # There is no appstreamcli for CentOS 7, so ignore the warning. We don't use
 # it anyway.
 #
@@ -26,7 +22,7 @@
 # export ARCH=x86_64
 #
 # Rename the appimagetool AppImage to appimagetool somewhere in your $PATH
-# and be sure it is executable.
+# and be sure it is executable and it's the x86_64 version (not i686).
 #
 # For linuxdeployqt, we need:
 #
