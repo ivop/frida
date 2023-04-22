@@ -38,11 +38,11 @@
 #endif
 
 #if defined(__FreeBSD__)
-    #define "FreeBSD"
+    #define PLATFORM "FreeBSD"
 #endif
 
 #if defined(__HAIKU__)
-    #define "Haiku"
+    #define PLATFORM "Haiku"
 #endif
 
 #if !defined(PLATFORM)
