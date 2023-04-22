@@ -38,6 +38,8 @@ QString BuildString;
 QString ArchitectureString;
 QString PlatformString;
 QString CompilerString;
+QString QtVersionString;
+QString DateTimeString;
 
 quint32 filetype, cputype;
 Loader *Loader;
@@ -69,10 +71,12 @@ StartDialog::StartDialog(QWidget *parent) :
     ArchitectureString = QStringLiteral(ARCHITECTURE);
     PlatformString = QStringLiteral(PLATFORM);
     CompilerString = QStringLiteral("%1 %2").arg(COMPILER).arg(COMPILER_VERSION);
+    QtVersionString = QStringLiteral("Qt %1.%2.%3").arg(QT_VERSION_MAJOR).arg(QT_VERSION_MINOR).arg(QT_VERSION_PATCH);
+    DateTimeString = QStringLiteral("%1 %2").arg(__DATE__).arg(__TIME__);
 
     AuthorString = QStringLiteral("Copyright © 2017,2023 by Ivo van Poorten");
     VersionString = QStringLiteral("Version: %1").arg(QStringLiteral(FRIDA_VERSION_STRING));
-    BuildString = QStringLiteral("Build: %1, %2, %3, %4, %5").arg(PlatformString, ArchitectureString, CompilerString, __DATE__, __TIME__);
+    BuildString = QStringLiteral("Build: %1, %2, %3, %4, %5").arg(PlatformString, ArchitectureString, CompilerString, QtVersionString, DateTimeString);
 
     ui->labelAuthor->setText(AuthorString);
     ui->labelVersion->setText(VersionString);
