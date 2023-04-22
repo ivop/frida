@@ -12,7 +12,7 @@ Also builds with Qt 6.x
     * Linux Mint 21.1 Vera  
     * CentOS 7 with devtoolset-8 and qt.io online installer (AppImage build platform)
     * ...and many others  
-* Windows 10, or later  
+* Windows 8.1, or later  
 * macOS Catalina 10.15.7, or later  
 * FreeBSD 13.2  
 * OpenBSD 7.2  
@@ -56,7 +56,7 @@ make -j8
 
 * Use latest Qt5 5.15.x or Qt6.  
 * Linux builds with both clang++ and g++.  
-* Windows builds with MinGW-g++, MS compiler is not supported.  
+* Windows builds with MinGW-g++, MS compiler is not supported. QtCreator from qt.io does not run on Windows 8.1, so you need to compile from the command line. Install git for Windows to clone the repo, and GnuWin32 make to make. MingW-g++ 11 is installable with qt.io's online installer as a separate option.  
 * macOS builds with clang++ that comes with XCode.  
 * FreeBSD builds with clang++. frida-nopch.pro builds with gcc.  
 * OpenBSD builds with eg++ and clang++.  
