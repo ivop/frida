@@ -4,7 +4,7 @@
 # Inside the directory, run:
 #
 
-windeployqt --release --no-translations --no-webkit2 --compiler-runtime frida.exe
+windeployqt --no-translations --no-virtualkeyboard --no-webkit2 --compiler-runtime frida.exe
 
 #
 # 7zip folder to Frida-version-win64.7z
