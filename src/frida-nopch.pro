@@ -48,6 +48,8 @@ SOURCES += \
 HEADERS += \
     addconstantsgroupwindow.h \
     addconstanttogroupwindow.h \
+    architecture.h \
+    compiler.h \
     constantsmanager.h \
     exportassembly.h \
     exportassemblywindow.h \
@@ -64,6 +66,7 @@ HEADERS += \
     changesegmentwindow.h \
     loadsaveproject.h \
     lowhighbytewindow.h \
+    platform.h \
     selectcartridgewindow.h \
     selectconstantsgoupwindow.h \
     startdialog.h
