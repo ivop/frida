@@ -70,7 +70,7 @@ StartDialog::StartDialog(QWidget *parent) :
 
     ArchitectureString = QStringLiteral(ARCHITECTURE);
     PlatformString = QStringLiteral(PLATFORM);
-    CompilerString = QStringLiteral("%1 %2").arg(COMPILER).arg(COMPILER_VERSION);
+    CompilerString = QStringLiteral("%1 version %2").arg(COMPILER).arg(COMPILER_VERSION);
     QtVersionString = QStringLiteral("Qt %1.%2.%3").arg(QT_VERSION_MAJOR).arg(QT_VERSION_MINOR).arg(QT_VERSION_PATCH);
     DateTimeString = QStringLiteral("%1 %2").arg(__DATE__).arg(__TIME__);
 
