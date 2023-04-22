@@ -1,0 +1,12 @@
+#
+# Create a new directory called Frida-version-win64
+# Copy frida.exe to that directory
+# Inside the directory, run:
+#
+
+windeployqt --release --no-translations --no-webkit2 --compiler-runtime frida.exe
+
+#
+# 7zip folder to Frida-version-win64.7z
+#
+
