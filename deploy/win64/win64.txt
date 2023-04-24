@@ -1,59 +1,49 @@
-#
-# Creating 7Z distribution on Windows 8.1
-# =======================================
-#
-# Install Qt 5.15.x with the online installer. Include the latest MinGW11
-# package under Tools.
-#
-# Install make from GnuWin32
-#
-# Both need to be in your path. Build like if we're on *nix.
-#
-# frida.exe is in build\release.
-#
-# Create a new directory called Frida-version-win64
-# Copy frida.exe to that directory
-# Inside the directory, run:
-#
+
+Creating 7Z distribution on Windows 8.1
+=======================================
+
+Install Qt 5.15.x with the online installer. Include the latest MinGW11
+package under Tools.
+
+Install make from GnuWin32
+
+Both need to be in your path. Build like if we're on *nix.
+
+frida.exe is in build\release.
+
+Create a new directory called Frida-version-win64
+Copy frida.exe to that directory
+Inside the directory, run:
+
 
 windeployqt --no-translations --no-virtualkeyboard --no-webkit2 --compiler-runtime frida.exe
 
-#
-# 7zip folder to Frida-version-win64.7z
-#
-# Done.
-#
+7zip folder to Frida-version-win64.7z
 
-#
-# Work in progress:
-#
-# Building Qt 6.5.0 for Windows 64-bit on Windows 8.1
-# ===================================================
-#
-# Install MinGW64 GCC 12 (MSVCRT) as C:\mingw64 (not the winlibs version)
-# Install Ninja in C:\Ninja
-# Install Python 3.11 in C:\Python311
-# Install CMake in C:\CMake
-#
-# Download qt-everywhere-src-6.5.0.zip and unzip to C:\Qt6\src
-# Because of the slowness of NTFS, you might want to skip qtdoc, qtwebengine,
-# and qttranslations, as we will skip them later, too.
-#
-# Copy 'BUILD Qt6.lnk', qt6buildenv.bat, and run-configure.bat to C:\Qt6.
-#
-# Opening the shortcut opens a command window with the proper %PATH%, and
-# lands you in C:\Qt6\src
-#
-# Run ..\run-configure
-#
-# cmake --build . --parallel 6
-# cmake --install .
-#
+Done.
 
-#
-# Work in progress 2:
-#
-# See if we can cross-compile this from Linux, as the slowness of NTFS, batch
-# files and cmd.exe are killing me ;)
-#
+
+Building Qt 6.5.0 for Windows 64-bit on Windows 8.1
+===================================================
+
+Install MinGW64 GCC 12 (MSVCRT) as C:\mingw64 (not the winlibs version)
+Install Ninja in C:\Ninja
+Install Python 3.11 in C:\Python311
+Install CMake in C:\CMake
+
+Download qt-everywhere-src-6.5.0.zip and unzip to C:\Qt6\src
+Because of the slowness of NTFS, you might want to skip qtdoc, qtwebengine,
+and qttranslations, as we will skip them later, too.
+
+Copy 'BUILD Qt6.lnk', qt6buildenv.bat, and run-configure.bat to C:\Qt6.
+
+Opening the shortcut opens a command window with the proper %PATH%, and
+lands you in C:\Qt6\src
+
+Run ..\run-configure
+
+cmake --build . --parallel 6
+cmake --install .
+
+Done.
 
