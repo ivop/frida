@@ -1,4 +1,16 @@
 #
+# Creating 7Z distribution on Windows 8.1
+# =======================================
+#
+# Install Qt 5.15.x with the online installer. Include the latest MinGW11
+# package under Tools.
+#
+# Install make from GnuWin32
+#
+# Both need to be in your path. Build like if we're on *nix.
+#
+# frida.exe is in build\release.
+#
 # Create a new directory called Frida-version-win64
 # Copy frida.exe to that directory
 # Inside the directory, run:
@@ -8,5 +20,40 @@ windeployqt --no-translations --no-virtualkeyboard --no-webkit2 --compiler-runti
 
 #
 # 7zip folder to Frida-version-win64.7z
+#
+# Done.
+#
+
+#
+# Work in progress:
+#
+# Building Qt 6.5.0 for Windows 64-bit on Windows 8.1
+# ===================================================
+#
+# Install MinGW64 GCC 12 (MSVCRT) as C:\mingw64 (not the winlibs version)
+# Install Ninja in C:\Ninja
+# Install Python 3.11 in C:\Python311
+# Install CMake in C:\CMake
+#
+# Download qt-everywhere-src-6.5.0.zip and unzip to C:\Qt6\src
+# Because of the slowness of NTFS, you might want to skip qtdoc, qtwebengine,
+# and qttranslations, as we will skip them later, too.
+#
+# Setup environment batch file that executes cmd.exe with the proper %PATH%
+# for g++, cmake, make, and python. Run it.
+#
+# cd C:\Qt6\src
+#
+# configure -prefix C:\Qt6 -opensource -confirm-license -release -nomake tests -nomake examples -strip -pch -no-warnings-are-errors -skip qtdoc,qtwebengine,qttranslations -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -disable-deprecated-up-to 0x050F00
+#
+# cmake --build . --parallel 6
+# cmake --install .
+#
+
+#
+# Work in progress 2:
+#
+# See if we can cross-compile this from Linux, as the slowness of NTFS, batch
+# files and cmd.exe are killing me ;)
 #
 
