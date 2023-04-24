@@ -27,6 +27,8 @@ Building Qt 6.5.0 for Windows 64-bit on Windows 8.1
 ===================================================
 
 Install MinGW64 GCC 11.2 (posix-seh) as C:\mingw64 (not the winlibs version)
+Be sure to pick posix-seh and NOT win32-seh, otherwise xatlas fails to
+compile.
 Install Ninja in C:\Ninja
 Install Python 3.11 in C:\Python311
 Install CMake in C:\CMake
