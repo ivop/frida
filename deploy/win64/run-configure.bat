@@ -1,1 +1,1 @@
-configure -prefix C:\Qt6 -cmake-generator Ninja -opensource -confirm-license -release -nomake tests -nomake examples -strip -pch -no-warnings-are-errors -skip qtdoc,qtwebengine,qttranslations -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -disable-deprecated-up-to 0x050F00
+\Qt6\src\configure -prefix C:\Qt6 -cmake-generator Ninja -opensource -confirm-license -release -nomake tests -nomake examples -strip -pch -no-warnings-are-errors -skip qtdoc,qtwebengine,qttranslations -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -disable-deprecated-up-to 0x050F00
