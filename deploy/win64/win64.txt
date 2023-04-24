@@ -37,15 +37,19 @@ Download qt-everywhere-src-6.5.0.zip and unzip to C:\Qt6\src
 Because of the slowness of NTFS, you might want to skip qtdoc, qtwebengine,
 and qttranslations, as we will skip them later, too.
 
+Copy 'BUILD Qt6.lnk', qt6buildenv.bat, and run-configure.bat to C:\Qt6.
+
+Opening the BUILD shortcut opens a command window with the proper %PATH%, and
+lands you in C:\Qt6
+
 Apply qt6-win8.patch:
 
+cd src
 patch -p 1 --dry-run -i qt6-win8.patch
 patch -p 1 -i qt6-win8.patch
 
-Copy 'BUILD Qt6.lnk', qt6buildenv.bat, and run-configure.bat to C:\Qt6.
-
-Opening the shortcut opens a command window with the proper %PATH%, and
-lands you in C:\Qt6\src
+mkdir build
+cd build
 
 Run ..\run-configure
 
@@ -53,4 +57,7 @@ cmake --build . --parallel 6
 cmake --install .
 
 Done.
+
+qt6devenv.bat and 'DEV Qt6.lnk' are convenient to compile against the newly
+built Qt6 libraries.
 
