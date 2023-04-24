@@ -70,9 +70,13 @@ StartDialog::StartDialog(QWidget *parent) :
 
     ArchitectureString = QStringLiteral(ARCHITECTURE);
     PlatformString = QStringLiteral(PLATFORM);
-    CompilerString = QStringLiteral("%1 version %2").arg(COMPILER).arg(COMPILER_VERSION);
+    CompilerString = QStringLiteral(COMPILER);
+    if (COMPILER_VERSION >= 0)
+        CompilerString += QStringLiteral(" version %1").arg(COMPILER_VERSION);
+    if (COMPILER_VERSION_MINOR >= 0)
+        CompilerString += QStringLiteral(".%1").arg(COMPILER_VERSION_MINOR);
     QtVersionString = QStringLiteral("Qt %1.%2.%3").arg(QT_VERSION_MAJOR).arg(QT_VERSION_MINOR).arg(QT_VERSION_PATCH);
-    DateTimeString = QStringLiteral("%1 %2").arg(__DATE__).arg(__TIME__);
+    DateTimeString = QStringLiteral("%1 %2").arg(__DATE__, __TIME__);
 
     AuthorString = QStringLiteral("Copyright © 2017,2023 by Ivo van Poorten");
     VersionString = QStringLiteral("Version: %1").arg(QStringLiteral(FRIDA_VERSION_STRING));
