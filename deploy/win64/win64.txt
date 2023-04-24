@@ -30,10 +30,17 @@ Install MinGW64 GCC 11.2 (posix-seh) as C:\mingw64 (not the winlibs version)
 Install Ninja in C:\Ninja
 Install Python 3.11 in C:\Python311
 Install CMake in C:\CMake
+Install Strawberry Perl in C:\Perl (not sure if Qt6 still needs it?)
+Install MSYS2 in C:\msys64, run pacman -S patch
 
 Download qt-everywhere-src-6.5.0.zip and unzip to C:\Qt6\src
 Because of the slowness of NTFS, you might want to skip qtdoc, qtwebengine,
 and qttranslations, as we will skip them later, too.
+
+Apply qt6-win8.patch:
+
+patch -p 1 --dry-run -i qt6-win8.patch
+patch -p 1 -i qt6-win8.patch
 
 Copy 'BUILD Qt6.lnk', qt6buildenv.bat, and run-configure.bat to C:\Qt6.
 
