@@ -2,12 +2,15 @@
 Creating 7Z distribution on Windows 8.1
 =======================================
 
-Install Qt 5.15.x with the online installer. Include the latest MinGW11
+Install Qt 6.2.4 with the online installer. Include the latest MinGW11
 package under Tools.
 
-Install make from GnuWin32
+Starting from Qt 6.3.0, it WON'T run on Windows 8.1 anymore. Too many
+dependencies on Win10 and later. Recompiling from source doesn't help.
 
-Both need to be in your path. Build like if we're on *nix.
+Install MSYS and run pacman -S make
+
+Both need to be in your path. Build as if we're on Linix. qmake, make, etc...
 
 frida.exe is in build\release.
 
@@ -15,51 +18,9 @@ Create a new directory called Frida-version-win64
 Copy frida.exe to that directory
 Inside the directory, run:
 
-
 windeployqt --no-translations --no-virtualkeyboard --no-webkit2 --compiler-runtime frida.exe
 
 7zip folder to Frida-version-win64.7z
 
 Done.
-
-
-Building Qt 6.5.0 for Windows 64-bit on Windows 8.1
-===================================================
-
-Install MinGW64 GCC 11.2 (posix-seh) as C:\mingw64 (not the winlibs version)
-Be sure to pick posix-seh and NOT win32-seh, otherwise xatlas fails to
-compile. GCC 12 gives a lot of warnings, so stick to GCC 11.
-Install Ninja in C:\Ninja
-Install Python 3.11 in C:\Python311
-Install CMake in C:\CMake
-Install Strawberry Perl in C:\Perl (not sure if Qt6 still needs it?)
-Install MSYS2 in C:\msys64, run pacman -S patch
-
-Download qt-everywhere-src-6.5.0.zip and unzip to C:\Qt6\src
-Because of the slowness of NTFS, you might want to skip qtdoc, qtwebengine,
-and qttranslations, as we will skip them later, too.
-
-Copy 'BUILD Qt6.lnk', qt6buildenv.bat, and run-configure.bat to C:\Qt6.
-
-Opening the BUILD shortcut opens a command window with the proper %PATH%, and
-lands you in C:\Qt6
-
-Apply qt6-win8.patch:
-
-cd src
-patch -p 1 --dry-run -i qt6-win8.patch
-patch -p 1 -i qt6-win8.patch
-
-mkdir build
-cd build
-
-Run ..\run-configure
-
-cmake --build . --parallel 6
-cmake --install .
-
-Done.
-
-qt6devenv.bat and 'DEV Qt6.lnk' are convenient to compile against the newly
-built Qt6 libraries.
 
