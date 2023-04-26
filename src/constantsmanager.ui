@@ -39,7 +39,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/document-edit.svg</normaloff>:/icons/document-edit.svg</iconset>
+         <normaloff>:/icons/document-edit.png</normaloff>:/icons/document-edit.png</iconset>
        </property>
       </widget>
      </item>
@@ -53,7 +53,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/document-edit.svg</normaloff>:/icons/document-edit.svg</iconset>
+         <normaloff>:/icons/document-edit.png</normaloff>:/icons/document-edit.png</iconset>
        </property>
       </widget>
      </item>
@@ -67,7 +67,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/document-import.svg</normaloff>:/icons/document-import.svg</iconset>
+         <normaloff>:/icons/document-import.png</normaloff>:/icons/document-import.png</iconset>
        </property>
       </widget>
      </item>
@@ -81,7 +81,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/document-export.svg</normaloff>:/icons/document-export.svg</iconset>
+         <normaloff>:/icons/document-export.png</normaloff>:/icons/document-export.png</iconset>
        </property>
       </widget>
      </item>
@@ -95,7 +95,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/document-close.svg</normaloff>:/icons/document-close.svg</iconset>
+         <normaloff>:/icons/document-close.png</normaloff>:/icons/document-close.png</iconset>
        </property>
       </widget>
      </item>

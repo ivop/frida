@@ -125,7 +125,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/document-import.svg</normaloff>:/icons/document-import.svg</iconset>
+         <normaloff>:/icons/document-import.png</normaloff>:/icons/document-import.png</iconset>
        </property>
       </widget>
      </item>
@@ -271,7 +271,7 @@
         </property>
         <property name="icon">
          <iconset resource="frida.qrc">
-          <normaloff>:/icons/document-new.svg</normaloff>:/icons/document-new.svg</iconset>
+          <normaloff>:/icons/document-new.png</normaloff>:/icons/document-new.png</iconset>
         </property>
        </widget>
       </item>

@@ -39,7 +39,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/document-edit.svg</normaloff>:/icons/document-edit.svg</iconset>
+         <normaloff>:/icons/document-edit.png</normaloff>:/icons/document-edit.png</iconset>
        </property>
        <property name="shortcut">
         <string>Alt+A</string>
@@ -59,7 +59,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/document-import.svg</normaloff>:/icons/document-import.svg</iconset>
+         <normaloff>:/icons/document-import.png</normaloff>:/icons/document-import.png</iconset>
        </property>
        <property name="shortcut">
         <string>Alt+I</string>
@@ -79,7 +79,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/document-export.svg</normaloff>:/icons/document-export.svg</iconset>
+         <normaloff>:/icons/document-export.png</normaloff>:/icons/document-export.png</iconset>
        </property>
        <property name="shortcut">
         <string>Alt+E</string>
@@ -99,7 +99,7 @@
        </property>
        <property name="icon">
         <iconset resource="frida.qrc">
-         <normaloff>:/icons/document-close.svg</normaloff>:/icons/document-close.svg</iconset>
+         <normaloff>:/icons/document-close.png</normaloff>:/icons/document-close.png</iconset>
        </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextBesideIcon</enum>
