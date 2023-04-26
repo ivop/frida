@@ -265,7 +265,7 @@ MainWindow::MainWindow(QWidget *parent) :
     t->setRowCount(0);
 
     t = ui->tableLegend;
-    t->setRowCount(DT_LAST);
+    t->setRowCount((int)(DT_LAST/2.0+0.5));
     int col = 0;
     for (int i=0; i<DT_LAST; i++) {
         t->setItem(i>>1,col, new QTableWidgetItem(datatypeNames[i]));
