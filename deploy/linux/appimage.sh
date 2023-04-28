@@ -66,7 +66,7 @@ linuxdeployqt                   \
 #
 # mkdir qt6-build && cd qt6-build
 #
-# ../qt-everywhere-src-6.5.0/configure -prefix $HOME/Qt/6.5.0 -opensource -confirm-license -release -nomake tests -nomake examples -strip -pch -no-warnings-are-errors -skip qtdoc,qtwebengine,qttranslations -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -xcb -xcb-xlib -disable-deprecated-up-to 0x050F00
+# ../qt-everywhere-src-6.5.0/configure -prefix $HOME/Qt/6.5.0 -release -opensource -confirm-license -strip -pch -no-warnings-are-errors -nomake tests -nomake examples -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -xcb -xcb-xlib -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qtgrpc,qthttpserver,qtlanguageserver,qtlocation,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquickeffectmaker,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtshadertools,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwebchannel,qtwebengine,qtwebsockets,qtwebview
 #
 # NPROC=`cat /proc/cpuinfo | grep ^processor | wc -l`
 #
