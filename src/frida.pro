@@ -15,6 +15,10 @@ LIBS += -lz
 
 TARGET = frida
 
+win32* {
+    RC_ICONS = ../deploy/win64/default.ico
+}
+
 SOURCES += \
     addconstantsgroupwindow.cpp \
     addconstanttogroupwindow.cpp \
