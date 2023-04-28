@@ -1,26 +1,29 @@
-
-Creating 7Z distribution on Windows 8.1
-=======================================
-
-Install Qt 6.2.4 with the online installer. Include the latest MinGW11
-package under Tools.
-
-Starting from Qt 6.3.0, it WON'T run on Windows 8.1 anymore. Too many
-dependencies on Win10 and later. Recompiling from source doesn't help.
-
-Install MSYS and run pacman -S make
-
-Both need to be in your path. Build as if we're on Linix. qmake, make, etc...
-
-frida.exe is in build\release.
-
-Create a new directory called Frida-version-win64
-Copy frida.exe to that directory
-Inside the directory, run:
+#
+# Creating 7Z distribution on Windows 8.1
+# =======================================
+#
+# Install Qt 6.2.4 with the online installer. Include the latest MinGW11
+# package under Tools.
+#
+# Starting from Qt 6.3.0, it WON'T run on Windows 8.1 anymore. Too many
+# dependencies on Win10 and later. Recompiling from source doesn't help.
+#
+# Install MSYS and run pacman -S make
+#
+# Both need to be in your path. Build as if we're on Linix. qmake, make, etc...
+#
+# frida.exe is in build\release.
+#
+# Create a new directory called Frida-version-win64
+# Copy frida.exe to that directory
+# Inside the directory, run:
+#
 
 windeployqt --no-translations --no-virtualkeyboard --no-webkit2 --compiler-runtime frida.exe
 
-7zip folder to Frida-version-win64.7z
-
-Done.
+#
+# 7zip folder to Frida-version-win64.7z
+#
+# Done.
+#
 
