@@ -19,6 +19,10 @@ win32* {
     RC_ICONS = ../deploy/win64/default.ico
 }
 
+macx* {
+    ICONS = ../deploy/macos/default.icns
+}
+
 SOURCES += \
     addconstantsgroupwindow.cpp \
     addconstanttogroupwindow.cpp \
