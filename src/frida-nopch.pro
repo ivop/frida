@@ -20,7 +20,7 @@ win32* {
 }
 
 macx* {
-    ICONS = ../deploy/macos/default.icns
+    ICON = ../deploy/macos/default.icns
 }
 
 SOURCES += \
