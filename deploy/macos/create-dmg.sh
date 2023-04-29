@@ -1,0 +1,3 @@
+
+macdeployqt frida.app -dmg
+
