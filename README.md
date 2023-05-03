@@ -10,7 +10,7 @@ Also builds with Qt 6.x
     * Debian 11.6 Bullseye (stable)  
     * Ubuntu 22.04 LTS Jammy Jellyfish  
     * Linux Mint 21.1 Vera  
-    * CentOS 7 with devtoolset-11 and qt.io online installer (AppImage build platform)
+    * CentOS 7 with devtoolset-11 (AppImage build platform)
     * ...and many others  
 * Windows 7/8.1 (Qt 5.15.2), 10, or later (Qt 6.5.0)  
 * macOS Catalina 10.15 (Qt 5.15.2), maOS Big Sur 11, or later (Qt 6.5.0)  
