@@ -1,9 +1,11 @@
+#
+# PREPARATION
+# ===========
+#
 # Install NetInstall CentOS 7 x86_64 2009
 # Mirror: https://centos.mirror.liteserver.nl/7/os/x86_64/
 # Standard partitions /boot 1GiB, / 73GiB, swap 6GiB
 # Server with GUI
-# Wait
-# Accept license, finish installation.
 
 # yum -y update
 # yum -y install epel-release
@@ -17,8 +19,11 @@
 # Increase screen size
 # Turn off annoying screensaver
 
+#
+# INSTAL NEEDED PACKAGES (64-bit)
+# ===============================
+#
 # yum -y install git patchelf m4
-
 # yum -y install `yum search libX | grep libX | grep x86 | grep devel | cut -d: -f1`
 # yum -y install xcb*
 # yum -y install libxkbcommon*
@@ -26,21 +31,21 @@
 # yum -y install mesa-*
 # yum clean all
 
-### later, we need the same for i686 and install libxcb-cursor from source
+### We need the same for i686 and install libxcb-cursor from source
 ### because CentOS is missing the i686 package for that!
 
+#
+# INSTAL NEEDED PACKAGES (32-bit)
+# ===============================
+#
 # yum -y install `yum list installed | grep -e mesa -e libx -e libX -e xcb -e xkbcommon -e wayland | cut -d' ' -f1 | sed 's/x86_64/i686/g'`
 # yum -y install glibc-devel.i686 libgcc.i686
 # yum -y install zlib-devel.i686 fuse-libs.i686 dbus-libs.i686
 
-# wget http://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.2.tar.bz2
-# tar xvjf xcb-util-cursor-0.1.2.tar.bz2
-# cd tar xvjf xcb-util-cursor-0.1.2.tar.bz2
-# cd xcb-util-cursor-0.1.2
-# CFLAGS=-m32 ./configure --prefix=/usr
-# make install
-# cd ..
-# rm -rf xcb-util-cursor*
+#
+# COMPILE GCC 11.3
+# ================
+#
 
 # As a normal user:
 
@@ -53,21 +58,24 @@
 # cd gcc-build
 # ../gcc-11.3.0/configure --disable-bootstrap --prefix=$HOME/gcc11 --enable-languages=c,c++
 # make -j6
-# make install
+# make install      # as root
 
 # add to .bashrc and refresh terminal window:
 # export PATH=$HOME/gcc11/bin:$PATH
 # export LD_LIBRARY_PATH=$HOME/gcc11/lib:$HOME/gcc11/lib64:$LD_LIBRARY_PATH
 
-# g++ --version | head -1
-# output: g++ (GCC) 11.3.0
-
 # cd ~
 # rm -rf gcc-11.3.0*
+
+#
+# INSTALL QT 5.15.2
+# =================
+#
 
 # Go to https://www.qt.io/download-open-source
 # Download qt-unified-linux-x64-4.5.2-online.run
 # Run and install ONLY Qt 5.15.2 to $HOME/Qt-Online
+#
 # We need this to compile linuxdeployqt against as it does not compile with
 # CentOS supplied Qt 5.9 or the Qt 6.5.0 we will be building later on.
 # Their appimage does not run on CentOS 7. libc is too old.
@@ -77,6 +85,11 @@
 # Uncheck everything, except for Qt 5.15.2 Desktop gcc 64-bit and install
 
 # rm -rf ~/.cache/qt-unified-linux-online
+
+#
+# INSTALL CMAKE AND NINJA
+# =======================
+#
 
 # Go to github.com/ninja-build/ninja/releases and download ninja-linux.zip
 # Go to cmake.org/download and download cmake-3.26.3-linux-x86_64.tar.bz
@@ -91,6 +104,11 @@
 # export PATH=$HOME/bin:$HOME/bin/cmake-3.26.3-linux-x86_64/bin:$PATH
 # Refresh terminal window
 
+#
+# COMPILE LINUXDEPLOYQT AGAINST QT 5.15.2
+# =======================================
+#
+
 # git clone https://github.com/probonopd/linuxdeployqt
 # cd linuxdeployqt
 # export LD_LIBRARY_PATH=$HOME/Qt-Online/5.15.2/gcc_64/lib/:$LD_LIBRARY_PATH
@@ -102,12 +120,22 @@
 # rm -rf linuxdeployqt
 # Refresh terminal (to drop the LD_LIBRARY_PATH again)
 
+#
+# INSTALL APPIMAGETOOLS
+# =====================
+#
+
 # Go to https://github.com/AppImage/AppImageKit/releases and download
 # appimagetool-i686.AppImage and appimagetool-x86_64.AppImage
 # mv ~/Downloads/appimagetool-* ~/bin
 # chmod +x ~/bin/*.AppImage
 
+#
 # BUILD 64-bit Qt 6.5.0
+# =====================
+#
+
+# Fresh terminal, gcc11, cmake and ninja in path (NOT Qt 5.15.2)
 
 # cd ~
 # wget https://ftp1.nluug.nl/languages/qt/archive/qt/6.5/6.5.0/single/qt-everywhere-src-6.5.0.tar.xz
@@ -118,7 +146,28 @@
 # time cmake --build . --parallel 6
 # cmake --install .
 
+#
+# BUILD 32-bit XCB-UTIL-CURSOR
+# ============================
+#
+
+# We need xcb-util-cursor.i686, but CentOS 7 is missing this. Compile from
+# source instead.
+
+# cd ~
+# wget http://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.2.tar.bz2
+# tar xvjf xcb-util-cursor-0.1.2.tar.bz2
+# cd tar xvjf xcb-util-cursor-0.1.2.tar.bz2
+# cd xcb-util-cursor-0.1.2
+# CFLAGS=-m32 ./configure --prefix=/usr
+# make install
+# cd ..
+# rm -rf xcb-util-cursor*
+
+#
 # BUILD 32-bit Qt 6.5.0
+# =====================
+#
 
 # cd ~
 # rm -rf qt6-build && mkdir qt6-build && cd qt6-build
@@ -126,7 +175,12 @@
 # time cmake --build . --parallel 6
 # cmake --install .
 
-# -----------
+# -----------------------------------------------------------------------------
+
+#
+# BUILDING FRIDA 64-BIT
+# =====================
+#
 
 # Fresh terminal with no Qt in $PATH
 
@@ -151,7 +205,10 @@
     -extra-plugins=platforms,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration,xcbglintegrations,egldeviceintegrations
 # mv Frida-*-x86_64.AppImage Frida-0.90beta-el7-x86_64.AppImage
 
-# -----------
+#
+# BUILDING FRIDA 64-BIT
+# =====================
+#
 
 # Fresh terminal with no Qt in $PATH
 
@@ -175,4 +232,8 @@
     -no-copy-copyright-files    \
     -extra-plugins=platforms,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration,xcbglintegrations,egldeviceintegrations
 # mv Frida-*-i686.AppImage Frida-0.90beta-el7-i686.AppImage
+
+
+# DONE
+# ====
 
