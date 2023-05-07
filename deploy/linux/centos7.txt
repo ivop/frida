@@ -1,0 +1,233 @@
+
+INSTALL CENTOS 7
+================
+
+Install NetInstall CentOS 7 x86_64 2009
+Mirror: https://centos.mirror.liteserver.nl/7/os/x86_64/
+Standard partitions /boot 1GiB, / 73GiB, swap 6GiB
+Server with GUI
+Accept license, finish installation.
+
+# yum -y install epel-release
+# yum -y update
+# yum clean all
+# usermod -aG wheel a-normal-user
+# reboot
+
+
+VIRTUALBOX GUEST ADDITIONS
+==========================
+
+# yum -y install kernel-headers kernel-devel gcc-c++
+
+Insert VirtualBox Guest Additions and install
+Reboot
+Increase screen size
+Turn off annoying screensaver
+
+
+PREPARE FOR 64-BIT COMPILATION
+==============================
+
+# yum -y install git patchelf m4
+# yum -y install `yum search libX | grep libX | grep x86 | grep devel | cut -d: -f1`
+# yum -y install xcb* libxkbcommon* libwayland* wayland* mesa-*
+# yum clean all
+
+
+PREPARE FOR 32-BIT COMPILATION
+==============================
+
+# yum -y install `yum list installed | grep -e mesa -e libx -e libX -e xcb -e xkbcommon -e wayland | cut -d' ' -f1 | sed 's/x86_64/i686/g'`
+# yum -y install glibc-devel.i686 libgcc.i686
+# yum -y install zlib-devel.i686 fuse-libs.i686 dbus-libs.i686
+# yum clean all
+
+
+COMPILE GCC 11.3
+================
+
+As a normal user, do:
+
+$ wget https://ftp.nluug.nl/languages/gcc/releases/gcc-11.3.0/gcc-11.3.0.tar.xz
+$ tar xvJf gcc-11.3.0.tar.xz
+$ cd gcc-11.3.0
+$ contrib/download_prerequisites
+$ cd ..
+$ mkdir gcc-build
+$ cd gcc-build
+$ ../gcc-11.3.0/configure --disable-bootstrap --prefix=$HOME/gcc11 --enable-languages=c,c++
+$ make -j6
+$ make install
+
+Add to .bashrc and refresh terminal window:
+    export PATH=$HOME/gcc11/bin:$PATH
+    export LD_LIBRARY_PATH=$HOME/gcc11/lib:$HOME/gcc11/lib64:$LD_LIBRARY_PATH
+
+$ cd ~
+$ rm -rf gcc-11.3.0* gcc-build
+
+
+INSTALL QT 5.15.2 FROM ONLINE REPO
+==================================
+
+Go to https://www.qt.io/download-open-source
+Download qt-unified-linux-x64-4.5.2-online.run
+Run and install ONLY Qt 5.15.2 to $HOME/Qt-Online
+We need this to compile linuxdeployqt against as it does not compile with
+CentOS supplied Qt 5.9 or the Qt 6.5.0 we will be building later on.
+Their appimage does not run on CentOS 7. libc is too old.
+
+$ chmod +x Downloads/qt-unified-linux-x64-4.5.2-online.run
+$ Downloads/qt-unified-linux-x64-4.5.2-online.run
+
+Uncheck everything, except for Qt 5.15.2 Desktop gcc 64-bit and install
+
+$ rm -rf ~/.cache/qt-unified-linux-online
+
+
+INSTALL CMAKE AND NINJA
+=======================
+
+Go to github.com/ninja-build/ninja/releases and download ninja-linux.zip
+Go to cmake.org/download and download cmake-3.26.3-linux-x86_64.tar.bz
+
+$ mkdir -p ~/bin
+$ cd ~/bin
+$ unzip ~/Downloads/ninja-linux.zip
+$ tar xvzf ~/Downloads/cmake-3.26.3-linux-x86_64.tar.bz
+$ rm -f ~/Downloads/*
+
+Add to .bashrc
+    export PATH=$HOME/bin:$HOME/bin/cmake-3.26.3-linux-x86_64/bin:$PATH
+
+Restart terminal window
+
+
+COMPILE LINUXDEPLOYQT AGAINST QT 5.15.2
+=======================================
+
+$ git clone https://github.com/probonopd/linuxdeployqt
+$ cd linuxdeployqt
+$ export LD_LIBRARY_PATH=$HOME/Qt-Online/5.15.2/gcc_64/lib/:$LD_LIBRARY_PATH
+$ ~/Qt-Online/5.15.2/gcc_64/bin/qmake
+$ make -j6
+$ patchelf --set-rpath ~/Qt-Online/5.15.2/gcc_64/lib/ bin/linuxdeployqt
+$ cp bin/linuxdeployqt ~/bin
+$ cd ..
+$ rm -rf linuxdeployqt
+
+Restart terminal (to drop the LD_LIBRARY_PATH again)
+
+
+INSTALL APPIMAGETOOLS
+=====================
+
+We need both i686 and x86_64!
+Go to https://github.com/AppImage/AppImageKit/releases and download
+appimagetool-i686.AppImage and appimagetool-x86_64.AppImage
+
+$ mv ~/Downloads/appimagetool-* ~/bin
+$ chmod +x ~/bin/*.AppImage
+
+
+BUILD 64-bit Qt 6.5.0
+=====================
+
+$ cd ~
+$ wget https://ftp1.nluug.nl/languages/qt/archive/qt/6.5/6.5.0/single/qt-everywhere-src-6.5.0.tar.xz
+$ tar xvJf qt-everywhere-src-6.5.0.tar.xz 
+$ mkdir qt6-build
+$ cd qt6-build
+$ ../qt-everywhere-src-6.5.0/configure -platform linux-g++-64 -prefix $HOME/Qt64/6.5.0 -release -opensource -confirm-license -strip -pch -no-warnings-are-errors -nomake tests -nomake examples -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -xcb -xcb-xlib -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qtgrpc,qthttpserver,qtlanguageserver,qtlocation,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquickeffectmaker,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtshadertools,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwebchannel,qtwebengine,qtwebsockets,qtwebview
+$ time cmake --build . --parallel 6
+$ cmake --install .
+
+
+BUILD xcb-cursor for 32-bit
+===========================
+
+CentOS 7 is missing this i686 package, so we have to build it ourself
+
+$ wget http://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.2.tar.bz2
+$ tar xvjf xcb-util-cursor-0.1.2.tar.bz2
+$ cd tar xvjf xcb-util-cursor-0.1.2.tar.bz2
+$ cd xcb-util-cursor-0.1.2
+$ CFLAGS=-m32 ./configure --prefix=/usr
+$ make
+$ sudo make install
+$ cd ..
+$ rm -rf xcb-util-cursor*
+
+
+BUILD 32-bit Qt 6.5.0
+=====================
+
+$ cd ~
+$ rm -rf qt6-build && mkdir qt6-build && cd qt6-build
+$ ../qt-everywhere-src-6.5.0/configure -platform linux-g++-32 -prefix $HOME/Qt32/6.5.0 -release -opensource -confirm-license -strip -pch -no-warnings-are-errors -nomake tests -nomake examples -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -xcb -xcb-xlib -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qtgrpc,qthttpserver,qtlanguageserver,qtlocation,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquickeffectmaker,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtshadertools,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwebchannel,qtwebengine,qtwebsockets,qtwebview
+$ time cmake --build . --parallel 6
+$ cmake --install .
+
+
+BUILD 64-bit FRIDA
+==================
+
+Fresh terminal with no Qt in $PATH
+
+$ cd ~
+$ rm -f bin/appimagetool
+$ ln -s $HOME/bin/appimagetool-x86_64.AppImage bin/appimagetool
+$ git clone https://github.com/ivop/frida
+$ cd frida
+$ mkdir build64
+$ cd build64
+$ ~/Qt64/6.5.0/bin/qmake ../src/frida.pro CONFIG+=release
+$ make -j6
+$ mkdir frida.app
+$ cp ../deploy/linux/default.* frida frida.app
+$ cd frida.app
+$ linuxdeployqt                 \
+    frida                       \
+    -qmake=$HOME/Qt64/6.5.0/bin/qmake \
+    -appimage                   \
+    -no-translations            \
+    -no-copy-copyright-files    \
+    -extra-plugins=platforms,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration,xcbglintegrations,egldeviceintegrations
+$ rm *.AppImage
+$ cp ~/gcc11/lib64/libgcc_s.so.1 ~/gcc11/lib64/libstdc++.so.6 lib
+$ patchelf --set-rpath \$ORIGIN lib/libgcc_s.so.1
+$ patchelf --set-rpath \$ORIGIN lib/libstdc++.so.6
+$ appimagetool . Frida-0.90beta-el7-x86_64.AppImage
+
+
+BUILD 32-bit FRIDA
+==================
+
+Fresh terminal with no Qt in $PATH
+
+$ cd ~
+$ rm -f bin/appimagetool
+$ ln -s $HOME/bin/appimagetool-i686.AppImage bin/appimagetool
+$ git clone https://github.com/ivop/frida
+$ cd frida
+$ mkdir build32
+$ cd build32
+$ ~/Qt32/6.5.0/bin/qmake ../src/frida.pro CONFIG+=release
+$ make -j6
+$ mkdir frida.app
+$ cp ../deploy/linux/default.* frida frida.app
+$ cd frida.app
+$ linuxdeployqt                 \
+    frida                       \
+    -qmake=$HOME/Qt32/6.5.0/bin/qmake \
+    -appimage                   \
+    -no-translations            \
+    -no-copy-copyright-files    \
+    -extra-plugins=platforms,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration,xcbglintegrations,egldeviceintegrations
+$ rm *.AppImage
+$ cp ~/gcc11/lib/libgcc_s.so.1 ~/gcc11/lib/libstdc++.so.6 lib
+$ patchelf --set-rpath \$ORIGIN lib/libgcc_s.so.1
+$ patchelf --set-rpath \$ORIGIN lib/libstdc++.so.6
+$ appimagetool . Frida-0.90beta-el7-i686.AppImage
+
