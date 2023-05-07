@@ -3,6 +3,6 @@ Type=Application
 Name=Frida
 Comment=Free Interactive Disassembler
 Exec=AppRun %F
-Icon=default
+Icon=default.png
 Terminal=false
 Categories=Development;
