@@ -139,7 +139,7 @@ $ wget https://ftp1.nluug.nl/languages/qt/archive/qt/6.5/6.5.0/single/qt-everywh
 $ tar xvJf qt-everywhere-src-6.5.0.tar.xz 
 $ mkdir qt6-build
 $ cd qt6-build
-$ ../qt-everywhere-src-6.5.0/configure -platform linux-g++-64 -prefix $HOME/Qt64/6.5.0 -release -opensource -confirm-license -strip -pch -no-warnings-are-errors -nomake tests -nomake examples -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -xcb -xcb-xlib -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qtgrpc,qthttpserver,qtlanguageserver,qtlocation,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquickeffectmaker,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtshadertools,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwebchannel,qtwebengine,qtwebsockets,qtwebview
+$ ../qt-everywhere-src-6.5.0/configure -platform linux-g++-64 -prefix $HOME/Qt64/6.5.0 -release -opensource -confirm-license -strip -pch -no-warnings-are-errors -nomake tests -nomake examples -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -xcb -xcb-xlib -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qtgrpc,qthttpserver,qtlanguageserver,qtlocation,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquickeffectmaker,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtshadertools,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwebchannel,qtwebengine,qtwebsockets,qtwebview -no-opengl
 $ time cmake --build . --parallel 6
 $ cmake --install .
 
@@ -165,7 +165,7 @@ BUILD 32-bit Qt 6.5.0
 
 $ cd ~
 $ rm -rf qt6-build && mkdir qt6-build && cd qt6-build
-$ ../qt-everywhere-src-6.5.0/configure -platform linux-g++-32 -prefix $HOME/Qt32/6.5.0 -release -opensource -confirm-license -strip -pch -no-warnings-are-errors -nomake tests -nomake examples -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -xcb -xcb-xlib -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qtgrpc,qthttpserver,qtlanguageserver,qtlocation,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquickeffectmaker,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtshadertools,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwebchannel,qtwebengine,qtwebsockets,qtwebview
+$ ../qt-everywhere-src-6.5.0/configure -platform linux-g++-32 -prefix $HOME/Qt32/6.5.0 -release -opensource -confirm-license -strip -pch -no-warnings-are-errors -nomake tests -nomake examples -qt-libpng -qt-libjpeg -qt-pcre -qt-zlib -qt-freetype -xcb -xcb-xlib -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qtgrpc,qthttpserver,qtlanguageserver,qtlocation,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquickeffectmaker,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtshadertools,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwebchannel,qtwebengine,qtwebsockets,qtwebview -no-opengl
 $ time cmake --build . --parallel 6
 $ cmake --install .
 
@@ -193,7 +193,7 @@ $ linuxdeployqt                 \
     -appimage                   \
     -no-translations            \
     -no-copy-copyright-files    \
-    -extra-plugins=platforms,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration,xcbglintegrations,egldeviceintegrations
+    -extra-plugins=platforms,wayland-decoration-client,wayland-shell-integration
 $ rm *.AppImage
 $ cp ~/gcc11/lib64/libgcc_s.so.1 ~/gcc11/lib64/libstdc++.so.6 lib
 $ patchelf --set-rpath \$ORIGIN lib/libgcc_s.so.1
@@ -224,7 +224,7 @@ $ linuxdeployqt                 \
     -appimage                   \
     -no-translations            \
     -no-copy-copyright-files    \
-    -extra-plugins=platforms,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration,xcbglintegrations,egldeviceintegrations
+    -extra-plugins=platforms,wayland-decoration-client,wayland-shell-integration
 $ rm *.AppImage
 $ cp ~/gcc11/lib/libgcc_s.so.1 ~/gcc11/lib/libstdc++.so.6 lib
 $ patchelf --set-rpath \$ORIGIN lib/libgcc_s.so.1
