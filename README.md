@@ -2,8 +2,8 @@
 
 ## FRee Interactive DisAssembler  
 Copyright (C) 2017,2023 by Ivo van Poorten  
-Created with QtCreator and Qt 5.15.2  
-Also builds with Qt 6.x  
+Created with QtCreator and Qt 5.15  
+Also builds with Qt 6.5  
 
 ##### Runs on:
 * Linux
@@ -54,7 +54,7 @@ make -j8
 
 ###### Notes:  
 
-* Use latest Qt5 5.15.x or Qt6.  
+* Use latest Qt 5.15 or Qt 6.5. Note that the 6 series is new and versions before 6.5 have bugs related to palette handling, and dark mode won't work.  
 * Linux builds with both clang++ and g++.  
 * Windows builds with MinGW-g++, MS compiler is not supported. Qt 5.15.2 builds for Window 7/8.1, Qt 6.5.0 for Windows 10, or later.  
 * macOS builds with clang++ that comes with XCode. Qt 5 builds for macOS 10.15, Qt6 for 11.x and later.  
