@@ -34,15 +34,15 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow() override;
 
     void showSegments(void);
     void showHex(void);
     void showAscii(void);
     void showDisassembly(void);
 
-    void closeEvent (QCloseEvent *event);
+    void closeEvent (QCloseEvent *event) override;
 
     bool darkMode, fullscreen;
 

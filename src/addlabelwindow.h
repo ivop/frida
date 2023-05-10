@@ -34,8 +34,8 @@ class addLabelWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit addLabelWindow(QWidget *parent = 0);
-    ~addLabelWindow();
+    explicit addLabelWindow(QWidget *parent = nullptr);
+    ~addLabelWindow() override;
 
 private Q_SLOTS:
     void onPushButtonCancel_clicked();

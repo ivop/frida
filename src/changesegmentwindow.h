@@ -34,8 +34,8 @@ class changesegmentwindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit changesegmentwindow(quint64 oldaddr, quint64 *newaddr, QWidget *parent = 0);
-    ~changesegmentwindow();
+    explicit changesegmentwindow(quint64 oldaddr, quint64 *newaddr, QWidget *parent = nullptr);
+    ~changesegmentwindow() override;
 
 private Q_SLOTS:
     void onButtonBox_accepted();

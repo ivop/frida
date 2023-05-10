@@ -35,7 +35,7 @@ class selectConstantsGoupWindow : public QDialog
 
 public:
     explicit selectConstantsGoupWindow(QWidget *parent = nullptr);
-    ~selectConstantsGoupWindow();
+    ~selectConstantsGoupWindow() override;
 
     quint64 groupID{};
 

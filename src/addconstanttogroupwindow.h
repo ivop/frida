@@ -35,7 +35,7 @@ class addConstantToGroupWindow : public QDialog
 
 public:
     explicit addConstantToGroupWindow(QWidget *parent = nullptr);
-    ~addConstantToGroupWindow();
+    ~addConstantToGroupWindow() override;
 
     qint64 constantValue {};
     QString constantName {};

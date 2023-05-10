@@ -35,7 +35,7 @@ class exportAssemblyWindow : public QDialog
 
 public:
     explicit exportAssemblyWindow(QWidget *parent = nullptr);
-    ~exportAssemblyWindow();
+    ~exportAssemblyWindow() override;
 
 
     int asm_format{};

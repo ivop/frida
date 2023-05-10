@@ -35,7 +35,7 @@ class addConstantsGroupWindow : public QDialog
 
 public:
     explicit addConstantsGroupWindow(QWidget *parent = nullptr);
-    ~addConstantsGroupWindow();
+    ~addConstantsGroupWindow() override;
 
 public Q_SLOTS:
     void accept() override;

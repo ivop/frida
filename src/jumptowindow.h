@@ -35,7 +35,7 @@ class jumpToWindow : public QDialog
 
 public:
     explicit jumpToWindow(QWidget *parent = nullptr, QStringList *list = nullptr);
-    ~jumpToWindow();
+    ~jumpToWindow() override;
 
     QString jump_to_location;
 

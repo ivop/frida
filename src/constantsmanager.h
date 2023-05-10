@@ -35,7 +35,7 @@ class constantsManager : public QDialog
 
 public:
     explicit constantsManager(QWidget *parent = nullptr);
-    ~constantsManager();
+    ~constantsManager() override;
 
 private Q_SLOTS:
     void onGroups_itemSelectionChanged(void);

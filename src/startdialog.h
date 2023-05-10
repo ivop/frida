@@ -34,8 +34,8 @@ class StartDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit StartDialog(QWidget *parent = 0);
-    ~StartDialog();
+    explicit StartDialog(QWidget *parent = nullptr);
+    ~StartDialog() override;
 
     bool load_existing_project = false;
     bool create_new_project    = false;

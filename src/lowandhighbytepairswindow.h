@@ -35,7 +35,7 @@ class LowAndHighBytePairsWindow : public QDialog
 
 public:
     explicit LowAndHighBytePairsWindow(QWidget *parent = nullptr);
-    ~LowAndHighBytePairsWindow();
+    ~LowAndHighBytePairsWindow() override;
 
     bool pairsLowLowHighHigh{};
     bool minusLabels{};

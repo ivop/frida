@@ -34,10 +34,10 @@ class lowhighbytewindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit lowhighbytewindow(QWidget *parent = 0);
+    explicit lowhighbytewindow(QWidget *parent = nullptr);
     lowhighbytewindow(quint64 location, bool low, quint8 byte,
-                      quint16 *fulladdr, QWidget *parent = 0);
-    ~lowhighbytewindow();
+                      quint16 *fulladdr, QWidget *parent = nullptr);
+    ~lowhighbytewindow() override;
 
 private Q_SLOTS:
     void onButtonBox_accepted();

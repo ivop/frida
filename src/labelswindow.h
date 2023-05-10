@@ -34,8 +34,8 @@ class labelswindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit labelswindow(QWidget *parent = 0);
-    ~labelswindow();
+    explicit labelswindow(QWidget *parent = nullptr);
+    ~labelswindow() override;
 
 private Q_SLOTS:
     void actionChange_To_Local_Label();

@@ -56,7 +56,7 @@ enum extmode {
     EXT_Z180
 };
 
-#define INVALID { "INVALID", "", "", 0, 0, 0, 0, "", "", "" }
+#define INVALID { nullptr, nullptr, nullptr, 0, 0, 0, 0, nullptr, nullptr, nullptr }
 
 static const struct distabitem distab_normal[256] = {
 { "nop", "", "  00  ", 1, "4", MODE_IMP, EXT_NORMAL, "nop", "", "No operation is performed." },

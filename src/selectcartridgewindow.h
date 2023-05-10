@@ -23,8 +23,8 @@
 #ifndef SELECTCARTRIDGEWINDOW_H
 #define SELECTCARTRIDGEWINDOW_H
 
-#include "pch.h"
 #include "loaderatari8bitcar.h"
+#include "pch.h"
 
 namespace Ui {
 class selectcartridgewindow;
@@ -36,7 +36,7 @@ class selectcartridgewindow : public QDialog
 
 public:
     explicit selectcartridgewindow(QWidget *parent = nullptr, const QVector<quint64> &candidates = {});
-    ~selectcartridgewindow();
+    ~selectcartridgewindow() override;
 
     quint64 cartridge_type{};
 

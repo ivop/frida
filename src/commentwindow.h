@@ -34,9 +34,9 @@ class commentwindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit commentwindow(QWidget *parent = 0);
-    commentwindow(const QString& s, const QString& c, QWidget *parent = 0);
-    ~commentwindow();
+    explicit commentwindow(QWidget *parent = nullptr);
+    commentwindow(const QString& s, const QString& c, QWidget *parent = nullptr);
+    ~commentwindow() override;
 
     QString retrieveComment(void);
 
