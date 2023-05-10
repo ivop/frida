@@ -2,7 +2,9 @@
 all: \
 	undefined_opcodes_mads.xex \
 	test_65c02_ca65.raw \
-	lowhigh_mads.xex
+	lowhigh_mads.xex \
+	test_z80.com \
+
 
 undefined_opcodes_mads.xex: undefined_opcodes_mads.s
 	mads -o:$@ $<
@@ -13,8 +15,11 @@ test_65c02_ca65.raw: test_65c02_ca65.s
 lowhigh_mads.xex: lowhigh_mads.s
 	mads -o:$@ $<
 
+test_z80.com: test_z80.asm
+	z80asm -o $@ $<
+
 clean:
 	rm -f *~ *.o
 	
 cleaner: clean
-	rm -f *.xex *.raw *.prg
+	rm -f *.xex *.raw *.prg *.com
