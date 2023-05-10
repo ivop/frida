@@ -73,4 +73,17 @@ protected:
                                   struct disassembly &dis, int &n) override;
 };
 
+class DisassemblerZ80 : public Disassembler {
+public:
+    void trace(quint64 address) override;
+    QString getDescriptionAt(quint64 address) override;
+
+protected:
+    void initTables(void) override;
+    int getInstructionSizeAt(quint64 relpos) override;
+    void createOperandLabels(quint64 relpos, bool generateLocalLabels) override;
+    void disassembleInstructionAt(quint64 relpos,
+                                  struct disassembly &dis, int &n) override;
+};
+
 #endif // DISASSEMBLER_H

@@ -27,18 +27,19 @@
 // ---------------------------------------------------------------------------
 
 #include "disassembler.h"
+#include "frida.h"
 
 struct distabitem {
-    const char * const inst;
-    const char * const oper;
-    const char * const binary;
-    const char size;
-    const char * const cycles;
-    const char mode;
-    const char extmode;
-    const char * const full_instruction;
-    const char * const flags;
-    const char * const description;
+    const char * inst;
+    const char * oper;
+    const char * binary;
+          char size;
+    const char * cycles;
+          char mode;
+          char extmode;
+    const char * full_instruction;
+    const char * flags;
+    const char * description;
 };
 
 enum modes {
@@ -58,7 +59,7 @@ enum extmode {
 
 #define INVALID { nullptr, nullptr, nullptr, 0, 0, 0, 0, nullptr, nullptr, nullptr }
 
-static const struct distabitem distab_normal[256] = {
+static struct distabitem distab_normal[256] = {
 { "nop", "", "  00  ", 1, "4", MODE_IMP, EXT_NORMAL, "nop", "", "No operation is performed." },
 { "ld", "bc,%1", "  01  <i>nn</i> ", 3, "10", MODE_NN, EXT_NORMAL, "ld bc,<i>nn</i>", "", "Loads <i>nn</i> into BC." },
 { "ld", "(bc),a", "  02  ", 1, "7", MODE_IMP, EXT_NORMAL, "ld (bc),a", "", "Stores A into the memory location pointed to by BC." },
@@ -317,7 +318,7 @@ INVALID,
 { "rst", "38h", "  FF  ", 1, "11", MODE_IMP, EXT_NORMAL, "rst 38h", "", "The current PC value plus one is pushed onto the stack, then is loaded with 56." },
 };
 
-static const struct distabitem distab_CB[256] = {
+static struct distabitem distab_CB[256] = {
 { "rlc", "b", "  CB  00  ", 2, "8", MODE_IMP, EXT_NORMAL, "rlc b", "C: as defined<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "The contents of B are rotated left one bit position. The contents of bit 7 are copied to the carry flag and bit 0." },
 { "rlc", "c", "  CB  01  ", 2, "8", MODE_IMP, EXT_NORMAL, "rlc c", "C: as defined<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "The contents of C are rotated left one bit position. The contents of bit 7 are copied to the carry flag and bit 0." },
 { "rlc", "d", "  CB  02  ", 2, "8", MODE_IMP, EXT_NORMAL, "rlc d", "C: as defined<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "The contents of D are rotated left one bit position. The contents of bit 7 are copied to the carry flag and bit 0." },
@@ -576,7 +577,7 @@ static const struct distabitem distab_CB[256] = {
 { "set", "7,a", "  CB  FF  ", 2, "8", MODE_IMP, EXT_NORMAL, "set 7,a", "", "Sets bit 7 of A." },
 };
 
-static const struct distabitem distab_DD[256] = {
+static struct distabitem distab_DD[256] = {
 INVALID,
 INVALID,
 INVALID,
@@ -835,7 +836,7 @@ INVALID,
 INVALID,
 };
 
-static const struct distabitem distab_DDCB[256] = {
+static struct distabitem distab_DDCB[256] = {
 { "rlc", "(ix+%1),b", "  DD  CB  <i>d</i>  00  ", 4, "23", MODE_DIS, EXT_UNDOCUMENTED, "rlc (ix+<i>d</i>),b", "C: as defined<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "The contents of the memory location pointed to by IX plus <i>d</i> are rotated left one bit position. The contents of bit 7 are copied to the carry flag and bit 0. The result is then stored in B." },
 { "rlc", "(ix+%1),c", "  DD  CB  <i>d</i>  01  ", 4, "23", MODE_DIS, EXT_UNDOCUMENTED, "rlc (ix+<i>d</i>),c", "C: as defined<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "The contents of the memory location pointed to by IX plus <i>d</i> are rotated left one bit position. The contents of bit 7 are copied to the carry flag and bit 0. The result is then stored in C." },
 { "rlc", "(ix+%1),d", "  DD  CB  <i>d</i>  02  ", 4, "23", MODE_DIS, EXT_UNDOCUMENTED, "rlc (ix+<i>d</i>),d", "C: as defined<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "The contents of the memory location pointed to by IX plus <i>d</i> are rotated left one bit position. The contents of bit 7 are copied to the carry flag and bit 0. The result is then stored in D." },
@@ -1094,7 +1095,7 @@ static const struct distabitem distab_DDCB[256] = {
 { "set", "7,(ix+%1),a", "  DD  CB  <i>d</i>  FF  ", 4, "23", MODE_DIS, EXT_UNDOCUMENTED, "set 7,(ix+<i>d</i>),a", "", "Sets bit 7 of the memory location pointed to by IX plus <i>d</i>. The result is then stored in A." },
 };
 
-static const struct distabitem distab_ED[256] = {
+static struct distabitem distab_ED[256] = {
 { "in0", "b,(%1)", "  ED  00  <i>n</i> ", 3, "12", MODE_N, EXT_Z180, "in0 b,(<i>n</i>)", "N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "A byte from the port whose address is formed by 00h in the high bits and <i>n</i> in the low bits is written to B." },
 { "out0", "(%1),b", "  ED  01  <i>n</i> ", 3, "13", MODE_N, EXT_Z180, "out0 (<i>n</i>),b", "", "The value of B is written to the port whose address is formed by 00h in the high bits and <i>n</i> in the low bits." },
 INVALID,
@@ -1353,7 +1354,7 @@ INVALID,
 INVALID,
 };
 
-static const struct distabitem distab_FD[256] = {
+static struct distabitem distab_FD[256] = {
 INVALID,
 INVALID,
 INVALID,
@@ -1612,7 +1613,7 @@ INVALID,
 INVALID,
 };
 
-static const struct distabitem distab_FDCB[256] = {
+static struct distabitem distab_FDCB[256] = {
 { "rlc", "(iy+%1),b", "  FD  CB  <i>d</i>  00  ", 4, "23", MODE_DIS, EXT_UNDOCUMENTED, "rlc (iy+<i>d</i>),b", "C: as defined<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "The contents of the memory location pointed to by IY plus <i>d</i> are rotated left one bit position. The contents of bit 7 are copied to the carry flag and bit 0. The result is then stored in B." },
 { "rlc", "(iy+%1),c", "  FD  CB  <i>d</i>  01  ", 4, "23", MODE_DIS, EXT_UNDOCUMENTED, "rlc (iy+<i>d</i>),c", "C: as defined<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "The contents of the memory location pointed to by IY plus <i>d</i> are rotated left one bit position. The contents of bit 7 are copied to the carry flag and bit 0. The result is then stored in C." },
 { "rlc", "(iy+%1),d", "  FD  CB  <i>d</i>  02  ", 4, "23", MODE_DIS, EXT_UNDOCUMENTED, "rlc (iy+<i>d</i>),d", "C: as defined<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "The contents of the memory location pointed to by IY plus <i>d</i> are rotated left one bit position. The contents of bit 7 are copied to the carry flag and bit 0. The result is then stored in D." },
@@ -1870,3 +1871,98 @@ static const struct distabitem distab_FDCB[256] = {
 { "set", "7,(iy+%1)", "  FD  CB  <i>d</i>  FE  ", 4, "23", MODE_DIS, EXT_NORMAL, "set 7,(iy+<i>d</i>)", "", "Sets bit 7 of the memory location pointed to by IY plus <i>d</i>." },
 { "set", "7,(iy+%1),a", "  FD  CB  <i>d</i>  FF  ", 4, "23", MODE_DIS, EXT_UNDOCUMENTED, "set 7,(iy+<i>d</i>),a", "", "Sets bit 7 of the memory location pointed to by IY plus <i>d</i>. The result is then stored in A." },
 };
+
+void DisassemblerZ80::initTables(void) {
+    // delete EXT_UNDOCUMENTED and/or EXT_Z180
+    bool del_undoc = true;
+    bool del_z180 = true;
+    if (this->cputype == CT_ZILOG_Z80UNDOC)
+        del_undoc = false;
+    if (this->cputype == CT_ZILOG_Z180)
+        del_z180 = false;
+    if (this->cputype == CT_ZILOG_Z180UNDOC)
+        del_undoc = false;
+
+#define DEL_IF_EXTMODE(x,y) if (x[i].extmode == y) x[i] = INVALID;
+
+    for (int i = 0; i<256; i++) {
+        if (del_undoc) {
+            DEL_IF_EXTMODE(distab_normal, EXT_UNDOCUMENTED);
+            DEL_IF_EXTMODE(distab_CB,     EXT_UNDOCUMENTED);
+            DEL_IF_EXTMODE(distab_DD,     EXT_UNDOCUMENTED);
+            DEL_IF_EXTMODE(distab_ED,     EXT_UNDOCUMENTED);
+            DEL_IF_EXTMODE(distab_FD,     EXT_UNDOCUMENTED);
+            DEL_IF_EXTMODE(distab_DDCB,   EXT_UNDOCUMENTED);
+            DEL_IF_EXTMODE(distab_FDCB,   EXT_UNDOCUMENTED);
+        }
+        if (del_z180) {
+            DEL_IF_EXTMODE(distab_normal, EXT_Z180);
+            DEL_IF_EXTMODE(distab_CB,     EXT_Z180);
+            DEL_IF_EXTMODE(distab_DD,     EXT_Z180);
+            DEL_IF_EXTMODE(distab_ED,     EXT_Z180);
+            DEL_IF_EXTMODE(distab_FD,     EXT_Z180);
+            DEL_IF_EXTMODE(distab_DDCB,   EXT_Z180);
+            DEL_IF_EXTMODE(distab_FDCB,   EXT_Z180);
+        }
+    }
+
+    hexPrefix = QStringLiteral("$");
+    hexSuffix = QLatin1String("");
+    toUpper   = false;
+}
+
+int DisassemblerZ80::getInstructionSizeAt(quint64 relpos) {
+    quint8 *data = segments[currentSegment].data;
+    quint8 byte0 = data[relpos];        // createEmptySegment allows reading beyond end
+    quint8 byte1 = data[relpos+1];      // so we don't need checks here
+//    quint8 byte2 = data[relpos+2];    // but only in disassembler.cpp
+    quint8 byte3 = data[relpos+3];      //
+
+    struct distabitem *item;
+
+    switch(byte0) {
+
+    default:    item = &distab_normal[byte0];   break;
+    case 0xcb:  item = &distab_CB[byte0];       break;
+    case 0xed:  item = &distab_ED[byte0];       break;
+
+    case 0xdd:
+        switch(byte1) {
+        default:    item = &distab_DD[byte1];   break;
+        case 0xcb:  item = &distab_DDCB[byte3]; break;
+        case 0xdd: [[fallthrough]];
+        case 0xed: [[fallthrough]];
+        case 0xfd:
+             return 1;  // ignore 0xdd prefix as single byte NOP
+        }
+        break;
+
+    case 0xfd:
+        switch(byte1) {
+        default:    item = &distab_FD[byte1];   break;
+        case 0xcb:  item = &distab_FDCB[byte3]; break;
+        case 0xdd: [[fallthrough]];
+        case 0xed: [[fallthrough]];
+        case 0xfd:
+             return 1;  // ignore 0xfd prefix as single byte NOP
+        }
+        break;
+    }
+
+    if (item->inst == nullptr)
+        return 1;   // invalid instruction
+    else
+        return item->size;
+}
+
+void DisassemblerZ80::createOperandLabels(quint64 relpos, bool generateLocalLabels) {
+}
+
+void DisassemblerZ80::disassembleInstructionAt(quint64 relpos, struct disassembly &dis, int &n) {
+}
+
+void DisassemblerZ80::trace(quint64 address) {
+}
+
+QString DisassemblerZ80::getDescriptionAt(quint64 address) {
+}

@@ -41,6 +41,10 @@ enum cputypeid {
     CT_NMOS6502UNDEF    = 0x01,
     CT_CMOS65C02        = 0x02,
     CT_INTEL_8080       = 0x10,
+    CT_ZILOG_Z80        = 0x20,
+    CT_ZILOG_Z80UNDOC   = 0x21,
+    CT_ZILOG_Z180       = 0x22,
+    CT_ZILOG_Z180UNDOC  = 0x23
 };
 
 struct cputype {

@@ -36,7 +36,7 @@ void Loader::genericComment(QFile& file, struct segment *segment) {
 }
 
 struct segment Loader::createEmptySegment(quint64 start, quint64 end) {
-    quint64 size = end - start + 1;
+    quint64 size = end - start + 1 +16;     // +16 to allow reading beyond end for speed during disassembly
      struct segment segment = {
          start, end, QString(""),
          new quint8[size](), new quint8[size](), new quint8[size](),

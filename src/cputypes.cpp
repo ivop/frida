@@ -27,4 +27,8 @@ const QVector<struct cputype> cputypes = {
 { "NMOS 6502 w/ undefined opcodes",     CT_NMOS6502UNDEF },
 { "CMOS 65C02",                         CT_CMOS65C02 },
 { "Intel 8080",                         CT_INTEL_8080 },
+{ "Zilog Z80",                          CT_ZILOG_Z80 },
+{ "Zilog Z80 w/ undocumented opcodes",  CT_ZILOG_Z80UNDOC },
+{ "Zilog Z180",                         CT_ZILOG_Z180 },
+{ "Zilog Z180 w/ undocumented opcodes", CT_ZILOG_Z180UNDOC },
 };
