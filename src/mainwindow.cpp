@@ -1168,10 +1168,10 @@ void MainWindow::onTableDisassembly_doubleClicked(const QModelIndex &index) {
         // if no label is found, check for hexPrefixed or hexSuffixed address
 
         if (iter == globalLabels.constEnd()) {
-            if (hexPrefix.size() && operand.left(hexPrefix.size()) == hexPrefix) {
+            if (!hexPrefix.isEmpty() && operand.left(hexPrefix.size()) == hexPrefix) {
                 operand = operand.mid(hexPrefix.size());
                 addr = operand.toULongLong(nullptr,16);
-            } else if (hexSuffix.size() && operand.right(hexSuffix.size()) == hexSuffix) {
+            } else if (!hexSuffix.isEmpty() && operand.right(hexSuffix.size()) == hexSuffix) {
                 operand = operand.left(operand.size()-hexSuffix.size());
                 addr = operand.toULongLong(nullptr,16);
             } else {
@@ -1431,6 +1431,8 @@ void MainWindow::actionLowAndHighBytePairs(void) {
 
     QVector<QPair<quint64, quint64>>allPairs;
     int half = allSelectedCells.size() / 2;
+
+    allPairs.reserve(half);
 
     if (lahbpw.pairsLowLowHighHigh) {
         for(int i = 0; i < half; i++) {
