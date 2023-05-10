@@ -1,42 +1,1881 @@
 
-; use 0100H so we can use the CP/M loader for convenience
-
     org $0100
 
-; $00-$0f
+N_VALUE:            equ $5e
+NN_VALUE:           equ $55ee
+DISPLACEMENT:       equ $5e
+NN_CALL_TO_LABEL:   equ $55ee
+NN_JUMP_TO_LABEL:   equ $55ee
 
-label:
-    nop
-    ld bc,$55ee
+; 00_main_instructions.asm
+
+    nop 
+    ld bc,NN_VALUE
     ld (bc),a
     inc bc
     inc b
     dec b
-    ld b,$5e
-    rlca
+    ld b,N_VALUE
+    rlca 
     ex af,af'
     add hl,bc
     ld a,(bc)
     dec bc
     inc c
     dec c
-    ld c,$5e
-    rrca
-
-; $10-$1f
-
-    djnz label
-    ld de,$55ee
+    ld c,N_VALUE
+    rrca 
+    djnz JUMP_DISPLACEMENT
+    ld de,NN_VALUE
     ld (de),a
     inc de
+    inc d
     dec d
-    ld d,$5e
-    rla
-    jr label
+    ld d,N_VALUE
+    rla 
+    jr JUMP_DISPLACEMENT
     add hl,de
     ld a,(de)
     dec de
     inc e
     dec e
-    ld e,$5e
-    rra
+    ld e,N_VALUE
+    rra 
+    jr nz,JUMP_DISPLACEMENT
+    ld hl,NN_VALUE
+    ld (NN_VALUE),hl
+    inc hl
+    inc h
+    dec h
+    ld h,N_VALUE
+    daa 
+
+; should be in reach for all relative jumps
+JUMP_DISPLACEMENT:
+
+    jr z,JUMP_DISPLACEMENT
+    add hl,hl
+    ld hl,(NN_VALUE)
+    dec hl
+    inc l
+    dec l
+    ld l,N_VALUE
+    cpl 
+    jr nc,JUMP_DISPLACEMENT
+    ld sp,NN_VALUE
+    ld (NN_VALUE),a
+    inc sp
+    inc (hl)
+    dec (hl)
+    ld (hl),N_VALUE
+    scf 
+    jr c,JUMP_DISPLACEMENT
+    add hl,sp
+    ld a,(NN_VALUE)
+    dec sp
+    inc a
+    dec a
+    ld a,N_VALUE
+    ccf 
+    ld b,b
+    ld b,c
+    ld b,d
+    ld b,e
+    ld b,h
+    ld b,l
+    ld b,(hl)
+    ld b,a
+    ld c,b
+    ld c,c
+    ld c,d
+    ld c,e
+    ld c,h
+    ld c,l
+    ld c,(hl)
+    ld c,a
+    ld d,b
+    ld d,c
+    ld d,d
+    ld d,e
+    ld d,h
+    ld d,l
+    ld d,(hl)
+    ld d,a
+    ld e,b
+    ld e,c
+    ld e,d
+    ld e,e
+    ld e,h
+    ld e,l
+    ld e,(hl)
+    ld e,a
+    ld h,b
+    ld h,c
+    ld h,d
+    ld h,e
+    ld h,h
+    ld h,l
+    ld h,(hl)
+    ld h,a
+    ld l,b
+    ld l,c
+    ld l,d
+    ld l,e
+    ld l,h
+    ld l,l
+    ld l,(hl)
+    ld l,a
+    ld (hl),b
+    ld (hl),c
+    ld (hl),d
+    ld (hl),e
+    ld (hl),h
+    ld (hl),l
+    halt 
+    ld (hl),a
+    ld a,b
+    ld a,c
+    ld a,d
+    ld a,e
+    ld a,h
+    ld a,l
+    ld a,(hl)
+    ld a,a
+    add a,b
+    add a,c
+    add a,d
+    add a,e
+    add a,h
+    add a,l
+    add a,(hl)
+    add a,a
+    adc a,b
+    adc a,c
+    adc a,d
+    adc a,e
+    adc a,h
+    adc a,l
+    adc a,(hl)
+    adc a,a
+    sub b
+    sub c
+    sub d
+    sub e
+    sub h
+    sub l
+    sub (hl)
+    sub a
+    sbc a,b
+    sbc a,c
+    sbc a,d
+    sbc a,e
+    sbc a,h
+    sbc a,l
+    sbc a,(hl)
+    sbc a,a
+    and b
+    and c
+    and d
+    and e
+    and h
+    and l
+    and (hl)
+    and a
+    xor b
+    xor c
+    xor d
+    xor e
+    xor h
+    xor l
+    xor (hl)
+    xor a
+    or b
+    or c
+    or d
+    or e
+    or h
+    or l
+    or (hl)
+    or a
+    cp b
+    cp c
+    cp d
+    cp e
+    cp h
+    cp l
+    cp (hl)
+    cp a
+    ret nz
+    pop bc
+    jp nz,NN_JUMP_TO_LABEL
+    jp NN_JUMP_TO_LABEL
+    call nz,NN_CALL_TO_LABEL
+    push bc
+    add a,N_VALUE
+    rst 00h
+    ret z
+    ret 
+    jp z,NN_JUMP_TO_LABEL
+; INVALID
+    call z,NN_CALL_TO_LABEL
+    call NN_CALL_TO_LABEL
+    adc a,N_VALUE
+    rst 08h
+    ret nc
+    pop de
+    jp nc,NN_JUMP_TO_LABEL
+    out (N_VALUE),a
+    call nc,NN_CALL_TO_LABEL
+    push de
+    sub N_VALUE
+    rst 10h
+    ret c
+    exx 
+    jp c,NN_JUMP_TO_LABEL
+    in a,(N_VALUE)
+    call c,NN_CALL_TO_LABEL
+; INVALID
+    sbc a,N_VALUE
+    rst 18h
+    ret po
+    pop hl
+    jp po,NN_JUMP_TO_LABEL
+    ex (sp),hl
+    call po,NN_CALL_TO_LABEL
+    push hl
+    and N_VALUE
+    rst 20h
+    ret pe
+    jp (hl)
+    jp pe,NN_JUMP_TO_LABEL
+    ex de,hl
+    call pe,NN_CALL_TO_LABEL
+; INVALID
+    xor N_VALUE
+    rst 28h
+    ret p
+    pop af
+    jp p,NN_JUMP_TO_LABEL
+    di 
+    call p,NN_CALL_TO_LABEL
+    push af
+    or N_VALUE
+    rst 30h
+    ret m
+    ld sp,hl
+    jp m,NN_JUMP_TO_LABEL
+    ei 
+    call m,NN_CALL_TO_LABEL
+; INVALID
+    cp N_VALUE
+    rst 38h
+
+
+; 01_bit_instructions_CB.asm
+
+    rlc b
+    rlc c
+    rlc d
+    rlc e
+    rlc h
+    rlc l
+    rlc (hl)
+    rlc a
+    rrc b
+    rrc c
+    rrc d
+    rrc e
+    rrc h
+    rrc l
+    rrc (hl)
+    rrc a
+    rl b
+    rl c
+    rl d
+    rl e
+    rl h
+    rl l
+    rl (hl)
+    rl a
+    rr b
+    rr c
+    rr d
+    rr e
+    rr h
+    rr l
+    rr (hl)
+    rr a
+    sla b
+    sla c
+    sla d
+    sla e
+    sla h
+    sla l
+    sla (hl)
+    sla a
+    sra b
+    sra c
+    sra d
+    sra e
+    sra h
+    sra l
+    sra (hl)
+    sra a
+
+; z80asm: manpage says both sll and sli are accepted, but only sli is
+    sli b
+    sli c
+    sli d
+    sli e
+    sli h
+    sli l
+    sli (hl)
+    sli a
+
+    srl b
+    srl c
+    srl d
+    srl e
+    srl h
+    srl l
+    srl (hl)
+    srl a
+    bit 0,b
+    bit 0,c
+    bit 0,d
+    bit 0,e
+    bit 0,h
+    bit 0,l
+    bit 0,(hl)
+    bit 0,a
+    bit 1,b
+    bit 1,c
+    bit 1,d
+    bit 1,e
+    bit 1,h
+    bit 1,l
+    bit 1,(hl)
+    bit 1,a
+    bit 2,b
+    bit 2,c
+    bit 2,d
+    bit 2,e
+    bit 2,h
+    bit 2,l
+    bit 2,(hl)
+    bit 2,a
+    bit 3,b
+    bit 3,c
+    bit 3,d
+    bit 3,e
+    bit 3,h
+    bit 3,l
+    bit 3,(hl)
+    bit 3,a
+    bit 4,b
+    bit 4,c
+    bit 4,d
+    bit 4,e
+    bit 4,h
+    bit 4,l
+    bit 4,(hl)
+    bit 4,a
+    bit 5,b
+    bit 5,c
+    bit 5,d
+    bit 5,e
+    bit 5,h
+    bit 5,l
+    bit 5,(hl)
+    bit 5,a
+    bit 6,b
+    bit 6,c
+    bit 6,d
+    bit 6,e
+    bit 6,h
+    bit 6,l
+    bit 6,(hl)
+    bit 6,a
+    bit 7,b
+    bit 7,c
+    bit 7,d
+    bit 7,e
+    bit 7,h
+    bit 7,l
+    bit 7,(hl)
+    bit 7,a
+    res 0,b
+    res 0,c
+    res 0,d
+    res 0,e
+    res 0,h
+    res 0,l
+    res 0,(hl)
+    res 0,a
+    res 1,b
+    res 1,c
+    res 1,d
+    res 1,e
+    res 1,h
+    res 1,l
+    res 1,(hl)
+    res 1,a
+    res 2,b
+    res 2,c
+    res 2,d
+    res 2,e
+    res 2,h
+    res 2,l
+    res 2,(hl)
+    res 2,a
+    res 3,b
+    res 3,c
+    res 3,d
+    res 3,e
+    res 3,h
+    res 3,l
+    res 3,(hl)
+    res 3,a
+    res 4,b
+    res 4,c
+    res 4,d
+    res 4,e
+    res 4,h
+    res 4,l
+    res 4,(hl)
+    res 4,a
+    res 5,b
+    res 5,c
+    res 5,d
+    res 5,e
+    res 5,h
+    res 5,l
+    res 5,(hl)
+    res 5,a
+    res 6,b
+    res 6,c
+    res 6,d
+    res 6,e
+    res 6,h
+    res 6,l
+    res 6,(hl)
+    res 6,a
+    res 7,b
+    res 7,c
+    res 7,d
+    res 7,e
+    res 7,h
+    res 7,l
+    res 7,(hl)
+    res 7,a
+    set 0,b
+    set 0,c
+    set 0,d
+    set 0,e
+    set 0,h
+    set 0,l
+    set 0,(hl)
+    set 0,a
+    set 1,b
+    set 1,c
+    set 1,d
+    set 1,e
+    set 1,h
+    set 1,l
+    set 1,(hl)
+    set 1,a
+    set 2,b
+    set 2,c
+    set 2,d
+    set 2,e
+    set 2,h
+    set 2,l
+    set 2,(hl)
+    set 2,a
+    set 3,b
+    set 3,c
+    set 3,d
+    set 3,e
+    set 3,h
+    set 3,l
+    set 3,(hl)
+    set 3,a
+    set 4,b
+    set 4,c
+    set 4,d
+    set 4,e
+    set 4,h
+    set 4,l
+    set 4,(hl)
+    set 4,a
+    set 5,b
+    set 5,c
+    set 5,d
+    set 5,e
+    set 5,h
+    set 5,l
+    set 5,(hl)
+    set 5,a
+    set 6,b
+    set 6,c
+    set 6,d
+    set 6,e
+    set 6,h
+    set 6,l
+    set 6,(hl)
+    set 6,a
+    set 7,b
+    set 7,c
+    set 7,d
+    set 7,e
+    set 7,h
+    set 7,l
+    set 7,(hl)
+    set 7,a
+
+
+; 02_ix_instructions_DD.asm
+
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    inc b
+    dec b
+    ld b,N_VALUE
+; INVALID
+; INVALID
+    add ix,bc
+; INVALID
+; INVALID
+    inc c
+    dec c
+    ld c,N_VALUE
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    inc d
+    dec d
+    ld d,N_VALUE
+; INVALID
+; INVALID
+    add ix,de
+; INVALID
+; INVALID
+    inc e
+    dec e
+    ld e,N_VALUE
+; INVALID
+; INVALID
+    ld ix,NN_VALUE
+    ld (NN_VALUE),ix
+    inc ix
+
+; z80asm: missing undocumented opcodes:
+;    inc ixh
+;    dec ixh
+
+    db $dd,$24
+    db $dd,$25
+
+    ld ixh,N_VALUE
+; INVALID
+; INVALID
+    add ix,ix
+    ld ix,(NN_VALUE)
+    dec ix
+
+; z80asm: missing undocumented opcodes:
+;    inc ixl
+;    dec ixl
+
+    db $dd,$2c
+    db $dd,$2d
+
+    ld ixl,N_VALUE
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    inc (ix+DISPLACEMENT)
+    dec (ix+DISPLACEMENT)
+    ld (ix+DISPLACEMENT),N_VALUE
+; INVALID
+; INVALID
+    add ix,sp
+; INVALID
+; INVALID
+    inc a
+    dec a
+    ld a,N_VALUE
+; INVALID
+    ld b,b
+    ld b,c
+    ld b,d
+    ld b,e
+    ld b,ixh
+    ld b,ixl
+    ld b,(ix+DISPLACEMENT)
+    ld b,a
+    ld c,b
+    ld c,c
+    ld c,d
+    ld c,e
+    ld c,ixh
+    ld c,ixl
+    ld c,(ix+DISPLACEMENT)
+    ld c,a
+    ld d,b
+    ld d,c
+    ld d,d
+    ld d,e
+    ld d,ixh
+    ld d,ixl
+    ld d,(ix+DISPLACEMENT)
+    ld d,a
+    ld e,b
+    ld e,c
+    ld e,d
+    ld e,e
+    ld e,ixh
+    ld e,ixl
+    ld e,(ix+DISPLACEMENT)
+    ld e,a
+    ld ixh,b
+    ld ixh,c
+    ld ixh,d
+    ld ixh,e
+    ld ixh,ixh
+    ld ixh,ixl
+    ld h,(ix+DISPLACEMENT)
+    ld ixh,a
+    ld ixl,b
+    ld ixl,c
+    ld ixl,d
+    ld ixl,e
+    ld ixl,ixh
+    ld ixl,ixl
+    ld l,(ix+DISPLACEMENT)
+    ld ixl,a
+    ld (ix+DISPLACEMENT),b
+    ld (ix+DISPLACEMENT),c
+    ld (ix+DISPLACEMENT),d
+    ld (ix+DISPLACEMENT),e
+    ld (ix+DISPLACEMENT),h
+    ld (ix+DISPLACEMENT),l
+; INVALID
+    ld (ix+DISPLACEMENT),a
+    ld a,b
+    ld a,c
+    ld a,d
+    ld a,e
+
+; z80asm: missing undocumented opcodes ld a,ixh and ld a,ixl
+;    ld a,ixh
+;    ld a,ixl
+
+    db $dd,$7c
+    db $dd,$7d
+
+    ld a,(ix+DISPLACEMENT)
+    ld a,a
+    add a,b
+    add a,c
+    add a,d
+    add a,e
+    add a,ixh
+    add a,ixl
+    add a,(ix+DISPLACEMENT)
+    add a,a
+    adc a,b
+    adc a,c
+    adc a,d
+    adc a,e
+    adc a,ixh
+    adc a,ixl
+    adc a,(ix+DISPLACEMENT)
+    adc a,a
+    sub b
+    sub c
+    sub d
+    sub e
+    sub ixh
+    sub ixl
+    sub (ix+DISPLACEMENT)
+    sub a
+    sbc a,b
+    sbc a,c
+    sbc a,d
+    sbc a,e
+    sbc a,ixh
+    sbc a,ixl
+    sbc a,(ix+DISPLACEMENT)
+    sbc a,a
+    and b
+    and c
+    and d
+    and e
+    and ixh
+    and ixl
+    and (ix+DISPLACEMENT)
+    and a
+    xor b
+    xor c
+    xor d
+    xor e
+    xor ixh
+    xor ixl
+    xor (ix+DISPLACEMENT)
+    xor a
+    or b
+    or c
+    or d
+    or e
+    or ixh
+    or ixl
+    or (ix+DISPLACEMENT)
+    or a
+    cp b
+    cp c
+    cp d
+    cp e
+    cp ixh
+    cp ixl
+    cp (ix+DISPLACEMENT)
+    cp a
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    pop ix
+; INVALID
+    ex (sp),ix
+; INVALID
+    push ix
+; INVALID
+; INVALID
+; INVALID
+    jp (ix)
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    ld sp,ix
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+
+
+; 03_ix_bit_instructions_DDCB.asm
+
+    rlc (ix+DISPLACEMENT),b
+    rlc (ix+DISPLACEMENT),c
+    rlc (ix+DISPLACEMENT),d
+    rlc (ix+DISPLACEMENT),e
+    rlc (ix+DISPLACEMENT),h
+    rlc (ix+DISPLACEMENT),l
+    rlc (ix+DISPLACEMENT)
+    rlc (ix+DISPLACEMENT),a
+    rrc (ix+DISPLACEMENT),b
+    rrc (ix+DISPLACEMENT),c
+    rrc (ix+DISPLACEMENT),d
+    rrc (ix+DISPLACEMENT),e
+    rrc (ix+DISPLACEMENT),h
+    rrc (ix+DISPLACEMENT),l
+    rrc (ix+DISPLACEMENT)
+    rrc (ix+DISPLACEMENT),a
+    rl (ix+DISPLACEMENT),b
+    rl (ix+DISPLACEMENT),c
+    rl (ix+DISPLACEMENT),d
+    rl (ix+DISPLACEMENT),e
+    rl (ix+DISPLACEMENT),h
+    rl (ix+DISPLACEMENT),l
+    rl (ix+DISPLACEMENT)
+    rl (ix+DISPLACEMENT),a
+    rr (ix+DISPLACEMENT),b
+    rr (ix+DISPLACEMENT),c
+    rr (ix+DISPLACEMENT),d
+    rr (ix+DISPLACEMENT),e
+    rr (ix+DISPLACEMENT),h
+    rr (ix+DISPLACEMENT),l
+    rr (ix+DISPLACEMENT)
+    rr (ix+DISPLACEMENT),a
+    sla (ix+DISPLACEMENT),b
+    sla (ix+DISPLACEMENT),c
+    sla (ix+DISPLACEMENT),d
+    sla (ix+DISPLACEMENT),e
+    sla (ix+DISPLACEMENT),h
+    sla (ix+DISPLACEMENT),l
+    sla (ix+DISPLACEMENT)
+    sla (ix+DISPLACEMENT),a
+    sra (ix+DISPLACEMENT),b
+    sra (ix+DISPLACEMENT),c
+    sra (ix+DISPLACEMENT),d
+    sra (ix+DISPLACEMENT),e
+    sra (ix+DISPLACEMENT),h
+    sra (ix+DISPLACEMENT),l
+    sra (ix+DISPLACEMENT)
+    sra (ix+DISPLACEMENT),a
+
+; z80asm: manpage says both sll and sli are accepted, but only sli is
+    sli (ix+DISPLACEMENT),b
+    sli (ix+DISPLACEMENT),c
+    sli (ix+DISPLACEMENT),d
+    sli (ix+DISPLACEMENT),e
+    sli (ix+DISPLACEMENT),h
+    sli (ix+DISPLACEMENT),l
+    sli (ix+DISPLACEMENT)
+    sli (ix+DISPLACEMENT),a
+
+    srl (ix+DISPLACEMENT),b
+    srl (ix+DISPLACEMENT),c
+    srl (ix+DISPLACEMENT),d
+    srl (ix+DISPLACEMENT),e
+    srl (ix+DISPLACEMENT),h
+    srl (ix+DISPLACEMENT),l
+    srl (ix+DISPLACEMENT)
+    srl (ix+DISPLACEMENT),a
+    bit 0,(ix+DISPLACEMENT)
+    bit 0,(ix+DISPLACEMENT)
+    bit 0,(ix+DISPLACEMENT)
+    bit 0,(ix+DISPLACEMENT)
+    bit 0,(ix+DISPLACEMENT)
+    bit 0,(ix+DISPLACEMENT)
+    bit 0,(ix+DISPLACEMENT)
+    bit 0,(ix+DISPLACEMENT)
+    bit 1,(ix+DISPLACEMENT)
+    bit 1,(ix+DISPLACEMENT)
+    bit 1,(ix+DISPLACEMENT)
+    bit 1,(ix+DISPLACEMENT)
+    bit 1,(ix+DISPLACEMENT)
+    bit 1,(ix+DISPLACEMENT)
+    bit 1,(ix+DISPLACEMENT)
+    bit 1,(ix+DISPLACEMENT)
+    bit 2,(ix+DISPLACEMENT)
+    bit 2,(ix+DISPLACEMENT)
+    bit 2,(ix+DISPLACEMENT)
+    bit 2,(ix+DISPLACEMENT)
+    bit 2,(ix+DISPLACEMENT)
+    bit 2,(ix+DISPLACEMENT)
+    bit 2,(ix+DISPLACEMENT)
+    bit 2,(ix+DISPLACEMENT)
+    bit 3,(ix+DISPLACEMENT)
+    bit 3,(ix+DISPLACEMENT)
+    bit 3,(ix+DISPLACEMENT)
+    bit 3,(ix+DISPLACEMENT)
+    bit 3,(ix+DISPLACEMENT)
+    bit 3,(ix+DISPLACEMENT)
+    bit 3,(ix+DISPLACEMENT)
+    bit 3,(ix+DISPLACEMENT)
+    bit 4,(ix+DISPLACEMENT)
+    bit 4,(ix+DISPLACEMENT)
+    bit 4,(ix+DISPLACEMENT)
+    bit 4,(ix+DISPLACEMENT)
+    bit 4,(ix+DISPLACEMENT)
+    bit 4,(ix+DISPLACEMENT)
+    bit 4,(ix+DISPLACEMENT)
+    bit 4,(ix+DISPLACEMENT)
+    bit 5,(ix+DISPLACEMENT)
+    bit 5,(ix+DISPLACEMENT)
+    bit 5,(ix+DISPLACEMENT)
+    bit 5,(ix+DISPLACEMENT)
+    bit 5,(ix+DISPLACEMENT)
+    bit 5,(ix+DISPLACEMENT)
+    bit 5,(ix+DISPLACEMENT)
+    bit 5,(ix+DISPLACEMENT)
+    bit 6,(ix+DISPLACEMENT)
+    bit 6,(ix+DISPLACEMENT)
+    bit 6,(ix+DISPLACEMENT)
+    bit 6,(ix+DISPLACEMENT)
+    bit 6,(ix+DISPLACEMENT)
+    bit 6,(ix+DISPLACEMENT)
+    bit 6,(ix+DISPLACEMENT)
+    bit 6,(ix+DISPLACEMENT)
+    bit 7,(ix+DISPLACEMENT)
+    bit 7,(ix+DISPLACEMENT)
+    bit 7,(ix+DISPLACEMENT)
+    bit 7,(ix+DISPLACEMENT)
+    bit 7,(ix+DISPLACEMENT)
+    bit 7,(ix+DISPLACEMENT)
+    bit 7,(ix+DISPLACEMENT)
+    bit 7,(ix+DISPLACEMENT)
+    res 0,(ix+DISPLACEMENT),b
+    res 0,(ix+DISPLACEMENT),c
+    res 0,(ix+DISPLACEMENT),d
+    res 0,(ix+DISPLACEMENT),e
+    res 0,(ix+DISPLACEMENT),h
+    res 0,(ix+DISPLACEMENT),l
+    res 0,(ix+DISPLACEMENT)
+    res 0,(ix+DISPLACEMENT),a
+    res 1,(ix+DISPLACEMENT),b
+    res 1,(ix+DISPLACEMENT),c
+    res 1,(ix+DISPLACEMENT),d
+    res 1,(ix+DISPLACEMENT),e
+    res 1,(ix+DISPLACEMENT),h
+    res 1,(ix+DISPLACEMENT),l
+    res 1,(ix+DISPLACEMENT)
+    res 1,(ix+DISPLACEMENT),a
+    res 2,(ix+DISPLACEMENT),b
+    res 2,(ix+DISPLACEMENT),c
+    res 2,(ix+DISPLACEMENT),d
+    res 2,(ix+DISPLACEMENT),e
+    res 2,(ix+DISPLACEMENT),h
+    res 2,(ix+DISPLACEMENT),l
+    res 2,(ix+DISPLACEMENT)
+    res 2,(ix+DISPLACEMENT),a
+    res 3,(ix+DISPLACEMENT),b
+    res 3,(ix+DISPLACEMENT),c
+    res 3,(ix+DISPLACEMENT),d
+    res 3,(ix+DISPLACEMENT),e
+    res 3,(ix+DISPLACEMENT),h
+    res 3,(ix+DISPLACEMENT),l
+    res 3,(ix+DISPLACEMENT)
+    res 3,(ix+DISPLACEMENT),a
+    res 4,(ix+DISPLACEMENT),b
+    res 4,(ix+DISPLACEMENT),c
+    res 4,(ix+DISPLACEMENT),d
+    res 4,(ix+DISPLACEMENT),e
+    res 4,(ix+DISPLACEMENT),h
+    res 4,(ix+DISPLACEMENT),l
+    res 4,(ix+DISPLACEMENT)
+    res 4,(ix+DISPLACEMENT),a
+    res 5,(ix+DISPLACEMENT),b
+    res 5,(ix+DISPLACEMENT),c
+    res 5,(ix+DISPLACEMENT),d
+    res 5,(ix+DISPLACEMENT),e
+    res 5,(ix+DISPLACEMENT),h
+    res 5,(ix+DISPLACEMENT),l
+    res 5,(ix+DISPLACEMENT)
+    res 5,(ix+DISPLACEMENT),a
+    res 6,(ix+DISPLACEMENT),b
+    res 6,(ix+DISPLACEMENT),c
+    res 6,(ix+DISPLACEMENT),d
+    res 6,(ix+DISPLACEMENT),e
+    res 6,(ix+DISPLACEMENT),h
+    res 6,(ix+DISPLACEMENT),l
+    res 6,(ix+DISPLACEMENT)
+    res 6,(ix+DISPLACEMENT),a
+    res 7,(ix+DISPLACEMENT),b
+    res 7,(ix+DISPLACEMENT),c
+    res 7,(ix+DISPLACEMENT),d
+    res 7,(ix+DISPLACEMENT),e
+    res 7,(ix+DISPLACEMENT),h
+    res 7,(ix+DISPLACEMENT),l
+    res 7,(ix+DISPLACEMENT)
+    res 7,(ix+DISPLACEMENT),a
+    set 0,(ix+DISPLACEMENT),b
+    set 0,(ix+DISPLACEMENT),c
+    set 0,(ix+DISPLACEMENT),d
+    set 0,(ix+DISPLACEMENT),e
+    set 0,(ix+DISPLACEMENT),h
+    set 0,(ix+DISPLACEMENT),l
+    set 0,(ix+DISPLACEMENT)
+    set 0,(ix+DISPLACEMENT),a
+    set 1,(ix+DISPLACEMENT),b
+    set 1,(ix+DISPLACEMENT),c
+    set 1,(ix+DISPLACEMENT),d
+    set 1,(ix+DISPLACEMENT),e
+    set 1,(ix+DISPLACEMENT),h
+    set 1,(ix+DISPLACEMENT),l
+    set 1,(ix+DISPLACEMENT)
+    set 1,(ix+DISPLACEMENT),a
+    set 2,(ix+DISPLACEMENT),b
+    set 2,(ix+DISPLACEMENT),c
+    set 2,(ix+DISPLACEMENT),d
+    set 2,(ix+DISPLACEMENT),e
+    set 2,(ix+DISPLACEMENT),h
+    set 2,(ix+DISPLACEMENT),l
+    set 2,(ix+DISPLACEMENT)
+    set 2,(ix+DISPLACEMENT),a
+    set 3,(ix+DISPLACEMENT),b
+    set 3,(ix+DISPLACEMENT),c
+    set 3,(ix+DISPLACEMENT),d
+    set 3,(ix+DISPLACEMENT),e
+    set 3,(ix+DISPLACEMENT),h
+    set 3,(ix+DISPLACEMENT),l
+    set 3,(ix+DISPLACEMENT)
+    set 3,(ix+DISPLACEMENT),a
+    set 4,(ix+DISPLACEMENT),b
+    set 4,(ix+DISPLACEMENT),c
+    set 4,(ix+DISPLACEMENT),d
+    set 4,(ix+DISPLACEMENT),e
+    set 4,(ix+DISPLACEMENT),h
+    set 4,(ix+DISPLACEMENT),l
+    set 4,(ix+DISPLACEMENT)
+    set 4,(ix+DISPLACEMENT),a
+    set 5,(ix+DISPLACEMENT),b
+    set 5,(ix+DISPLACEMENT),c
+    set 5,(ix+DISPLACEMENT),d
+    set 5,(ix+DISPLACEMENT),e
+    set 5,(ix+DISPLACEMENT),h
+    set 5,(ix+DISPLACEMENT),l
+    set 5,(ix+DISPLACEMENT)
+    set 5,(ix+DISPLACEMENT),a
+    set 6,(ix+DISPLACEMENT),b
+    set 6,(ix+DISPLACEMENT),c
+    set 6,(ix+DISPLACEMENT),d
+    set 6,(ix+DISPLACEMENT),e
+    set 6,(ix+DISPLACEMENT),h
+    set 6,(ix+DISPLACEMENT),l
+    set 6,(ix+DISPLACEMENT)
+    set 6,(ix+DISPLACEMENT),a
+    set 7,(ix+DISPLACEMENT),b
+    set 7,(ix+DISPLACEMENT),c
+    set 7,(ix+DISPLACEMENT),d
+    set 7,(ix+DISPLACEMENT),e
+    set 7,(ix+DISPLACEMENT),h
+    set 7,(ix+DISPLACEMENT),l
+    set 7,(ix+DISPLACEMENT)
+    set 7,(ix+DISPLACEMENT),a
+
+
+; 04_misc_instructions_ED.asm
+
+;    in0 b,(N_VALUE)     ; Z180
+;    out0 (N_VALUE),b     ; Z180
+; INVALID
+; INVALID
+;    tst b     ; Z180
+; INVALID
+; INVALID
+; INVALID
+;    in0 c,(N_VALUE)     ; Z180
+;    out0 (N_VALUE),c     ; Z180
+; INVALID
+; INVALID
+;    tst c     ; Z180
+; INVALID
+; INVALID
+; INVALID
+;    in0 d,(N_VALUE)     ; Z180
+;    out0 (N_VALUE),d     ; Z180
+; INVALID
+; INVALID
+;    tst d     ; Z180
+; INVALID
+; INVALID
+; INVALID
+;    in0 e,(N_VALUE)     ; Z180
+;    out0 (N_VALUE),e     ; Z180
+; INVALID
+; INVALID
+;    tst e     ; Z180
+; INVALID
+; INVALID
+; INVALID
+;    in0 h,(N_VALUE)     ; Z180
+;    out0 (N_VALUE),h     ; Z180
+; INVALID
+; INVALID
+;    tst h     ; Z180
+; INVALID
+; INVALID
+; INVALID
+;    in0 l,(N_VALUE)     ; Z180
+;    out0 (N_VALUE),l     ; Z180
+; INVALID
+; INVALID
+;    tst l     ; Z180
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+;    tst (hl)     ; Z180
+; INVALID
+; INVALID
+; INVALID
+;    in0 a,(N_VALUE)     ; Z180
+;    out0 (N_VALUE),a     ; Z180
+; INVALID
+; INVALID
+;    tst a     ; Z180
+; INVALID
+; INVALID
+; INVALID
+    in b,(c)
+    out (c),b
+    sbc hl,bc
+    ld (NN_VALUE),bc
+    neg 
+    retn 
+    im 0
+    ld i,a
+    in c,(c)
+    out (c),c
+    adc hl,bc
+    ld bc,(NN_VALUE)
+;    mlt bc     ; Z180
+    reti 
+; INVALID
+    ld r,a
+    in d,(c)
+    out (c),d
+    sbc hl,de
+    ld (NN_VALUE),de
+; INVALID
+; INVALID
+    im 1
+    ld a,i
+    in e,(c)
+    out (c),e
+    adc hl,de
+    ld de,(NN_VALUE)
+;    mlt de     ; Z180
+; INVALID
+    im 2
+    ld a,r
+    in h,(c)
+    out (c),h
+    sbc hl,hl
+    ld (NN_VALUE),hl
+;    tst N_VALUE     ; Z180
+; INVALID
+; INVALID
+    rrd 
+    in l,(c)
+    out (c),l
+    adc hl,hl
+    ld hl,(NN_VALUE)
+;    mlt hl     ; Z180
+; INVALID
+; INVALID
+    rld 
+
+; z80asm: in (c) undocumented opcode not supported
+;    in (c)
+    db $ed,$70
+
+    out (c),0
+    sbc hl,sp
+    ld (NN_VALUE),sp
+;    tstio N_VALUE     ; Z180
+; INVALID
+;    slp      ; Z180
+; INVALID
+    in a,(c)
+    out (c),a
+    adc hl,sp
+    ld sp,(NN_VALUE)
+;    mlt sp     ; Z180
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+;    otim      ; Z180
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+;    otdm      ; Z180
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+;    otimr      ; Z180
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+;    otdmr      ; Z180
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    ldi 
+    cpi 
+    ini 
+    outi 
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    ldd 
+    cpd 
+    ind 
+    outd 
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    ldir 
+    cpir 
+    inir 
+    otir 
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    lddr 
+    cpdr 
+    indr 
+    otdr 
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+
+
+; 05_iy_instructions_FD.asm
+
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    inc b
+    dec b
+    ld b,N_VALUE
+; INVALID
+; INVALID
+    add iy,bc
+; INVALID
+; INVALID
+    inc c
+    dec c
+    ld c,N_VALUE
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    inc d
+    dec d
+    ld d,N_VALUE
+; INVALID
+; INVALID
+    add iy,de
+; INVALID
+; INVALID
+    inc e
+    dec e
+    ld e,N_VALUE
+; INVALID
+; INVALID
+    ld iy,NN_VALUE
+    ld (NN_VALUE),iy
+    inc iy
+
+; z80asm: missing undocumented opcodes:
+;    inc iyh
+;    dec iyh
+
+    db $fd,$24
+    db $fd,$25
+
+    ld iyh,N_VALUE
+; INVALID
+; INVALID
+    add iy,iy
+    ld iy,(NN_VALUE)
+    dec iy
+
+; z80asm: missing undocumented opcodes:
+;    inc iyl
+;    dec iyl
+
+    db $fd,$2c
+    db $fd,$2d
+
+    ld iyl,N_VALUE
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    inc (iy+DISPLACEMENT)
+    dec (iy+DISPLACEMENT)
+    ld (iy+DISPLACEMENT),N_VALUE
+; INVALID
+; INVALID
+    add iy,sp
+; INVALID
+; INVALID
+    inc a
+    dec a
+    ld a,N_VALUE
+; INVALID
+    ld b,b
+    ld b,c
+    ld b,d
+    ld b,e
+    ld b,iyh
+    ld b,iyl
+    ld b,(iy+DISPLACEMENT)
+    ld b,a
+    ld c,b
+    ld c,c
+    ld c,d
+    ld c,e
+    ld c,iyh
+    ld c,iyl
+    ld c,(iy+DISPLACEMENT)
+    ld c,a
+    ld d,b
+    ld d,c
+    ld d,d
+    ld d,e
+    ld d,iyh
+    ld d,iyl
+    ld d,(iy+DISPLACEMENT)
+    ld d,a
+    ld e,b
+    ld e,c
+    ld e,d
+    ld e,e
+    ld e,iyh
+    ld e,iyl
+    ld e,(iy+DISPLACEMENT)
+    ld e,a
+    ld iyh,b
+    ld iyh,c
+    ld iyh,d
+    ld iyh,e
+    ld iyh,iyh
+    ld iyh,iyl
+    ld h,(iy+DISPLACEMENT)
+    ld iyh,a
+    ld iyl,b
+    ld iyl,c
+    ld iyl,d
+    ld iyl,e
+    ld iyl,iyh
+    ld iyl,iyl
+    ld l,(iy+DISPLACEMENT)
+    ld iyl,a
+    ld (iy+DISPLACEMENT),b
+    ld (iy+DISPLACEMENT),c
+    ld (iy+DISPLACEMENT),d
+    ld (iy+DISPLACEMENT),e
+    ld (iy+DISPLACEMENT),h
+    ld (iy+DISPLACEMENT),l
+; INVALID
+    ld (iy+DISPLACEMENT),a
+    ld a,b
+    ld a,c
+    ld a,d
+    ld a,e
+
+; z80asm: missing undocumented opcodes ld a,ixh and ld a,ixl
+;    ld a,iyh
+;    ld a,iyl
+
+    db $fd,$7c
+    db $fd,$7d
+
+    ld a,(iy+DISPLACEMENT)
+    ld a,a
+    add a,b
+    add a,c
+    add a,d
+    add a,e
+    add a,iyh
+    add a,iyl
+    add a,(iy+DISPLACEMENT)
+    add a,a
+    adc a,b
+    adc a,c
+    adc a,d
+    adc a,e
+    adc a,iyh
+    adc a,iyl
+    adc a,(iy+DISPLACEMENT)
+    adc a,a
+    sub b
+    sub c
+    sub d
+    sub e
+    sub iyh
+    sub iyl
+    sub (iy+DISPLACEMENT)
+    sub a
+    sbc a,b
+    sbc a,c
+    sbc a,d
+    sbc a,e
+    sbc a,iyh
+    sbc a,iyl
+    sbc a,(iy+DISPLACEMENT)
+    sbc a,a
+    and b
+    and c
+    and d
+    and e
+    and iyh
+    and iyl
+    and (iy+DISPLACEMENT)
+    and a
+    xor b
+    xor c
+    xor d
+    xor e
+    xor iyh
+    xor iyl
+    xor (iy+DISPLACEMENT)
+    xor a
+    or b
+    or c
+    or d
+    or e
+    or iyh
+    or iyl
+    or (iy+DISPLACEMENT)
+    or a
+    cp b
+    cp c
+    cp d
+    cp e
+    cp iyh
+    cp iyl
+    cp (iy+DISPLACEMENT)
+    cp a
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    pop iy
+; INVALID
+    ex (sp),iy
+; INVALID
+    push iy
+; INVALID
+; INVALID
+; INVALID
+    jp (iy)
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+    ld sp,iy
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+; INVALID
+
+
+; 06_iy_bit_instructions_FDCB.asm
+
+    rlc (iy+DISPLACEMENT),b
+    rlc (iy+DISPLACEMENT),c
+    rlc (iy+DISPLACEMENT),d
+    rlc (iy+DISPLACEMENT),e
+    rlc (iy+DISPLACEMENT),h
+    rlc (iy+DISPLACEMENT),l
+    rlc (iy+DISPLACEMENT)
+    rlc (iy+DISPLACEMENT),a
+    rrc (iy+DISPLACEMENT),b
+    rrc (iy+DISPLACEMENT),c
+    rrc (iy+DISPLACEMENT),d
+    rrc (iy+DISPLACEMENT),e
+    rrc (iy+DISPLACEMENT),h
+    rrc (iy+DISPLACEMENT),l
+    rrc (iy+DISPLACEMENT)
+    rrc (iy+DISPLACEMENT),a
+    rl (iy+DISPLACEMENT),b
+    rl (iy+DISPLACEMENT),c
+    rl (iy+DISPLACEMENT),d
+    rl (iy+DISPLACEMENT),e
+    rl (iy+DISPLACEMENT),h
+    rl (iy+DISPLACEMENT),l
+    rl (iy+DISPLACEMENT)
+    rl (iy+DISPLACEMENT),a
+    rr (iy+DISPLACEMENT),b
+    rr (iy+DISPLACEMENT),c
+    rr (iy+DISPLACEMENT),d
+    rr (iy+DISPLACEMENT),e
+    rr (iy+DISPLACEMENT),h
+    rr (iy+DISPLACEMENT),l
+    rr (iy+DISPLACEMENT)
+    rr (iy+DISPLACEMENT),a
+    sla (iy+DISPLACEMENT),b
+    sla (iy+DISPLACEMENT),c
+    sla (iy+DISPLACEMENT),d
+    sla (iy+DISPLACEMENT),e
+    sla (iy+DISPLACEMENT),h
+    sla (iy+DISPLACEMENT),l
+    sla (iy+DISPLACEMENT)
+    sla (iy+DISPLACEMENT),a
+    sra (iy+DISPLACEMENT),b
+    sra (iy+DISPLACEMENT),c
+    sra (iy+DISPLACEMENT),d
+    sra (iy+DISPLACEMENT),e
+    sra (iy+DISPLACEMENT),h
+    sra (iy+DISPLACEMENT),l
+    sra (iy+DISPLACEMENT)
+    sra (iy+DISPLACEMENT),a
+
+; z80asm: manpage says both sll and sli are accepted, but only sli is
+    sli (iy+DISPLACEMENT),b
+    sli (iy+DISPLACEMENT),c
+    sli (iy+DISPLACEMENT),d
+    sli (iy+DISPLACEMENT),e
+    sli (iy+DISPLACEMENT),h
+    sli (iy+DISPLACEMENT),l
+    sli (iy+DISPLACEMENT)
+    sli (iy+DISPLACEMENT),a
+
+    srl (iy+DISPLACEMENT),b
+    srl (iy+DISPLACEMENT),c
+    srl (iy+DISPLACEMENT),d
+    srl (iy+DISPLACEMENT),e
+    srl (iy+DISPLACEMENT),h
+    srl (iy+DISPLACEMENT),l
+    srl (iy+DISPLACEMENT)
+    srl (iy+DISPLACEMENT),a
+    bit 0,(iy+DISPLACEMENT)
+    bit 0,(iy+DISPLACEMENT)
+    bit 0,(iy+DISPLACEMENT)
+    bit 0,(iy+DISPLACEMENT)
+    bit 0,(iy+DISPLACEMENT)
+    bit 0,(iy+DISPLACEMENT)
+    bit 0,(iy+DISPLACEMENT)
+    bit 0,(iy+DISPLACEMENT)
+    bit 1,(iy+DISPLACEMENT)
+    bit 1,(iy+DISPLACEMENT)
+    bit 1,(iy+DISPLACEMENT)
+    bit 1,(iy+DISPLACEMENT)
+    bit 1,(iy+DISPLACEMENT)
+    bit 1,(iy+DISPLACEMENT)
+    bit 1,(iy+DISPLACEMENT)
+    bit 1,(iy+DISPLACEMENT)
+    bit 2,(iy+DISPLACEMENT)
+    bit 2,(iy+DISPLACEMENT)
+    bit 2,(iy+DISPLACEMENT)
+    bit 2,(iy+DISPLACEMENT)
+    bit 2,(iy+DISPLACEMENT)
+    bit 2,(iy+DISPLACEMENT)
+    bit 2,(iy+DISPLACEMENT)
+    bit 2,(iy+DISPLACEMENT)
+    bit 3,(iy+DISPLACEMENT)
+    bit 3,(iy+DISPLACEMENT)
+    bit 3,(iy+DISPLACEMENT)
+    bit 3,(iy+DISPLACEMENT)
+    bit 3,(iy+DISPLACEMENT)
+    bit 3,(iy+DISPLACEMENT)
+    bit 3,(iy+DISPLACEMENT)
+    bit 3,(iy+DISPLACEMENT)
+    bit 4,(iy+DISPLACEMENT)
+    bit 4,(iy+DISPLACEMENT)
+    bit 4,(iy+DISPLACEMENT)
+    bit 4,(iy+DISPLACEMENT)
+    bit 4,(iy+DISPLACEMENT)
+    bit 4,(iy+DISPLACEMENT)
+    bit 4,(iy+DISPLACEMENT)
+    bit 4,(iy+DISPLACEMENT)
+    bit 5,(iy+DISPLACEMENT)
+    bit 5,(iy+DISPLACEMENT)
+    bit 5,(iy+DISPLACEMENT)
+    bit 5,(iy+DISPLACEMENT)
+    bit 5,(iy+DISPLACEMENT)
+    bit 5,(iy+DISPLACEMENT)
+    bit 5,(iy+DISPLACEMENT)
+    bit 5,(iy+DISPLACEMENT)
+    bit 6,(iy+DISPLACEMENT)
+    bit 6,(iy+DISPLACEMENT)
+    bit 6,(iy+DISPLACEMENT)
+    bit 6,(iy+DISPLACEMENT)
+    bit 6,(iy+DISPLACEMENT)
+    bit 6,(iy+DISPLACEMENT)
+    bit 6,(iy+DISPLACEMENT)
+    bit 6,(iy+DISPLACEMENT)
+    bit 7,(iy+DISPLACEMENT)
+    bit 7,(iy+DISPLACEMENT)
+    bit 7,(iy+DISPLACEMENT)
+    bit 7,(iy+DISPLACEMENT)
+    bit 7,(iy+DISPLACEMENT)
+    bit 7,(iy+DISPLACEMENT)
+    bit 7,(iy+DISPLACEMENT)
+    bit 7,(iy+DISPLACEMENT)
+    res 0,(iy+DISPLACEMENT),b
+    res 0,(iy+DISPLACEMENT),c
+    res 0,(iy+DISPLACEMENT),d
+    res 0,(iy+DISPLACEMENT),e
+    res 0,(iy+DISPLACEMENT),h
+    res 0,(iy+DISPLACEMENT),l
+    res 0,(iy+DISPLACEMENT)
+    res 0,(iy+DISPLACEMENT),a
+    res 1,(iy+DISPLACEMENT),b
+    res 1,(iy+DISPLACEMENT),c
+    res 1,(iy+DISPLACEMENT),d
+    res 1,(iy+DISPLACEMENT),e
+    res 1,(iy+DISPLACEMENT),h
+    res 1,(iy+DISPLACEMENT),l
+    res 1,(iy+DISPLACEMENT)
+    res 1,(iy+DISPLACEMENT),a
+    res 2,(iy+DISPLACEMENT),b
+    res 2,(iy+DISPLACEMENT),c
+    res 2,(iy+DISPLACEMENT),d
+    res 2,(iy+DISPLACEMENT),e
+    res 2,(iy+DISPLACEMENT),h
+    res 2,(iy+DISPLACEMENT),l
+    res 2,(iy+DISPLACEMENT)
+    res 2,(iy+DISPLACEMENT),a
+    res 3,(iy+DISPLACEMENT),b
+    res 3,(iy+DISPLACEMENT),c
+    res 3,(iy+DISPLACEMENT),d
+    res 3,(iy+DISPLACEMENT),e
+    res 3,(iy+DISPLACEMENT),h
+    res 3,(iy+DISPLACEMENT),l
+    res 3,(iy+DISPLACEMENT)
+    res 3,(iy+DISPLACEMENT),a
+    res 4,(iy+DISPLACEMENT),b
+    res 4,(iy+DISPLACEMENT),c
+    res 4,(iy+DISPLACEMENT),d
+    res 4,(iy+DISPLACEMENT),e
+    res 4,(iy+DISPLACEMENT),h
+    res 4,(iy+DISPLACEMENT),l
+    res 4,(iy+DISPLACEMENT)
+    res 4,(iy+DISPLACEMENT),a
+    res 5,(iy+DISPLACEMENT),b
+    res 5,(iy+DISPLACEMENT),c
+    res 5,(iy+DISPLACEMENT),d
+    res 5,(iy+DISPLACEMENT),e
+    res 5,(iy+DISPLACEMENT),h
+    res 5,(iy+DISPLACEMENT),l
+    res 5,(iy+DISPLACEMENT)
+    res 5,(iy+DISPLACEMENT),a
+    res 6,(iy+DISPLACEMENT),b
+    res 6,(iy+DISPLACEMENT),c
+    res 6,(iy+DISPLACEMENT),d
+    res 6,(iy+DISPLACEMENT),e
+    res 6,(iy+DISPLACEMENT),h
+    res 6,(iy+DISPLACEMENT),l
+    res 6,(iy+DISPLACEMENT)
+    res 6,(iy+DISPLACEMENT),a
+    res 7,(iy+DISPLACEMENT),b
+    res 7,(iy+DISPLACEMENT),c
+    res 7,(iy+DISPLACEMENT),d
+    res 7,(iy+DISPLACEMENT),e
+    res 7,(iy+DISPLACEMENT),h
+    res 7,(iy+DISPLACEMENT),l
+    res 7,(iy+DISPLACEMENT)
+    res 7,(iy+DISPLACEMENT),a
+    set 0,(iy+DISPLACEMENT),b
+    set 0,(iy+DISPLACEMENT),c
+    set 0,(iy+DISPLACEMENT),d
+    set 0,(iy+DISPLACEMENT),e
+    set 0,(iy+DISPLACEMENT),h
+    set 0,(iy+DISPLACEMENT),l
+    set 0,(iy+DISPLACEMENT)
+    set 0,(iy+DISPLACEMENT),a
+    set 1,(iy+DISPLACEMENT),b
+    set 1,(iy+DISPLACEMENT),c
+    set 1,(iy+DISPLACEMENT),d
+    set 1,(iy+DISPLACEMENT),e
+    set 1,(iy+DISPLACEMENT),h
+    set 1,(iy+DISPLACEMENT),l
+    set 1,(iy+DISPLACEMENT)
+    set 1,(iy+DISPLACEMENT),a
+    set 2,(iy+DISPLACEMENT),b
+    set 2,(iy+DISPLACEMENT),c
+    set 2,(iy+DISPLACEMENT),d
+    set 2,(iy+DISPLACEMENT),e
+    set 2,(iy+DISPLACEMENT),h
+    set 2,(iy+DISPLACEMENT),l
+    set 2,(iy+DISPLACEMENT)
+    set 2,(iy+DISPLACEMENT),a
+    set 3,(iy+DISPLACEMENT),b
+    set 3,(iy+DISPLACEMENT),c
+    set 3,(iy+DISPLACEMENT),d
+    set 3,(iy+DISPLACEMENT),e
+    set 3,(iy+DISPLACEMENT),h
+    set 3,(iy+DISPLACEMENT),l
+    set 3,(iy+DISPLACEMENT)
+    set 3,(iy+DISPLACEMENT),a
+    set 4,(iy+DISPLACEMENT),b
+    set 4,(iy+DISPLACEMENT),c
+    set 4,(iy+DISPLACEMENT),d
+    set 4,(iy+DISPLACEMENT),e
+    set 4,(iy+DISPLACEMENT),h
+    set 4,(iy+DISPLACEMENT),l
+    set 4,(iy+DISPLACEMENT)
+    set 4,(iy+DISPLACEMENT),a
+    set 5,(iy+DISPLACEMENT),b
+    set 5,(iy+DISPLACEMENT),c
+    set 5,(iy+DISPLACEMENT),d
+    set 5,(iy+DISPLACEMENT),e
+    set 5,(iy+DISPLACEMENT),h
+    set 5,(iy+DISPLACEMENT),l
+    set 5,(iy+DISPLACEMENT)
+    set 5,(iy+DISPLACEMENT),a
+    set 6,(iy+DISPLACEMENT),b
+    set 6,(iy+DISPLACEMENT),c
+    set 6,(iy+DISPLACEMENT),d
+    set 6,(iy+DISPLACEMENT),e
+    set 6,(iy+DISPLACEMENT),h
+    set 6,(iy+DISPLACEMENT),l
+    set 6,(iy+DISPLACEMENT)
+    set 6,(iy+DISPLACEMENT),a
+    set 7,(iy+DISPLACEMENT),b
+    set 7,(iy+DISPLACEMENT),c
+    set 7,(iy+DISPLACEMENT),d
+    set 7,(iy+DISPLACEMENT),e
+    set 7,(iy+DISPLACEMENT),h
+    set 7,(iy+DISPLACEMENT),l
+    set 7,(iy+DISPLACEMENT)
+    set 7,(iy+DISPLACEMENT),a
+
