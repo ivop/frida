@@ -53,6 +53,7 @@ enum modes {
 enum extmode {
     EXT_NORMAL = 0,
     EXT_JUMP,
+    EXT_CALL,
     EXT_UNDOCUMENTED,
     EXT_Z180
 };
@@ -256,7 +257,7 @@ static struct distabitem distab_normal[256] = {
 { "pop", "bc", "  C1  ", 1, "10", MODE_IMP, EXT_NORMAL, "pop bc", "", "The memory location pointed to by SP is stored into C and SP is incremented. The memory location pointed to by SP is stored into B and SP is incremented again." },
 { "jp", "nz,%1", "  C2  <i>nn</i> ", 3, "10", MODE_NN, EXT_JUMP, "jp nz,<i>nn</i>", "", "If the zero flag is unset, <i>nn</i> is copied to PC." },
 { "jp", "%1", "  C3  <i>nn</i> ", 3, "10", MODE_NN, EXT_JUMP, "jp <i>nn</i>", "", "<i>nn</i> is copied to PC." },
-{ "call", "nz,%1", "  C4  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_NORMAL, "call nz,<i>nn</i>", "", "If the zero flag is unset, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
+{ "call", "nz,%1", "  C4  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_CALL, "call nz,<i>nn</i>", "", "If the zero flag is unset, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
 { "push", "bc", "  C5  ", 1, "11", MODE_IMP, EXT_NORMAL, "push bc", "", "SP is decremented and B is stored into the memory location pointed to by SP. SP is decremented again and C is stored into the memory location pointed to by SP." },
 { "add", "a,%1", "  C6  <i>n</i> ", 2, "7", MODE_N, EXT_NORMAL, "add a,<i>n</i>", "C: as defined<br>N: as defined<br>PV: detects overflow<br>H: as defined<br>Z: as defined<br>S: as defined<br>", "Adds <i>n</i> to A." },
 { "rst", "00h", "  C7  ", 1, "11", MODE_IMP, EXT_NORMAL, "rst 00h", "", "The current PC value plus one is pushed onto the stack, then is loaded with 0." },
@@ -264,15 +265,15 @@ static struct distabitem distab_normal[256] = {
 { "ret", "", "  C9  ", 1, "10", MODE_IMP, EXT_NORMAL, "ret", "", "The top stack entry is popped into PC." },
 { "jp", "z,%1", "  CA  <i>nn</i> ", 3, "10", MODE_NN, EXT_JUMP, "jp z,<i>nn</i>", "", "If the zero flag is set, <i>nn</i> is copied to PC." },
 INVALID,
-{ "call", "z,%1", "  CC  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_NORMAL, "call z,<i>nn</i>", "", "If the zero flag is set, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
-{ "call", "%1", "  CD  <i>nn</i> ", 3, "17", MODE_NN, EXT_NORMAL, "call <i>nn</i>", "", "The current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
+{ "call", "z,%1", "  CC  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_CALL, "call z,<i>nn</i>", "", "If the zero flag is set, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
+{ "call", "%1", "  CD  <i>nn</i> ", 3, "17", MODE_NN, EXT_CALL, "call <i>nn</i>", "", "The current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
 { "adc", "a,%1", "  CE  <i>n</i> ", 2, "7", MODE_N, EXT_NORMAL, "adc a,<i>n</i>", "C: as defined<br>N: as defined<br>PV: detects overflow<br>H: as defined<br>Z: as defined<br>S: as defined<br>", "Adds <i>n</i> and the carry flag to A." },
 { "rst", "08h", "  CF  ", 1, "11", MODE_IMP, EXT_NORMAL, "rst 08h", "", "The current PC value plus one is pushed onto the stack, then is loaded with 8." },
 { "ret", "nc", "  D0  ", 1, "11/5", MODE_IMP, EXT_NORMAL, "ret nc", "", "If the carry flag is unset, the top stack entry is popped into PC." },
 { "pop", "de", "  D1  ", 1, "10", MODE_IMP, EXT_NORMAL, "pop de", "", "The memory location pointed to by SP is stored into E and SP is incremented. The memory location pointed to by SP is stored into D and SP is incremented again." },
 { "jp", "nc,%1", "  D2  <i>nn</i> ", 3, "10", MODE_NN, EXT_JUMP, "jp nc,<i>nn</i>", "", "If the carry flag is unset, <i>nn</i> is copied to PC." },
 { "out", "(%1),a", "  D3  <i>n</i> ", 2, "11", MODE_N, EXT_NORMAL, "out (<i>n</i>),a", "", "The value of A is written to port <i>n</i>." },
-{ "call", "nc,%1", "  D4  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_NORMAL, "call nc,<i>nn</i>", "", "If the carry flag is unset, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
+{ "call", "nc,%1", "  D4  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_CALL, " nc,<i>nn</i>", "", "If the carry flag is unset, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
 { "push", "de", "  D5  ", 1, "11", MODE_IMP, EXT_NORMAL, "push de", "", "SP is decremented and D is stored into the memory location pointed to by SP. SP is decremented again and E is stored into the memory location pointed to by SP." },
 { "sub", "%1", "  D6  <i>n</i> ", 2, "7", MODE_N, EXT_NORMAL, "sub <i>n</i>", "C: as defined<br>N: as defined<br>PV: detects overflow<br>H: as defined<br>Z: as defined<br>S: as defined<br>", "Subtracts <i>n</i> from A." },
 { "rst", "10h", "  D7  ", 1, "11", MODE_IMP, EXT_NORMAL, "rst 10h", "", "The current PC value plus one is pushed onto the stack, then is loaded with 16." },
@@ -280,7 +281,7 @@ INVALID,
 { "exx", "", "  D9  ", 1, "4", MODE_IMP, EXT_NORMAL, "exx", "", "Exchanges the 16-bit contents of BC, DE, and HL with BC', DE', and HL'." },
 { "jp", "c,%1", "  DA  <i>nn</i> ", 3, "10", MODE_NN, EXT_JUMP, "jp c,<i>nn</i>", "", "If the carry flag is set, <i>nn</i> is copied to PC." },
 { "in", "a,(%1)", "  DB  <i>n</i> ", 2, "11", MODE_N, EXT_NORMAL, "in a,(<i>n</i>)", "", "A byte from port <i>n</i> is written to A." },
-{ "call", "c,%1", "  DC  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_NORMAL, "call c,<i>nn</i>", "", "If the carry flag is set, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
+{ "call", "c,%1", "  DC  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_CALL, "call c,<i>nn</i>", "", "If the carry flag is set, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
 INVALID,
 { "sbc", "a,%1", "  DE  <i>n</i> ", 2, "7", MODE_N, EXT_NORMAL, "sbc a,<i>n</i>", "C: as defined<br>N: as defined<br>PV: detects overflow<br>H: as defined<br>Z: as defined<br>S: as defined<br>", "Subtracts <i>n</i> and the carry flag from A." },
 { "rst", "18h", "  DF  ", 1, "11", MODE_IMP, EXT_NORMAL, "rst 18h", "", "The current PC value plus one is pushed onto the stack, then is loaded with 24." },
@@ -288,7 +289,7 @@ INVALID,
 { "pop", "hl", "  E1  ", 1, "10", MODE_IMP, EXT_NORMAL, "pop hl", "", "The memory location pointed to by SP is stored into L and SP is incremented. The memory location pointed to by SP is stored into H and SP is incremented again." },
 { "jp", "po,%1", "  E2  <i>nn</i> ", 3, "10", MODE_NN, EXT_JUMP, "jp po,<i>nn</i>", "", "If the parity/overflow flag is unset, <i>nn</i> is copied to PC." },
 { "ex", "(sp),hl", "  E3  ", 1, "19", MODE_IMP, EXT_NORMAL, "ex (sp),hl", "", "Exchanges (SP) with L, and (SP+1) with H." },
-{ "call", "po,%1", "  E4  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_NORMAL, "call po,<i>nn</i>", "", "If the parity/overflow flag is unset, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
+{ "call", "po,%1", "  E4  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_CALL, "call po,<i>nn</i>", "", "If the parity/overflow flag is unset, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
 { "push", "hl", "  E5  ", 1, "11", MODE_IMP, EXT_NORMAL, "push hl", "", "SP is decremented and H is stored into the memory location pointed to by SP. SP is decremented again and L is stored into the memory location pointed to by SP." },
 { "and", "%1", "  E6  <i>n</i> ", 2, "7", MODE_N, EXT_NORMAL, "and <i>n</i>", "C: reset<br>N: reset<br>PV: detects parity<br>H: set<br>Z: as defined<br>S: as defined<br>", "Bitwise AND on A with <i>n</i>." },
 { "rst", "20h", "  E7  ", 1, "11", MODE_IMP, EXT_NORMAL, "rst 20h", "", "The current PC value plus one is pushed onto the stack, then is loaded with 32." },
@@ -296,7 +297,7 @@ INVALID,
 { "jp", "(hl)", "  E9  ", 1, "4", MODE_IMP, EXT_JUMP, "jp (hl)", "", "Loads the value of HL into PC." },
 { "jp", "pe,%1", "  EA  <i>nn</i> ", 3, "10", MODE_NN, EXT_JUMP, "jp pe,<i>nn</i>", "", "If the parity/overflow flag is set, <i>nn</i> is copied to PC." },
 { "ex", "de,hl", "  EB  ", 1, "4", MODE_IMP, EXT_NORMAL, "ex de,hl", "", "Exchanges the 16-bit contents of DE and HL." },
-{ "call", "pe,%1", "  EC  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_NORMAL, "call pe,<i>nn</i>", "", "If the parity/overflow flag is set, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
+{ "call", "pe,%1", "  EC  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_CALL, "call pe,<i>nn</i>", "", "If the parity/overflow flag is set, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
 INVALID,
 { "xor", "%1", "  EE  <i>n</i> ", 2, "7", MODE_N, EXT_NORMAL, "xor <i>n</i>", "C: reset<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "Bitwise XOR on A with <i>n</i>." },
 { "rst", "28h", "  EF  ", 1, "11", MODE_IMP, EXT_NORMAL, "rst 28h", "", "The current PC value plus one is pushed onto the stack, then is loaded with 40." },
@@ -304,7 +305,7 @@ INVALID,
 { "pop", "af", "  F1  ", 1, "10", MODE_IMP, EXT_NORMAL, "pop af", "", "The memory location pointed to by SP is stored into f and SP is incremented. The memory location pointed to by SP is stored into A and SP is incremented again." },
 { "jp", "p,%1", "  F2  <i>nn</i> ", 3, "10", MODE_NN, EXT_JUMP, "jp p,<i>nn</i>", "", "If the sign flag is unset, <i>nn</i> is copied to PC." },
 { "di", "", "  F3  ", 1, "4", MODE_IMP, EXT_NORMAL, "di", "", "Resets both interrupt flip-flops, thus prenting maskable interrupts from triggering." },
-{ "call", "p,%1", "  F4  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_NORMAL, "call p,<i>nn</i>", "", "If the sign flag is unset, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
+{ "call", "p,%1", "  F4  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_CALL, "call p,<i>nn</i>", "", "If the sign flag is unset, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
 { "push", "af", "  F5  ", 1, "11", MODE_IMP, EXT_NORMAL, "push af", "", "SP is decremented and A is stored into the memory location pointed to by SP. SP is decremented again and f is stored into the memory location pointed to by SP." },
 { "or", "%1", "  F6  <i>n</i> ", 2, "7", MODE_N, EXT_NORMAL, "or <i>n</i>", "C: reset<br>N: reset<br>PV: detects parity<br>H: reset<br>Z: as defined<br>S: as defined<br>", "Bitwise OR on A with <i>n</i>." },
 { "rst", "30h", "  F7  ", 1, "11", MODE_IMP, EXT_NORMAL, "rst 30h", "", "The current PC value plus one is pushed onto the stack, then is loaded with 48." },
@@ -312,7 +313,7 @@ INVALID,
 { "ld", "sp,hl", "  F9  ", 1, "6", MODE_IMP, EXT_NORMAL, "ld sp,hl", "", "Loads the value of HL into SP." },
 { "jp", "m,%1", "  FA  <i>nn</i> ", 3, "10", MODE_NN, EXT_JUMP, "jp m,<i>nn</i>", "", "If the sign flag is set, <i>nn</i> is copied to PC." },
 { "ei", "", "  FB  ", 1, "4", MODE_IMP, EXT_NORMAL, "ei", "", "Sets both interrupt flip-flops, thus allowing maskable interrupts to occur. An interrupt will not occur until after the immediately following instruction." },
-{ "call", "m,%1", "  FC  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_NORMAL, "call m,<i>nn</i>", "", "If the sign flag is set, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
+{ "call", "m,%1", "  FC  <i>nn</i> ", 3, "17/10", MODE_NN, EXT_CALL, "call m,<i>nn</i>", "", "If the sign flag is set, the current PC value plus three is pushed onto the stack, then is loaded with <i>nn</i>." },
 INVALID,
 { "cp", "%1", "  FE  <i>n</i> ", 2, "7", MODE_N, EXT_NORMAL, "cp <i>n</i>", "C: as defined<br>N: as defined<br>PV: detects overflow<br>H: as defined<br>Z: as defined<br>S: as defined<br>", "Subtracts <i>n</i> from A and affects flags according to the result. A is not modified." },
 { "rst", "38h", "  FF  ", 1, "11", MODE_IMP, EXT_NORMAL, "rst 38h", "", "The current PC value plus one is pushed onto the stack, then is loaded with 56." },
@@ -1872,6 +1873,9 @@ static struct distabitem distab_FDCB[256] = {
 { "set", "7,(iy+%1),a", "  FD  CB  <i>d</i>  FF  ", 4, "23", MODE_DIS, EXT_UNDOCUMENTED, "set 7,(iy+<i>d</i>),a", "", "Sets bit 7 of the memory location pointed to by IY plus <i>d</i>. The result is then stored in A." },
 };
 
+struct distabitem ignore_prefix_dd = { ".byte $dd", "; ignore extra prefix", "", 1, "4", MODE_IMP, EXT_NORMAL, "", "", "" };
+struct distabitem ignore_prefix_fd = { ".byte $fd", "; ignore extra prefix", "", 1, "4", MODE_IMP, EXT_NORMAL, "", "", "" };
+
 void DisassemblerZ80::initTables(void) {
     // delete EXT_UNDOCUMENTED and/or EXT_Z180
     bool del_undoc = true;
@@ -1911,7 +1915,8 @@ void DisassemblerZ80::initTables(void) {
     toUpper   = false;
 }
 
-int DisassemblerZ80::getInstructionSizeAt(quint64 relpos) {
+
+static struct distabitem *get_distabitem_at(quint64 relpos) {
     quint8 *data = segments[currentSegment].data;
     quint8 byte0 = data[relpos];        // createEmptySegment allows reading beyond end
     quint8 byte1 = data[relpos+1];      // so we don't need checks here
@@ -1933,7 +1938,7 @@ int DisassemblerZ80::getInstructionSizeAt(quint64 relpos) {
         case 0xdd: [[fallthrough]];
         case 0xed: [[fallthrough]];
         case 0xfd:
-             return 1;  // ignore 0xdd prefix as single byte NOP
+             return &ignore_prefix_dd;
         }
         break;
 
@@ -1944,16 +1949,28 @@ int DisassemblerZ80::getInstructionSizeAt(quint64 relpos) {
         case 0xdd: [[fallthrough]];
         case 0xed: [[fallthrough]];
         case 0xfd:
-             return 1;  // ignore 0xfd prefix as single byte NOP
+             return &ignore_prefix_fd;
         }
         break;
     }
+
+    return item;
+}
+
+int DisassemblerZ80::getInstructionSizeAt(quint64 relpos) {
+
+    struct distabitem *item  = get_distabitem_at(relpos);
 
     if (item->inst == nullptr)
         return 1;   // invalid instruction
     else
         return item->size;
 }
+
+// Label:   MODE_NN && EXT_JUMP
+//          MODE_NN && EXT_CALL
+//          MODE_MEM_NN
+//          MODE_DIS && EXT_JUMP
 
 void DisassemblerZ80::createOperandLabels(quint64 relpos, bool generateLocalLabels) {
 }
@@ -1962,6 +1979,9 @@ void DisassemblerZ80::disassembleInstructionAt(quint64 relpos, struct disassembl
 }
 
 void DisassemblerZ80::trace(quint64 address) {
+    struct segment *s = &segments[currentSegment];
+    quint64 relpos = address - s->start;
+
 }
 
 QString DisassemblerZ80::getDescriptionAt(quint64 address) {
