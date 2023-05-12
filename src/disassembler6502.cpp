@@ -1209,8 +1209,7 @@ void Disassembler6502::disassembleInstructionAt(quint64 relpos,
             temps = QString(fmts[m]).arg(hex, hex2);
         }
     }
-    dis = { start + i, distab[opcode].inst, temps, n,false, (quint64) opcode,
-                                                (quint64) operand, 0 };
+    dis = { start + i, distab[opcode].inst, temps, n,false };
     if (m == MODE_REL || opcode == 0x4c || opcode == 0x6c || opcode == 0x20 ||
             opcode == 0x40 || opcode ==0x60) {
         dis.changes_pc = true;

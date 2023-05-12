@@ -475,8 +475,7 @@ void Disassembler8080::disassembleInstructionAt(quint64 relpos,
         }
     }
 
-    dis = { start + i, distab[opcode].inst, temps, n,false, (quint64) opcode,
-                                                (quint64) operand, 0 };
+    dis = { start + i, distab[opcode].inst, temps, n,false };
     if (m == MODE_JMP)
         dis.changes_pc = true;
 }

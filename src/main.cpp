@@ -103,15 +103,20 @@ int main(int argc, char *argv[])
     // Select Disassembler as set in start dialog or loaded from project
 
     switch(cputype) {
-    case CT_NMOS6502:
-        [[fallthrough]];
-    case CT_NMOS6502UNDEF:
-        [[fallthrough]];
+    case CT_NMOS6502:       [[fallthrough]];
+    case CT_NMOS6502UNDEF:  [[fallthrough]];
     case CT_CMOS65C02:
         Disassembler = new Disassembler6502();
         break;
     case CT_INTEL_8080:
         Disassembler = new Disassembler8080();
+        break;
+    case CT_ZILOG_Z80:      [[fallthrough]];
+    case CT_ZILOG_Z80UNDOC: [[fallthrough]];
+    case CT_ZILOG_Z180:     [[fallthrough]];
+    case CT_ZILOG_Z180UNDOC:
+        Disassembler = new DisassemblerZ80();
+        break;
     default:
         break;      // should not happen
     }

@@ -399,7 +399,7 @@ do_directive:
             if (toUpper)
                 instr = instr.toUpper();
             if (perline <= 0 || prevtype != type) {
-                dis = { start + i, instr, hex, n, false, 256, 0, 0 };
+                dis = { start + i, instr, hex, n, false };
                 perline = 8;
                 prevtype = type;
                 dislist->append(dis);
@@ -457,7 +457,7 @@ do_string_directive:
                 || prevtype != type
                 || s->comments.contains(start+i)) {
                 // start new directive at label location
-                dis = { start + i, instr, QString("\"\""), n, false, 256, 0, 0 };
+                dis = { start + i, instr, QString("\"\""), n, false };
                 perline = 40;
                 prevtype = type;
                 dislist->append(dis);

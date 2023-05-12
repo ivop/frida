@@ -127,9 +127,9 @@ struct disassembly {
     QString arguments;
     int size;           // number of bytes "consumed" incl. instruction
     bool changes_pc;
-    quint64 opcode;
-    quint64 operand_address;
-    quint64 operand_offset;
+//    quint64 opcode;
+//    quint64 operand_address;
+//    quint64 operand_offset;
 };
 
 // --------------------------------------------------------------------------
