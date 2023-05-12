@@ -59,7 +59,7 @@ enum extmode {
     EXT_Z180
 };
 
-#define INVALID { nullptr, nullptr, nullptr, 0, 0, 0, 0, nullptr, nullptr, nullptr, 0 }
+#define INVALID { "INVALID", "", nullptr, 1, 0, 0, 0, nullptr, nullptr, nullptr, 0 }
 
 static struct distabitem distab_normal[256] = {
 { "nop", "", "  00  ", 1, "4", MODE_IMP, EXT_NORMAL, "nop", "", "No operation is performed.", 1 },
@@ -1929,8 +1929,8 @@ static struct distabitem *get_distabitem_at(quint64 relpos) {
     switch(byte0) {
 
     default:    item = &distab_normal[byte0];   break;
-    case 0xcb:  item = &distab_CB[byte0];       break;
-    case 0xed:  item = &distab_ED[byte0];       break;
+    case 0xcb:  item = &distab_CB[byte1];       break;
+    case 0xed:  item = &distab_ED[byte1];       break;
 
     case 0xdd:
         switch(byte1) {
@@ -1962,7 +1962,7 @@ int DisassemblerZ80::getInstructionSizeAt(quint64 relpos) {
 
     struct distabitem *item  = get_distabitem_at(relpos);
 
-    if (item->inst == nullptr)
+    if (item->binary == nullptr)
         return 1;   // invalid instruction
     else
         return item->size;
@@ -2004,13 +2004,29 @@ void DisassemblerZ80::disassembleInstructionAt(quint64 relpos, struct disassembl
     if (item->mode == MODE_MEM_NN || item->mode == MODE_NN)
         operand += data[relpos + operand_offset +1] << 8;
 
-    QString operand_string = hexPrefix + QString("%1").arg(operand, 2, 16, QChar('0')) + hexSuffix;
+    // calculate destination address of displacement jumps
 
-    QString temps = QString(item->oper).arg(operand_string);
+    if (item->mode == MODE_DIS && item->extmode == EXT_JUMP) {
+        if (operand < 128) {
+            operand = s->start + relpos + 2 + operand;
+        } else {
+            operand = s->start + relpos + 2 + operand - 256;
+        }
+    }
+
+    QString operand_string;
+
+    if (item->mode != MODE_IMP)
+        operand_string = hexPrefix + QString("%1").arg(operand, 2, 16, QChar('0')) + hexSuffix;
+
+    if (operand_string.isEmpty())
+        operand_string = QString(item->oper);
+    else
+        operand_string = QString(item->oper).arg(operand_string);
 
     n = item->size;
 
-    dis = { s->start + relpos, item->inst, temps, n, false };
+    dis = { s->start + relpos, item->inst, operand_string, n, false };
 
     if (item->extmode == EXT_JUMP || item->extmode == EXT_CALL) {   // missing: RETZ etc..
         dis.changes_pc = true;
