@@ -40,6 +40,8 @@ void exportAssemblyWindow::accept() {
 
     if (ui->mads_assembler->isChecked())
         asm_format = ASM_FORMAT_MADS;
+    else if (ui->ca65_assembler->isChecked())
+        asm_format = ASM_FORMAT_CA65;
 
     setResult(QDialog::Accepted);
     hide();

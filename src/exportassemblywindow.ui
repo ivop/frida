@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>170</height>
+    <height>213</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,6 +34,13 @@
        <widget class="QRadioButton" name="mads_assembler">
         <property name="text">
          <string>MADS Assembler</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="ca65_assembler">
+        <property name="text">
+         <string>CA65 Assembler</string>
         </property>
        </widget>
       </item>

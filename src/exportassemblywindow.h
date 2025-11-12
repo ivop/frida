@@ -49,7 +49,8 @@ private:
 
 enum {
     ASM_FORMAT_VERBATIM = 0,
-    ASM_FORMAT_MADS
+    ASM_FORMAT_MADS,
+    ASM_FORMAT_CA65
 };
 
 #endif // EXPORTASSEMBLYWINDOW_H

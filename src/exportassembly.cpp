@@ -40,6 +40,12 @@ static void mads_assembler(QString *instr) {
     instr->replace(QStringLiteral(".org"), QStringLiteral("org"));
 }
 
+static void ca65_assembler(QString *instr) {
+    instr->replace(QStringLiteral(".wordle"), QStringLiteral(".word"));
+    instr->replace(QStringLiteral(".ascii"), QStringLiteral(".byte"));
+    instr->replace(QStringLiteral(".atascii"), QStringLiteral(".byte"));
+}
+
 // ---------------------------------------------------------------------------
 
 static void write_line(QTextStream *out) {
@@ -228,6 +234,8 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
 
             if (asm_format == ASM_FORMAT_MADS) {
                 mads_assembler(&instruction);
+            } else if (asm_format == ASM_FORMAT_CA65) {
+                ca65_assembler(&instruction);
             }
 
             out << "    " << instruction << " " << dis.arguments << "\n";
