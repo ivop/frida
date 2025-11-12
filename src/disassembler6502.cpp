@@ -1285,8 +1285,8 @@ void Disassembler6502::trace(quint64 address) {
                     tracelist.append(operand2);
             }
 
-            // rts, rti, jmp, jmp (ind)
-            if (opcode == 0x60 || opcode == 0x40 || opcode == 0x4c || opcode == 0x6c)
+            // rts, rti, jmp, jmp (ind), brk
+            if (opcode == 0x60 || opcode == 0x40 || opcode == 0x4c || opcode == 0x6c || opcode == 0x00)
                 break;
 
             if (distab[opcode].inst == QStringLiteral("UNDEFINED")) {
