@@ -1344,7 +1344,7 @@ void MainWindow::onFindButton_clicked(void) {
                     addRefEntry(t, i, address, line, what);
                 }
             }
-            break;
+            //break;
         }
     }
 
@@ -1361,8 +1361,8 @@ void MainWindow::onFindButton_clicked(void) {
                 if (address >= s->start && address <= s->end) {
                     const QString& line = iter.value();
                     addRefEntry(t, seg, address, line, what);
-                    break;
-                    }
+                    //break;
+                }
             }
         }
     }
