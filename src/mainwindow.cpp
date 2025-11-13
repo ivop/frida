@@ -758,8 +758,8 @@ void MainWindow::showDisassembly(void) {
 
         skip_comment:
 
-        if (   globalLabels.contains(dis.address)
-            || s->localLabels.contains(dis.address)) {
+        if (dis.address && (globalLabels.contains(dis.address)
+            || s->localLabels.contains(dis.address))) {
 
             QString label;
             if (s->localLabels.contains(dis.address))

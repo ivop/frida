@@ -214,8 +214,8 @@ void export_assembly(QWidget *widget, bool generateLocalLabels) {
                 out << "; " << com << "\n";
             }
 
-            if (   globalLabels.contains(dis.address)
-                || s->localLabels.contains(dis.address)) {
+            if (dis.address && (globalLabels.contains(dis.address)
+                || s->localLabels.contains(dis.address))) {
 
                 QString label;
                 if (s->localLabels.contains(dis.address))
