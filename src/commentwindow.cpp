@@ -37,6 +37,9 @@ commentwindow::commentwindow(const QString& s, const QString& c, QWidget *parent
     ui->setupUi(this);
     ui->label->setText("Comment at " + s);
     ui->plainTextEdit->setPlainText(c);
+
+    connect(ui->rulerButton, &QPushButton::clicked,
+            this, &commentwindow::onRulerButton_clicked);
 }
 
 commentwindow::~commentwindow()
@@ -46,4 +49,8 @@ commentwindow::~commentwindow()
 
 QString commentwindow::retrieveComment(void) {
     return ui->plainTextEdit->toPlainText();
+}
+
+void commentwindow::onRulerButton_clicked(void) {
+    ui->plainTextEdit->insertPlainText("----------------------------------------------------------------------------");
 }

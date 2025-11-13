@@ -40,6 +40,9 @@ public:
 
     QString retrieveComment(void);
 
+private Q_SLOTS:
+    void onRulerButton_clicked(void);
+
 private:
     Ui::commentwindow *ui;
     quint64 address{};
